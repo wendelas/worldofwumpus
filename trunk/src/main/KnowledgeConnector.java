@@ -32,6 +32,10 @@ public class KnowledgeConnector {
 	}
 	
 	
+	public void Tellkb(String line){
+		kb.tell(line);
+	}
+	
 	
 	
 	
