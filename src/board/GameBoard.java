@@ -93,4 +93,9 @@ public class GameBoard {
 		}
 		return output;
 	}
+	
+	public Object clone(){
+		
+		return null;
+	}
 }

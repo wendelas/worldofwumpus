@@ -1,19 +1,14 @@
-package propositional_logic;
+package z.propositional_logic;
 
 import java.awt.Point;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.Random;
 
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.WindowConstants;
 
-import aima.logic.propositional.WumpusWorldKB;
+import z.WumpusWorld.WumpusGame.WumpusGame;
 
-import WumpusWorld.WumpusGame.WumpusGame;
 
 public class WumpusWorldSolver {
 

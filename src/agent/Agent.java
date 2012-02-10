@@ -1,12 +1,13 @@
-package z.agent;
+package agent;
 
-import main.Gameboard;
+import board.GameBoard;
+
 
 public abstract class Agent {
 
 	static enum direction{ goUp, goDown, goLeft, goRight }
-	
-	public abstract int search(Gameboard board);
+
+	public abstract int search(GameBoard board);	
 	
 	
 }

@@ -1,4 +1,4 @@
-package WumpusWorld.WumpusApplet;
+package z.WumpusWorld.WumpusApplet;
 
 import javax.swing.JApplet;
 

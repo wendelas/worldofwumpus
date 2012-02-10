@@ -1,4 +1,4 @@
-package z.agent;
+package agent;
 
 public class MemoryNode {
 

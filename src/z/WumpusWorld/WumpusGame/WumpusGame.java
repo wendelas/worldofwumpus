@@ -1,4 +1,4 @@
-package WumpusWorld.WumpusGame;
+package z.WumpusWorld.WumpusGame;
 
 import java.awt.Point;
 import java.util.Observable;

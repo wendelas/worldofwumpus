@@ -1,13 +1,14 @@
 package heuristic;
 
 import heuristic.Nodes.Action;
+import board.GameBoard;
 
 public class ManhattanDistance implements Heuristic{
 
 	public ManhattanDistance(){
 		
 	}
-
+/*
 	@Override
 	public int search(GameBoard board) {
 		
@@ -83,10 +84,16 @@ public class ManhattanDistance implements Heuristic{
 		
 		return currentNode.getPATHCOST();
 	}
-	
+*/
 	
 	private Nodes createNode(Nodes parrent, GameBoard state, int pathCost, Action action){
 		return new Nodes(parrent,state,pathCost,action);
+	}
+
+	@Override
+	public int search(GameBoard board) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

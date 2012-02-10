@@ -1,6 +1,6 @@
 package heuristic;
 
-import java.util.*;
+import board.GameBoard;
 
 public class Nodes {
 
