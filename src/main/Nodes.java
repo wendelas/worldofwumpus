@@ -1,6 +1,6 @@
 package main;
 
-import java.util.*;
+import board.GameBoard;
 
 public class Nodes {
 
@@ -12,12 +12,12 @@ public class Nodes {
 
 	
 	
-	private Gameboard state;
+	private GameBoard state;
 	private int PATHCOST;
 	private Action action;
 	
 	
-	public Nodes(Nodes parent, Gameboard state,int pathCost, Action action){
+	public Nodes(Nodes parent, GameBoard state,int pathCost, Action action){
 		this.parent=parent;
 		this.state=state;
 		this.PATHCOST=pathCost;
@@ -30,7 +30,7 @@ public class Nodes {
 		return parent;
 	}
 	
-	public Gameboard getState() {
+	public GameBoard getState() {
 		return state;
 	}
 

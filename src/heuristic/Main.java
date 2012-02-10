@@ -1,4 +1,4 @@
-package main;
+package heuristic;
 
 import java.util.*;
 
@@ -16,7 +16,7 @@ public class Main {
 		Heuristic rnd = new randomStart();
 		
 		for(int a = 50; a>=1; a--){
-			Gameboard game = new Gameboard();
+			GameBoard game = new GameBoard();
 			game = randomBoard();
 			int manh = man.search(game.clone());
 			int misp = mis.search(game.clone());
@@ -53,16 +53,16 @@ public class Main {
 	
 	
 	
-	private static Gameboard randomBoard(){
+	private static GameBoard randomBoard(){
 		
 		Random rand = new Random();
 		int temp = rand.nextInt(75-1)+1;
 		return shuffle(temp);
 	}
 	
-	private static Gameboard shuffle(int moves){
+	private static GameBoard shuffle(int moves){
 		
-		Gameboard a = new Gameboard();
+		GameBoard a = new GameBoard();
 		
 		Random rand = new Random();
 		

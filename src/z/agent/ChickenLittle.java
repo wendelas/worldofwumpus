@@ -1,6 +1,6 @@
 package z.agent;
 
-import z.main.Gameboard;
+import main.Gameboard;
 
 public class ChickenLittle extends Agent {
 
