@@ -36,9 +36,9 @@ public class PELexer extends Lexer {
 
 	@Override
 	public Token nextToken() {
-		Token result = null;
-		int tokenType;
-		String tokenContent;
+//		Token result = null;
+//		int tokenType;
+//		String tokenContent;
 
 		if (lookAhead(1) == '(') {
 			consume();
@@ -94,6 +94,7 @@ public class PELexer extends Lexer {
 
 	}
 
+	@SuppressWarnings("unused")
 	private Token connector() {
 		StringBuffer sbuf = new StringBuffer();
 		while (Character.isLetterOrDigit(lookAhead(1))) {
@@ -103,6 +104,7 @@ public class PELexer extends Lexer {
 		return new Token(LogicTokenTypes.CONNECTOR, sbuf.toString());
 	}
 
+	@SuppressWarnings("unused")
 	private Token whiteSpace() {
 		StringBuffer sbuf = new StringBuffer();
 		while (Character.isWhitespace(lookAhead(1))) {

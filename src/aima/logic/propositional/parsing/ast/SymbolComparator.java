@@ -11,7 +11,7 @@ import java.util.Comparator;
  * 
  */
 
-public class SymbolComparator implements Comparator {
+public class SymbolComparator implements Comparator<Object> {
 
 	public int compare(Object symbol1, Object symbol2) {
 		Symbol one = (Symbol) symbol1;

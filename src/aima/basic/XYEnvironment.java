@@ -73,7 +73,7 @@ public class XYEnvironment extends Environment {
 		return retval;
 	}
 
-	public ArrayList getObjectsNear(Agent agent, int radius) {
+	public ArrayList<Object> getObjectsNear(Agent agent, int radius) {
 		ArrayList<Object> retval = new ArrayList<Object>();
 
 		XYLocation agentLocation = (XYLocation) agent.getAttribute(LOCATION);
@@ -112,7 +112,7 @@ public class XYEnvironment extends Environment {
 
 	public boolean isBlocked(XYLocation loc) {
 		boolean retval = false;
-		ArrayList objs = this.getObjectsAt(loc);
+		ArrayList<?> objs = this.getObjectsAt(loc);
 
 		for (Object o : objs) {
 			if (o instanceof Wall) {

@@ -21,7 +21,7 @@ public abstract class Agent extends ObjectWithDynamicAttributes {
 
 	protected boolean isAlive;
 
-	protected Hashtable enviromentSpecificAttributes;
+	protected Hashtable<?, ?> enviromentSpecificAttributes;
 
 	protected Agent() {
 		live();

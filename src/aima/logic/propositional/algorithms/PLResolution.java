@@ -74,7 +74,7 @@ public class PLResolution {
 			Set<Sentence> clauses) {
 		Set<Sentence> filtered = new HashSet<Sentence>();
 		SymbolClassifier classifier = new SymbolClassifier();
-		Iterator iter = clauses.iterator();
+		Iterator<Sentence> iter = clauses.iterator();
 		while (iter.hasNext()) {
 			Sentence clause = (Sentence) iter.next();
 			Set<Symbol> positiveSymbols = classifier
@@ -92,7 +92,7 @@ public class PLResolution {
 	public Set<Sentence> plResolve(Sentence clause1, Sentence clause2) {
 		Set<Sentence> resolvents = new HashSet<Sentence>();
 		ClauseSymbols cs = new ClauseSymbols(clause1, clause2);
-		Iterator iter = cs.getComplementedSymbols().iterator();
+		Iterator<Symbol> iter = cs.getComplementedSymbols().iterator();
 		while (iter.hasNext()) {
 			Symbol symbol = (Symbol) iter.next();
 			resolvents.add(createResolventClause(cs, symbol));
@@ -134,13 +134,13 @@ public class PLResolution {
 	}
 
 	private List<List<Sentence>> getCombinationPairs(List<Sentence> clausesList) {
-		int odd = clausesList.size() % 2;
-		int midpoint = 0;
-		if (odd == 1) {
-			midpoint = (clausesList.size() / 2) + 1;
-		} else {
-			midpoint = (clausesList.size() / 2);
-		}
+//		int odd = clausesList.size() % 2;
+//		int midpoint = 0;
+//		if (odd == 1) {
+//			midpoint = (clausesList.size() / 2) + 1;
+//		} else {
+//			midpoint = (clausesList.size() / 2);
+//		}
 
 		List<List<Sentence>> pairs = new ArrayList<List<Sentence>>();
 		for (int i = 0; i < clausesList.size(); i++) {
@@ -190,7 +190,7 @@ public class PLResolution {
 
 		}
 
-		public Set getComplementedSymbols() {
+		public Set<Symbol> getComplementedSymbols() {
 			return new SetOps<Symbol>().union(
 					positiveInClause1NegativeInClause2,
 					negativeInClause1PositiveInClause2);

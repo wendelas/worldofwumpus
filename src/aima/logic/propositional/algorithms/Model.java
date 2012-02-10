@@ -58,7 +58,7 @@ public class Model implements PLVisitor {
 	}
 
 	public Model extend(Symbol symbol, boolean b) {
-		Model m = new Model();
+//		Model m = new Model();
 		return extend(symbol.getValue(), b);
 	}
 
@@ -68,7 +68,7 @@ public class Model implements PLVisitor {
 		while (i.hasNext()) {
 			String key = i.next();
 			Boolean value = h.get(key);
-			String newKey = new String((key).toCharArray());
+//			String newKey = new String((key).toCharArray());
 			if (value == null) {
 				throw new RuntimeException();
 			}
@@ -79,7 +79,7 @@ public class Model implements PLVisitor {
 	}
 
 	public void print() {
-		Iterator i = h.keySet().iterator();
+		Iterator<String> i = h.keySet().iterator();
 		while (i.hasNext()) {
 			Object key = i.next();
 			Object value = h.get(key);
@@ -212,7 +212,7 @@ public class Model implements PLVisitor {
 
 	public Set<Symbol> getAssignedSymbols() {
 		Set<Symbol> set = new HashSet<Symbol>();
-		Iterator i = this.h.keySet().iterator();
+		Iterator<String> i = this.h.keySet().iterator();
 		while (i.hasNext()) {
 			Symbol key = new Symbol((String) i.next());
 			if (!(isUnknown(key))) {

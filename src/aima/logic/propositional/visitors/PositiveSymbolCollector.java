@@ -18,6 +18,7 @@ import aima.util.SetOps;
  */
 
 public class PositiveSymbolCollector extends BasicTraverser {
+	@SuppressWarnings("unchecked")
 	@Override
 	public Object visitSymbol(Symbol symbol, Object arg) {
 		Set<Symbol> s = (Set<Symbol>) arg;
@@ -26,6 +27,7 @@ public class PositiveSymbolCollector extends BasicTraverser {
 		return arg;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Object visitNotSentence(UnarySentence ns, Object arg) {
 		Set<Symbol> s = (Set<Symbol>) arg;
@@ -38,6 +40,7 @@ public class PositiveSymbolCollector extends BasicTraverser {
 		return s;
 	}
 
+	@SuppressWarnings("unchecked")
 	public Set<Symbol> getPositiveSymbolsIn(Sentence sentence) {
 		return (Set<Symbol>) sentence.accept(this, new HashSet<Symbol>());
 	}

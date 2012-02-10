@@ -25,7 +25,7 @@ public class Pair<X, Y> {
 
 	@Override
 	public boolean equals(Object o) {
-
+		@SuppressWarnings("unchecked")
 		Pair<X, Y> p = (Pair<X, Y>) o;
 		return a.equals(p.a) && b.equals(p.b);
 	}
