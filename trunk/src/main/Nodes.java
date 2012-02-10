@@ -32,9 +32,7 @@ public class Nodes {
 	
 	public Gameboard getState() {
 		return state;
-	}
-
-	public int getPATHCOST() {
+	}eST() {
 		return PATHCOST;
 	}
 	
