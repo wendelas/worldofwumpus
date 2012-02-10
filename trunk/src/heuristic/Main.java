@@ -1,6 +1,8 @@
 package heuristic;
 
-import java.util.*;
+import java.util.Random;
+
+import board.GameBoard;
 
 public class Main {
 	
@@ -16,11 +18,11 @@ public class Main {
 		Heuristic rnd = new randomStart();
 		
 		for(int a = 50; a>=1; a--){
-			GameBoard game = new GameBoard();
+			GameBoard game = new GameBoard(4, 4);
 			game = randomBoard();
-			int manh = man.search(game.clone());
-			int misp = mis.search(game.clone());
-			int asta = rnd.search(game.clone());
+			int manh = man.search((GameBoard)game.clone());
+			int misp = mis.search((GameBoard)game.clone());
+			int asta = rnd.search((GameBoard)game.clone());
 			
 			
 			if(manh>=0){
@@ -62,7 +64,7 @@ public class Main {
 	
 	private static GameBoard shuffle(int moves){
 		
-		GameBoard a = new GameBoard();
+		GameBoard a = new GameBoard(4, 4);
 		
 		Random rand = new Random();
 		
@@ -75,16 +77,16 @@ public class Main {
 				switch(select){
 				
 				case 0:
-					move = a.movePieceUp();
+//					move = a.movePieceUp();
 					break;
 				case 1:
-					move = a.movePieceLeft();
+//					move = a.movePieceLeft();
 					break;
 				case 2:
-					move = a.movePieceDown();
+//					move = a.movePieceDown();
 					break;
 				case 3:
-					move = a.movePieceRight();
+//					move = a.movePieceRight();
 					break;
 				}
 				if(move){

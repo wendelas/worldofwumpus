@@ -1,11 +1,11 @@
-package z.agent;
+package agent;
 
-import main.Gameboard;
+import board.GameBoard;
 
 public class ChickenLittle extends Agent {
 
 	@Override
-	public int search(Gameboard board) {
+	public int search(GameBoard board) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

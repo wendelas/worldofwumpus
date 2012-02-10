@@ -1,10 +1,11 @@
-package WumpusWorld.WumpusApplet;
+package z.WumpusWorld.WumpusApplet;
 
 import java.awt.Component;
 
 import javax.swing.JApplet;
 
-import WumpusWorld.WumpusGame.WumpusGame;
+import z.WumpusWorld.WumpusGame.WumpusGame;
+
 
 public class WumpusGUIController {
 		

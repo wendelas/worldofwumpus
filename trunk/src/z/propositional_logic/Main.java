@@ -1,7 +1,7 @@
-package propositional_logic;
+package z.propositional_logic;
 
-import WumpusWorld.WumpusGame.WumpusGame;
-import WumpusWorld.WumpusForm.WumpusGameForm;
+import z.WumpusWorld.WumpusForm.WumpusGameForm;
+import z.WumpusWorld.WumpusGame.WumpusGame;
 public class Main {
 
 	public static void main(String[] args)

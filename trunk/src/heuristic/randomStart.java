@@ -1,8 +1,8 @@
 package heuristic;
 
-import heuristic.Nodes.Action;
-
 import java.util.Random;
+
+import board.GameBoard;
 
 
 public class randomStart implements Heuristic {
@@ -27,16 +27,16 @@ public class randomStart implements Heuristic {
 					
 					switch(t){
 					case 0:
-						move = board.movePieceUp();
+//						move = board.movePieceUp();
 						break;
 					case 1:
-						move = board.movePieceDown();
+//						move = board.movePieceDown();
 						break;
 					case 2:
-						move = board.movePieceRight();
+//						move = board.movePieceRight();
 						break;
 					case 3:
-						move = board.movePieceLeft();
+//						move = board.movePieceLeft();
 						break;
 					}
 					

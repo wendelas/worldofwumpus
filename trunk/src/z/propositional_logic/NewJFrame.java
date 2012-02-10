@@ -1,4 +1,4 @@
-package propositional_logic;
+package z.propositional_logic;
 
 import javax.swing.WindowConstants;
 import javax.swing.SwingUtilities;

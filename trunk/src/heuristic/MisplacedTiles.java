@@ -1,8 +1,7 @@
 package heuristic;
 
 import heuristic.Nodes.Action;
-
-import java.util.ArrayList;
+import board.GameBoard;
 
 
 public class MisplacedTiles implements Heuristic {
@@ -11,6 +10,7 @@ public class MisplacedTiles implements Heuristic {
 		
 	}
 	
+/*
 	@Override
 	public int search(GameBoard board) {
 		 MisplacedTiles mt = new MisplacedTiles();
@@ -64,9 +64,15 @@ public class MisplacedTiles implements Heuristic {
 		 return currentNode.getPATHCOST();
 	}
 	
-
+*/
 	private Nodes createNode(Nodes parent,GameBoard state, int PATHCOST,Action action){
 		return new Nodes(parent,state,PATHCOST,action);
+	}
+
+	@Override
+	public int search(GameBoard board) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 

@@ -1,4 +1,4 @@
-package WumpusWorld.WumpusApplet;
+package z.WumpusWorld.WumpusApplet;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

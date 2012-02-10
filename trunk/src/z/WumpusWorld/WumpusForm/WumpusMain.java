@@ -1,6 +1,6 @@
-package WumpusWorld.WumpusForm;
+package z.WumpusWorld.WumpusForm;
 
-import WumpusWorld.WumpusGame.WumpusGame;
+import z.WumpusWorld.WumpusGame.WumpusGame;
 
 public class WumpusMain {
 

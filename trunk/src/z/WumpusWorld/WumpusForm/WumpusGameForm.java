@@ -1,16 +1,9 @@
-package WumpusWorld.WumpusApplet;
+package z.WumpusWorld.WumpusForm;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.WindowAdapter;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -23,10 +16,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ListModel;
-import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 
-import WumpusWorld.WumpusGame.WumpusGame;
+import z.WumpusWorld.WumpusGame.WumpusGame;
+
 
 
 /**
@@ -41,12 +34,7 @@ import WumpusWorld.WumpusGame.WumpusGame;
 * THIS MACHINE, SO JIGLOO OR THIS CODE CANNOT BE USED
 * LEGALLY FOR ANY CORPORATE OR COMMERCIAL PURPOSE.
 */
-public class WumpusGamePanel extends javax.swing.JPanel implements Observer {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -990778910616011830L;
+public class WumpusGameForm extends javax.swing.JFrame implements Observer {
 
 	{
 		//Set Look & Feel
@@ -64,7 +52,7 @@ public class WumpusGamePanel extends javax.swing.JPanel implements Observer {
 	private JScrollPane scrollPane;
 	private JList listKey;
 	private JLabel lblDeaths;
-	private JButton btnNewGame;
+	private JLabel lblTries;
 	private JLabel lblMoves;
 	private JLabel lblTitle;
 	private JLabel lblWins;
@@ -72,40 +60,28 @@ public class WumpusGamePanel extends javax.swing.JPanel implements Observer {
 	private JLabel lblGold;
 	private GridLayout pnlGameLayout;
 	private boolean gameInitialized = false;
-	private KeyListener keyHandler;
-	private boolean showingBoard;
-	private Color agentColor;
-	private WumpusGUIController controller;
-	private boolean hadGold;
+	private static final int STATUS_LBL_LENGTH = 9;
 	
-	public WumpusGamePanel(WumpusGame game, WumpusGUIController controller) {
+	private Color agentColor;
+	
+	public WumpusGameForm(WumpusGame game) {
 		super();
 		this.game = game;
-		this.controller = controller;
 		initGUI();
-		keyHandler = new WumpusKeyHandler(game);
-		//this.addKeyListener(keyHandler);
+		this.addKeyListener(new WumpusKeyHandler(game));
 		game.addObserver(this);
-		this.update(game,null);
-		
-		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
-				txtArea.requestFocus();
-			}
-		});
-		
-		this.txtArea.setText("Welcome to Wumpus World!");
+		this.update(game, game.getDiscoveredTiles());
 	}
-
+	
 	private void initBoard()
 	{
 		if(gameInitialized)
 		{
-			remove(pnlGame);
+			getContentPane().remove(pnlGame);
 		}
 		agentColor = Color.white;
 		pnlGame = new JPanel();
-		pnlGame.setBounds(191, 1, 400, 400);
+		pnlGame.setBounds(231, 1, 400, 400);
 		
 		pnlGameLayout = new GridLayout(game.getHeight(),game.getWidth());
 		
@@ -143,14 +119,13 @@ public class WumpusGamePanel extends javax.swing.JPanel implements Observer {
 		pnlGameLayout.setVgap(0);
 		
 		gameInitialized = true;
-		hadGold = false;
+
 		pnlGame.setLayout(pnlGameLayout);
-		
-		add(pnlGame);
+		getContentPane().add(pnlGame);
 		pnlGame.setSize(400, 375);
 		{
 			lblTitle = new JLabel();
-			add(lblTitle);
+			getContentPane().add(lblTitle);
 			lblTitle.setText("Wumpus World");
 			lblTitle.setFont(new java.awt.Font("Andy",2,28));
 			lblTitle.setBounds(11, 3, 180, 48);
@@ -160,8 +135,10 @@ public class WumpusGamePanel extends javax.swing.JPanel implements Observer {
 	}
 	private void initGUI() {
 		try {
-			setLayout(null);
-			setBackground(new java.awt.Color(255,255,255));
+			setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+			getContentPane().setLayout(null);
+			this.setResizable(false);
+			getContentPane().setBackground(new java.awt.Color(255,255,255));
 			{
 				initBoard();
 			}
@@ -174,83 +151,76 @@ public class WumpusGamePanel extends javax.swing.JPanel implements Observer {
 			{
 				scrollPane = new JScrollPane(txtArea);
 				scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-				add(scrollPane);
-				scrollPane.setBounds(191, 388, 400, 150);
+				getContentPane().add(scrollPane);
+				scrollPane.setBounds(231, 388, 400, 150);
 			}
 			{
 				ListModel listKeyModel = 
 						new DefaultComboBoxModel(
 								new String[] { 
 										"Button Key",
-										" Move Buttons:",
-										"  Up:     " + WumpusKeyHandler.KEY_UP,
-										"  Down:   " + WumpusKeyHandler.KEY_DOWN,
-										"  Right:  " + WumpusKeyHandler.KEY_RIGHT,
-										"  Left:   " + WumpusKeyHandler.KEY_LEFT,
-										" Action Buttons:",
-										"  Grab:   " + WumpusKeyHandler.KEY_GRAB,
-										"  Climb:  " + WumpusKeyHandler.KEY_CLIMB,
-										"  Fire:   " + WumpusKeyHandler.KEY_FIRE
-										});
+										"  Move Buttons:",
+										"     Up:        " + WumpusKeyHandler.KEY_UP,
+										"     Down:   " + WumpusKeyHandler.KEY_DOWN,
+										"     Right:    " + WumpusKeyHandler.KEY_RIGHT,
+										"     Left:       " + WumpusKeyHandler.KEY_LEFT,
+										"  Action Buttons:",
+										"     Grab:     " + WumpusKeyHandler.KEY_GRAB,
+										"     Climb:   " + WumpusKeyHandler.KEY_CLIMB,
+										"     Fire:       " + WumpusKeyHandler.KEY_FIRE});
 				listKey = new JList();
-				add(listKey);
+				getContentPane().add(listKey);
 				listKey.setModel(listKeyModel);
 				listKey.setBounds(0, 47, 179, 251);
 				listKey.setEnabled(false);
-				listKey.setFont(new java.awt.Font("DialogInput",0,16));
+				listKey.setFont(new java.awt.Font("Segoe UI",0,16));
 				listKey.setBackground(new java.awt.Color(255,255,255));
 			}
 			{
 				lblMoves = new JLabel();
-				add(lblMoves);
+				getContentPane().add(lblMoves);
 				lblMoves.setText("Moves:");
 				lblMoves.setFont(new java.awt.Font("DialogInput",0,20));
-				lblMoves.setBounds(6, 448, 180, 48);
+				lblMoves.setBounds(6, 448, 213, 48);
 			}
 			{
 				lblGold = new JLabel();
-				add(lblGold);
+				getContentPane().add(lblGold);
 				lblGold.setText("Gold:");
 				lblGold.setBounds(6, 295, 180, 48);
 				lblGold.setFont(new java.awt.Font("DialogInput",0,20));
 			}
 			{
 				lblDeaths = new JLabel();
-				add(lblDeaths);
+				getContentPane().add(lblDeaths);
 				lblDeaths.setText("Deaths:");
-				lblDeaths.setBounds(6, 333, 180, 48);
+				lblDeaths.setBounds(6, 333, 225, 48);
 				lblDeaths.setFont(new java.awt.Font("DialogInput",0,20));
 			}
 			{
 				lblKills = new JLabel();
-				add(lblKills);
+				getContentPane().add(lblKills);
 				lblKills.setText("Wumpus Kills:");
 				lblKills.setFont(new java.awt.Font("DialogInput",0,20));
-				lblKills.setBounds(6, 408, 180, 48);
+				lblKills.setBounds(6, 408, 220, 48);
 			}
 			{
 				lblWins = new JLabel();
-				add(lblWins);
+				getContentPane().add(lblWins);
 				lblWins.setText("Wins:");
 				lblWins.setFont(new java.awt.Font("DialogInput",0,20));
-				lblWins.setBounds(6, 369, 180, 48);
+				lblWins.setBounds(6, 369, 220, 48);
 			}
 			{
-				btnNewGame = new JButton();
-				this.add(btnNewGame);
-				btnNewGame.setText("NewGame");
-				btnNewGame.setBounds(33, 512, 92, 26);
-				btnNewGame.addActionListener(new ActionListener(){
-
-					@Override
-					public void actionPerformed(ActionEvent arg0) {
-						controller.newGame();
-					}
-					
-				});
+				lblTries = new JLabel();
+				getContentPane().add(lblTries);
+				lblTries.setText("Tries:");
+				lblTries.setFont(new java.awt.Font("DialogInput",0,20));
+				lblTries.setBounds(6, 490, 220, 40);
 			}
 
-			this.setSize(610, 576);
+			pack();
+			this.setSize(640, 576);
 		} catch (Exception e) {
 		    //add your error handling code here
 			e.printStackTrace();
@@ -270,11 +240,11 @@ public class WumpusGamePanel extends javax.swing.JPanel implements Observer {
 		private WumpusGame game;
 		
 		private boolean isFireing;
+		
 		public WumpusKeyHandler(WumpusGame game)
 		{
 			this.game = game;
 			isFireing = false;
-			hadGold = false;
 		}
 		
 		@Override
@@ -289,131 +259,93 @@ public class WumpusGamePanel extends javax.swing.JPanel implements Observer {
 		@Override
 		public void keyTyped(KeyEvent e) {
 			char key = e.getKeyChar();
-			if(showingBoard)
+			if(isFireing)
 			{
-				initBoard();
-				showingBoard = false;
-				update(game,null);
-			}
-			else
-			{
-				if(isFireing)
+				switch(key)
 				{
-					boolean fired = false;
-					switch(key)
-					{
-						case KEY_UP:
-							game.fireUp();
-							fired = true;
-							break;
-						case KEY_DOWN:
-							game.fireDown();
-							fired = true;
-							break;
-						case KEY_LEFT:
-							game.fireLeft();
-							fired = true;
-							break;
-						case KEY_RIGHT:
-							game.fireRight();
-							fired = true;
-							break;
-						default:
-							break;
-					}
-					boolean wumpusDead = WumpusGamePanel.this.game.didWumpusDie();
-					String message;
-					if(wumpusDead)
-					{
-						message = "You hear a deathlike scream!";
-					}
-					else if(fired)
-					{
-						message = "It would seem you need to work on your aim";
-					}
-					else
-					{
-						message = "Fireing sequence canceled";
-					}
-					if(txtArea.getText().length() != 0)
-					{
-						WumpusGamePanel.this.txtArea.setText(txtArea.getText() + "\n" + message);
-					}
-					else
-					{
-						WumpusGamePanel.this.txtArea.setText(message);
-					}
-					
-					isFireing = false;
+					case KEY_UP:
+						game.fireUp();
+						break;
+					case KEY_DOWN:
+						game.fireDown();
+						break;
+					case KEY_LEFT:
+						game.fireLeft();
+						break;
+					case KEY_RIGHT:
+						game.fireRight();
+						break;
+					default:
+						break;
+				}
+				boolean wumpusDead = WumpusGameForm.this.game.didWumpusDie();
+				String message;
+				if(wumpusDead)
+				{
+					message = "You hear a deathlike scream!";
 				}
 				else
 				{
-					boolean move = true;
-					switch(key)
-					{
-						case KEY_UP:
-							move = game.moveUp();
-							break;
-						case KEY_DOWN:
-							move = game.moveDown();
-							break;
-						case KEY_LEFT:
-							move = game.moveLeft();
-							break;
-						case KEY_RIGHT:
-							move = game.moveRight();
-							break;
-						case KEY_GRAB:
-							game.grabGold();
-							if(game.hasGold())
-							{
-								agentColor = Color.yellow;
-								if(hadGold == false)
-								{
-									hadGold = true;
-									WumpusGamePanel.this.update(game, null);
-								}
-							}
-							
-							break;
-						case KEY_CLIMB:
-							game.climb();
-							break;
-						case KEY_FIRE:
-							boolean hasFired = WumpusGamePanel.this.game.hasFired();
-							String message;
-							if(hasFired)
-							{
-								message = "You already fired! You has no more ammo!";
-							}
-							else
-							{
-								message = "Which Direction? (use WASD or any other key to cancel)";
-								isFireing = true;
-							}
-							if(txtArea.getText().length() != 0)
-							{
-								WumpusGamePanel.this.txtArea.setText(txtArea.getText() + "\n" + message);
-							}
-							else
-							{
-								WumpusGamePanel.this.txtArea.setText(message);
-							}
-							break;
-					}
-					
-					if(!move)
-					{
-						String message = "Bump! Sorry you can't walk through walls...";
-						if(txtArea.getText().length() != 0)
+					message = "It would seem you need to work on your aim";
+				}
+				if(txtArea.getText().length() != 0)
+				{
+					WumpusGameForm.this.txtArea.setText(txtArea.getText() + "\n" + message);
+				}
+				else
+				{
+					WumpusGameForm.this.txtArea.setText(message);
+				}
+				
+				isFireing = false;
+			}
+			else
+			{
+				switch(key)
+				{
+					case KEY_UP:
+						game.moveUp();
+						break;
+					case KEY_DOWN:
+						game.moveDown();
+						break;
+					case KEY_LEFT:
+						game.moveLeft();
+						break;
+					case KEY_RIGHT:
+						game.moveRight();
+						break;
+					case KEY_GRAB:
+						game.grabGold();
+						if(game.hasGold())
 						{
-							WumpusGamePanel.this.txtArea.setText(txtArea.getText() + "\n" + message);
+							WumpusGameForm.this.update(game, null);
+						}
+						break;
+					case KEY_CLIMB:
+						game.climb();
+						break;
+					case KEY_FIRE:
+						boolean hasFired = WumpusGameForm.this.game.hasFired();
+						String message;
+						if(hasFired)
+						{
+							message = "You already fired! You has no more ammo!";
 						}
 						else
 						{
-							WumpusGamePanel.this.txtArea.setText(message);
+							message = "Which Direction? (use WASD or any other key to cancel)";
+							isFireing = true;
 						}
-					}
+						if(txtArea.getText().length() != 0)
+						{
+							WumpusGameForm.this.txtArea.setText(txtArea.getText() + "\n" + message);
+						}
+						else
+						{
+							WumpusGameForm.this.txtArea.setText(message);
+						}
+						break;
 				}
 			}
 			updateStatusTexts();
@@ -475,76 +407,84 @@ public class WumpusGamePanel extends javax.swing.JPanel implements Observer {
 			this.txtArea.setText(message);
 		}
 	}
-	
+
 	@Override
 	public void update(Observable o, Object object) {
-		
-		Thread t = new Thread()
+		System.out.println("Updating");
+		if(game.hasGold())
 		{
-			public void run()
+			agentColor = Color.yellow;
+		}
+		boolean[][] discoveredTiles = game.getDiscoveredTiles();
+		for(int x = 0; x < discoveredTiles.length; x++)
+		{
+			for(int y = 0; y < discoveredTiles[x].length; y++)
 			{
-				System.out.println("Updating");
-				boolean[][] discoveredTiles = game.getDiscoveredTiles();
-				for(int x = 0; x < discoveredTiles.length; x++)
+				if(discoveredTiles[x][y])
 				{
-					for(int y = 0; y < discoveredTiles[x].length; y++)
-					{
-						if(discoveredTiles[x][y])
-						{
-							buttons[x][y].setText(game.getStatus()[x][y]);
-							buttons[x][y].setBackground(Color.LIGHT_GRAY);
-							buttons[x][y].repaint();
-						}
-					}
-				}
-				
-				buttons[game.getAgentLocation().x][game.getAgentLocation().y].setBackground(agentColor);
-				buttons[game.getAgentLocation().x][game.getAgentLocation().y].repaint();
-				
-				updateTextArea();
-				updateStatusTexts();
-				
-				if(game.didAgentDie() || game.didAgentFinish())
-				{
-					agentColor = Color.LIGHT_GRAY;
-
-					Point start = game.getStartLocation();
-					String text = buttons[start.x][start.y].getText();
-					for(int x = 0; x < discoveredTiles.length; x++)
-					{
-						for(int y = 0; y < discoveredTiles[x].length; y++)
-						{
-							buttons[x][y].setText(game.getStatus()[x][y]);
-							buttons[x][y].setBackground(Color.LIGHT_GRAY);
-							buttons[x][y].repaint();
-						}
-					}
-					buttons[start.x][start.y].setText(text);
-					String message = "Press any key to continue";
-					if(txtArea.getText().length() != 0)
-					{
-						WumpusGamePanel.this.txtArea.setText(txtArea.getText() + "\n" + message);
-					}
-					else
-					{
-						WumpusGamePanel.this.txtArea.setText(message);
-					}
-					
-					showingBoard = true;
+					buttons[x][y].setText(game.getStatus()[x][y]);
+					buttons[x][y].setBackground(Color.LIGHT_GRAY);
+					buttons[x][y].repaint();
 				}
 			}
-		};
+		}
 		
-		t.run();
+		buttons[game.getAgentLocation().x][game.getAgentLocation().y].setBackground(agentColor);
+		buttons[game.getAgentLocation().x][game.getAgentLocation().y].repaint();
+		
+		updateTextArea();
+		updateStatusTexts();
+		
+		if(game.didAgentDie() || game.didAgentFinish())
+		{
+			System.out.println("Initializing");
+			initBoard();
+			System.out.println("Initialized");
+		}
 	}
 	
 	private void updateStatusTexts()
-	{		
+	{	
+		int tries = game.getTries();
+		int wins = game.getWins();
+		int deaths = game.getDeaths();
+		int kills = game.getWumpusKills();
+		
+		double winPerc = ((double)wins)/((double)tries)*100.00;
+		double deathPerc = ((double)deaths)/((double)tries)*100.00;
+		double killsPerc = ((double)kills)/((double)tries)*100.00;
+		
+		String winString = "" + winPerc;
+		String deathString = "" + deathPerc;
+		String killsString = "" + killsPerc;
+		
+		if(winString.length() > 5)
+		{
+			winString = winString.substring(0,5);
+		}
+		
+		if(deathString.length() > 5)
+		{
+			deathString = deathString.substring(0,5);
+		}
+		
+		if(killsString.length() > 5)
+		{
+			killsString = killsString.substring(0,5);
+		}
+		
+		if(tries == 0)
+		{
+			winString = "00.00";
+			deathString = "00.00";
+			killsString = "00.00";
+		}
 		lblGold.setText(  "Gold:   " + game.getGold());
-		lblDeaths.setText("Deaths: " + game.getDeaths());
-		lblWins.setText(  "Wins:   " + game.getWins());
-		lblKills.setText( "Kills:  " + game.getWumpusKills());
+		lblDeaths.setText("Deaths: " + deaths + "(" + deathString + "%)");
+		lblWins.setText(  "Wins:   " + wins + "(" + winString + "%)");
+		lblKills.setText( "Kills:  " + kills + "(" + killsString + "%)");
 		lblMoves.setText( "Moves:  " + game.getNumMoves());
+		lblTries.setText( "Tries:  " + tries);
 	}
 	
 
