@@ -1,4 +1,4 @@
-package z.main;
+package main;
 
 
 import aima.logic.propositional.algorithms.KnowledgeBase;

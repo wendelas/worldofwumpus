@@ -1,4 +1,4 @@
-package z.board;
+package board;
 
 import java.awt.Point;
 import java.util.Random;
@@ -13,16 +13,16 @@ public class GameBoard {
 	/**
 	 * 
 	 */
-	public GameBoard(){
-		board = new Tile[4][4];
-		for(int x = 0; x<board.length;x++){
-			for(int y = 0; y<board[x].length; y++){
-				board[x][y] = new Tile();
+	public GameBoard(int x, int y){
+		board = new Tile[x][y];
+		for(int i = 0; x<board.length;x++){
+			for(int j = 0; y<board[x].length; y++){
+				board[i][j] = new Tile();
 			}
 		}
+		placeGold();
 		placePits();
 		placeWumpus();
-		placeGold();
 	}
 	
 	
@@ -32,7 +32,7 @@ public class GameBoard {
 	private void placeWumpus(){
 		Random gen = new Random();
 		int x=0, y=0;
-		while(x==0 && y==0){
+		while((x==0 && y==0) || (!board[x][y].gold)){
 			x =gen.nextInt(4);
 			y = gen.nextInt(4); 
 		}
@@ -57,7 +57,7 @@ public class GameBoard {
 			for(int y = 0; y<board[x].length; y++){
 				//Determines if the tile has a pit
 				if(((gen.nextInt(4)+1)%4)==2){
-					if((x==0&&y==0) || (wumpus.x==x&&wumpus.y==y)) break;
+					if((x==0&&y==0) || (wumpus.x==x&&wumpus.y==y) || (!board[x][y].gold)) break;
 					//Add pit
 					board[x][y].pit = true;
 					//Add breeze
@@ -68,7 +68,6 @@ public class GameBoard {
 				}
 			}
 		}
-		
 	}
 	
 	/**

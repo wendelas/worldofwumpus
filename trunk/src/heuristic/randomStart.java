@@ -1,8 +1,9 @@
-package main;
+package heuristic;
+
+import heuristic.Nodes.Action;
 
 import java.util.Random;
 
-import main.Nodes.Action;
 
 public class randomStart implements Heuristic {
 	
@@ -12,7 +13,7 @@ public class randomStart implements Heuristic {
 
 
 	@Override
-	public int search(Gameboard board) {
+	public int search(GameBoard board) {
 		Heuristic mh = new ManhattanDistance();
 		int pathCost = mh.search(board);
 		

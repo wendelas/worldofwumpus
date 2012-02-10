@@ -1,6 +1,6 @@
-package main;
+package heuristic;
 
-import main.Nodes.Action;
+import heuristic.Nodes.Action;
 
 public class ManhattanDistance implements Heuristic{
 
@@ -9,7 +9,7 @@ public class ManhattanDistance implements Heuristic{
 	}
 
 	@Override
-	public int search(Gameboard board) {
+	public int search(GameBoard board) {
 		
 		ManhattanDistance md = new ManhattanDistance();
 		
@@ -85,7 +85,7 @@ public class ManhattanDistance implements Heuristic{
 	}
 	
 	
-	private Nodes createNode(Nodes parrent, Gameboard state, int pathCost, Action action){
+	private Nodes createNode(Nodes parrent, GameBoard state, int pathCost, Action action){
 		return new Nodes(parrent,state,pathCost,action);
 	}
 

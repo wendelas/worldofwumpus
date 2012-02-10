@@ -1,4 +1,4 @@
-package z.board;
+package board;
 
 /**
  * @author amethyr
