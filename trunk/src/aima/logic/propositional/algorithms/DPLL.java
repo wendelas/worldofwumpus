@@ -42,13 +42,14 @@ public class DPLL {
 	public boolean dpllSatisfiable(Sentence s, Model m) {
 		Set<Sentence> clauses = new CNFClauseGatherer()
 				.getClausesFrom(new CNFTransformer().transform(s));
-		List symbols = SYMBOL_CONVERTER.setToList(new SymbolCollector()
+		List<Symbol> symbols = SYMBOL_CONVERTER.setToList(new SymbolCollector()
 				.getSymbolsIn(s));
 		// System.out.println(" numberOfSymbols = " + symbols.size());
 		return dpll(clauses, symbols, m);
 	}
 
-	private boolean dpll(Set<Sentence> clauses, List symbols, Model model) {
+	@SuppressWarnings("unchecked")
+	private boolean dpll(Set<Sentence> clauses, List<Symbol> symbols, Model model) {
 		// List<Sentence> clauseList = asList(clauses);
 		List<Sentence> clauseList = new Converter<Sentence>()
 				.setToList(clauses);
@@ -68,7 +69,7 @@ public class DPLL {
 		SymbolValuePair svp = findPureSymbolValuePair(clauseList, model,
 				symbols);
 		if (svp.notNull()) {
-			List newSymbols = (List) ((ArrayList) symbols).clone();
+			List<Symbol> newSymbols = (List<Symbol>) ((ArrayList<Symbol>) symbols).clone();
 			newSymbols.remove(new Symbol(svp.symbol.getValue()));
 			Model newModel = model.extend(new Symbol(svp.symbol.getValue()),
 					svp.value.booleanValue());
@@ -77,7 +78,7 @@ public class DPLL {
 
 		SymbolValuePair svp2 = findUnitClause(clauseList, model, symbols);
 		if (svp2.notNull()) {
-			List newSymbols = (List) ((ArrayList) symbols).clone();
+			List<Symbol> newSymbols = (List<Symbol>) ((ArrayList<Symbol>) symbols).clone();
 			newSymbols.remove(new Symbol(svp2.symbol.getValue()));
 			Model newModel = model.extend(new Symbol(svp2.symbol.getValue()),
 					svp2.value.booleanValue());
@@ -86,13 +87,13 @@ public class DPLL {
 
 		Symbol symbol = (Symbol) symbols.get(0);
 		// System.out.println("default behaviour selecting " + symbol);
-		List newSymbols = (List) ((ArrayList) symbols).clone();
+		List<Symbol> newSymbols = (List<Symbol>) ((ArrayList<Symbol>) symbols).clone();
 		newSymbols.remove(0);
 		return (dpll(clauses, newSymbols, model.extend(symbol, true)) || dpll(
 				clauses, newSymbols, model.extend(symbol, false)));
 	}
 
-	private boolean isEvenOneClauseFalse(Model model, List clauseList) {
+	private boolean isEvenOneClauseFalse(Model model, List<Sentence> clauseList) {
 		for (int i = 0; i < clauseList.size(); i++) {
 			Sentence clause = (Sentence) clauseList.get(i);
 			if (model.isFalse(clause)) {
@@ -105,7 +106,7 @@ public class DPLL {
 		return false;
 	}
 
-	private boolean areAllClausesTrue(Model model, List clauseList) {
+	private boolean areAllClausesTrue(Model model, List<Sentence> clauseList) {
 
 		for (int i = 0; i < clauseList.size(); i++) {
 			Sentence clause = (Sentence) clauseList.get(i);
@@ -157,8 +158,8 @@ public class DPLL {
 	}
 
 	public SymbolValuePair findPureSymbolValuePair(List<Sentence> clauseList,
-			Model model, List symbols) {
-		List clausesWithNonTrueValues = clausesWithNonTrueValues(clauseList,
+			Model model, List<Symbol> symbols) {
+		List<Sentence> clausesWithNonTrueValues = clausesWithNonTrueValues(clauseList,
 				model);
 		Sentence nonTrueClauses = LogicUtils.chainWith("AND",
 				clausesWithNonTrueValues);
@@ -212,8 +213,8 @@ public class DPLL {
 		}
 	}
 
-	private SymbolValuePair findUnitClause(List clauseList, Model model,
-			List symbols) {
+	private SymbolValuePair findUnitClause(List<Sentence> clauseList, Model model,
+			List<Symbol> symbols) {
 		for (int i = 0; i < clauseList.size(); i++) {
 			Sentence clause = (Sentence) clauseList.get(i);
 			if ((clause instanceof Symbol)

@@ -39,11 +39,13 @@ public class BasicTraverser implements PLVisitor {
 		return arg;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Object visitNotSentence(UnarySentence ns, Object arg) {
 		Set s = (Set) arg;
 		return new SetOps().union(s, (Set) ns.getNegated().accept(this, arg));
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Object visitBinarySentence(BinarySentence bs, Object arg) {
 		Set s = (Set) arg;
 		Set termunion = new SetOps().union((Set) bs.getFirst()

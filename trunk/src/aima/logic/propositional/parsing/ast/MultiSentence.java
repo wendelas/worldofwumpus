@@ -27,7 +27,7 @@ public class MultiSentence extends ComplexSentence {
 		return operator;
 	}
 
-	public List getSentences() {
+	public List<Sentence> getSentences() {
 		return sentences;
 	}
 

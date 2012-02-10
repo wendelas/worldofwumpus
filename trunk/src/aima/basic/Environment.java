@@ -86,11 +86,11 @@ public abstract class Environment {
 		}
 	}
 
-	public ArrayList getAgents() {
+	public ArrayList<Agent> getAgents() {
 		return agents;
 	}
 
-	public ArrayList getObjects() {
+	public ArrayList<EnvironmentObject> getObjects() {
 		return objects;
 	}
 

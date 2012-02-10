@@ -85,7 +85,7 @@ public class KnowledgeBase {
 			return asSentence().toString();
 	}
 
-	public List getSentences() {
+	public List<Sentence> getSentences() {
 		return sentences;
 	}
 }

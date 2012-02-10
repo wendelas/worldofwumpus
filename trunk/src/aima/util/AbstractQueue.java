@@ -36,13 +36,13 @@ public class AbstractQueue implements Queue {
 		linkedList.addLast(n);
 	}
 
-	public void addToFront(List list) {
+	public void addToFront(List<?> list) {
 		for (int i = 0; i < list.size(); i++) {
 			addToFront(list.get(list.size() - 1 - i));
 		}
 	}
 
-	public void addToBack(List list) {
+	public void addToBack(List<?> list) {
 		for (int i = 0; i < list.size(); i++) {
 			addToBack(list.get(i));
 		}
@@ -72,7 +72,7 @@ public class AbstractQueue implements Queue {
 		return linkedList.size();
 	}
 
-	public List asList() {
+	public List<Object> asList() {
 		return linkedList;
 	}
 
@@ -80,7 +80,7 @@ public class AbstractQueue implements Queue {
 		throw new RuntimeException("must be implemented by subclasses");
 	}
 
-	public void add(List items) {
+	public void add(List<?> items) {
 		throw new RuntimeException("must be implemented by subclasses");
 	}
 

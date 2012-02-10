@@ -9,7 +9,7 @@ import java.util.NoSuchElementException;
  * 
  * @author <A HREF="mailto:moravek@pobox.sk">Peter Moravek </A>
  */
-public class Tokenizer implements Enumeration {
+public class Tokenizer implements Enumeration<Object> {
 
 	/**
 	 * Constructs a string tokenizer for the specified string. All characters in

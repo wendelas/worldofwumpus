@@ -77,7 +77,7 @@ public class PLFCEntails {
 		return false;
 	}
 
-	private List<HornClause> asHornClauses(List sentences) {
+	private List<HornClause> asHornClauses(List<?> sentences) {
 		List<HornClause> hornClauses = new ArrayList<HornClause>();
 		for (int i = 0; i < sentences.size(); i++) {
 			Sentence sentence = (Sentence) sentences.get(i);
@@ -103,6 +103,7 @@ public class PLFCEntails {
 		return ((value == null) || value.equals(Boolean.TRUE));
 	}
 	
+	@SuppressWarnings("unused")
 	private boolean isTrue(Symbol p) {
 		Object value = inferred.get(p);
 		return ((value != null) && value.equals(Boolean.TRUE));
@@ -155,7 +156,7 @@ public class PLFCEntails {
 			return premiseSymbols.contains(q);
 		}
 
-		public List getPremiseSymbols() {
+		public List<Symbol> getPremiseSymbols() {
 			return premiseSymbols;
 		}
 
@@ -172,7 +173,7 @@ public class PLFCEntails {
 			if (premiseSymbols.size() != ohc.premiseSymbols.size()) {
 				return false;
 			}
-			boolean result = true;
+//			boolean result = true;
 			for (Symbol s : premiseSymbols) {
 				if (!ohc.premiseSymbols.contains(s)) {
 					return false;

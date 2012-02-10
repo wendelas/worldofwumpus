@@ -6,7 +6,6 @@ package aima.util;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -23,15 +22,15 @@ import aima.logic.propositional.parsing.ast.UnarySentence;
 
 public class LogicUtils {
 
-	public static Sentence chainWith(String connector, List sentences) {
+	public static Sentence chainWith(String connector, List<Sentence> sentences) {
 		if (sentences.size() == 0) {
 			return null;
 		} else if (sentences.size() == 1) {
-			return (Sentence) sentences.get(0);
+			return sentences.get(0);
 		} else {
-			Sentence soFar = (Sentence) sentences.get(0);
+			Sentence soFar = sentences.get(0);
 			for (int i = 1; i < sentences.size(); i++) {
-				Sentence next = (Sentence) sentences.get(i);
+				Sentence next = sentences.get(i);
 				soFar = new BinarySentence(connector, soFar, next);
 			}
 			return soFar;

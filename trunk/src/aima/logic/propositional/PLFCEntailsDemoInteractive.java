@@ -1,16 +1,15 @@
 package aima.logic.propositional;
 
+import java.util.Scanner;
+
 import aima.logic.propositional.algorithms.KnowledgeBase;
 import aima.logic.propositional.algorithms.PLFCEntails;
-import aima.logic.propositional.parsing.PEParser;
-
-import java.util.*;
 
 /**
  * @author Jay Urbain credits: Ravi Mohan
  */
 public class PLFCEntailsDemoInteractive {
-	private static PEParser parser = new PEParser();
+//	private static PEParser parser = new PEParser();
 
 	private static PLFCEntails plfce = new PLFCEntails();
 
