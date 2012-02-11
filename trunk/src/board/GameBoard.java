@@ -1,19 +1,52 @@
+/*****************************************************************************
+ * FILE: GameBoard.java
+ * DATE: 02/08/12
+ * AUTHOR: 	Karl Schmidbauer <schmidbauerk@msoe.edu>
+ * 			Ben Ebert <ebertb@msoe.edu>
+ * 
+ * PURPOSE: Creates and stores the game board.
+ * 
+ ****************************************************************************/
 package board;
 
+import java.awt.Dimension;
 import java.awt.Point;
 import java.util.Random;
 
+/**
+ * Generates the game board for a wumpus world implementation
+ * 
+ * @author Karl Schmidbauer <schmidbauerk@msoe.edu>
+ *
+ */
 public class GameBoard {
 	
+	/**
+	 * The point where the wupus is
+	 */
 	private Point wumpus;
+	/**
+	 * The game board stored as a two dimensional array of tiles
+	 */
 	private Tile[][] board;
-	
-	
+	/**
+	 * Stores the board size
+	 */
+	private Dimension boardSize;
 	
 	/**
-	 * 
+	 * Default constructor makes a game board of a default size
+	 */
+	public GameBoard(){
+		this(4, 4);
+	}
+	
+	/**
+	 * Public constructor takes in parameters the size of the game board
 	 */
 	public GameBoard(int x, int y){
+		boardSize = new Dimension(x, y);
+		
 		board = new Tile[x][y];
 		for(int i = 0; x<board.length;x++){
 			for(int j = 0; y<board[x].length; y++){
@@ -27,7 +60,7 @@ public class GameBoard {
 	
 	
 	/**
-	 * 
+	 * Places the wumpus on a random tile on the board
 	 */
 	private void placeWumpus(){
 		Random gen = new Random();
@@ -49,7 +82,7 @@ public class GameBoard {
 	
 	
 	/**
-	 * 
+	 * Places pits with a 20% chance on tiles
 	 */
 	private void placePits(){
 		Random gen = new Random();
@@ -71,18 +104,20 @@ public class GameBoard {
 	}
 	
 	/**
-	 * 
+	 * Places the gold on a random tile on the board
 	 */
 	private void placeGold(){
 		Random gen = new Random();
 		int x =gen.nextInt(4), y = gen.nextInt(4); 
 		//Place gold
 		board[x][y].gold = true;
-		//Add glitter
-		board[x][y].glitter = true;
+		//Glitter and gold are the same
 	}
 	
 	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	public String toString(){
 		String output = "";
 		for(int x = 0; x<board.length;x++){
@@ -94,8 +129,19 @@ public class GameBoard {
 		return output;
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#clone()
+	 */
 	public Object clone(){
 		
 		return null;
+	}
+	
+	/**
+	 * Get the size of the game board
+	 * @return - dimension of the game board
+	 */
+	public Dimension getBoardSize(){
+		return boardSize;
 	}
 }

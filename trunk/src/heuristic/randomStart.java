@@ -2,6 +2,7 @@ package heuristic;
 
 import java.util.Random;
 
+import agent.Agent.direction;
 import board.GameBoard;
 
 
@@ -13,16 +14,16 @@ public class randomStart implements Heuristic {
 
 
 	@Override
-	public int search(GameBoard board) {
+	public direction nextMove(GameBoard board) {
 		Heuristic mh = new ManhattanDistance();
-		int pathCost = mh.search(board);
+		direction pathCost = mh.nextMove(board);
 		
 		while(pathCost == -1){
 			Random r = new Random();
 			
 			for(int i=0; i<50; i++){
-				while(true){
-					boolean move = false;
+				boolean move = false;
+				while(!move){
 					int t = r.nextInt(4);
 					
 					switch(t){
@@ -39,17 +40,10 @@ public class randomStart implements Heuristic {
 //						move = board.movePieceLeft();
 						break;
 					}
-					
-					if(move){
-						break;
-					}
-					
-					
-					
 				}
 			}
 			
-			pathCost = mh.search(board);
+			pathCost = mh.nextMove(board);
 		}
 		
 		return pathCost;
