@@ -20,9 +20,9 @@ public class Main {
 		for(int a = 50; a>=1; a--){
 			GameBoard game = new GameBoard(4, 4);
 			game = randomBoard();
-			int manh = man.search((GameBoard)game.clone());
-			int misp = mis.search((GameBoard)game.clone());
-			int asta = rnd.search((GameBoard)game.clone());
+			int manh = man.nextMove((GameBoard)game.clone());
+			int misp = mis.nextMove((GameBoard)game.clone());
+			int asta = rnd.nextMove((GameBoard)game.clone());
 			
 			
 			if(manh>=0){

@@ -91,7 +91,7 @@ public class ManhattanDistance implements Heuristic{
 	}
 
 	@Override
-	public int search(GameBoard board) {
+	public int nextMove(GameBoard board) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
