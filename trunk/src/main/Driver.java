@@ -49,11 +49,6 @@ public class Driver {
 		
 		
 		board = new GameBoard(sizeX,sizeY);
-		kc = new KnowledgeConnector();
-		
-		Agent walker = new ChickenLittle(board);
-		
-		kc.createkb();
-		
+		System.out.println(board);
 	}
 }
