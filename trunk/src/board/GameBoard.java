@@ -57,6 +57,7 @@ public class GameBoard {
 		placeGold();
 		placeWumpus();
 		placePits();
+		
 	}
 	
 	
@@ -120,9 +121,9 @@ public class GameBoard {
 	 */
 	public String toString(){
 		String output = "";
-		for(int x = 0; x<board.length;x++){
-			for(int y = 0; y<board[x].length; y++){
-				output+="|"+board[x][y]+"\t|";
+		for(int y = board.length-1; y>=0;y--){
+			for(int x = 0; x<board[y].length; x++){
+				output+="|"+board[y][x]+"\t|";
 			}
 			output+="\n";
 		}
