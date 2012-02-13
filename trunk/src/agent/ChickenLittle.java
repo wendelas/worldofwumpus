@@ -16,11 +16,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-import exceptions.IllegalMove;
-
 import z.WumpusWorld.WumpusGame.WumpusGame;
 import z.propositional_logic.WumpusWorldKB;
 import board.GameBoard;
+import exceptions.IllegalMove;
 
 public class ChickenLittle extends Agent {
 
