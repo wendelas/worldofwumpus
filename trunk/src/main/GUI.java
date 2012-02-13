@@ -11,9 +11,11 @@ import java.awt.event.WindowListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.JTextPane;
 
 public class GUI extends JFrame{
@@ -34,6 +36,7 @@ public class GUI extends JFrame{
 	//private static JButton reset;
 	private JTextArea results;
 	private JScrollPane scrollable;
+	private JTextField numGames;
 	
 	
 	public GUI(){
@@ -88,13 +91,14 @@ public class GUI extends JFrame{
 	
 	
 	private void addButtonPanel(){
-		JPanel buttonPanel = new JPanel(new GridLayout(1,2));
+		JPanel buttonPanel = new JPanel(new GridLayout(1,3));
 		buttonPanel.setSize(WIDTH-25, 100);
 		buttonPanel.setLocation(10,465);
 		
 		//Generate Buttons
-		buttonPanel.add(createButtons("Run"));
-		buttonPanel.add(createButtons("Reset"));
+		buttonPanel.add(createButtons("Chicken Little"));
+		buttonPanel.add(createButtons("Rambo"));
+		buttonPanel.add(createNumGamesPanel());
 		
 		//Add to main Panel
 		this.add(buttonPanel);
@@ -103,7 +107,7 @@ public class GUI extends JFrame{
 	
 	private JButton createButtons(String name){
 		JButton button = new JButton(name);
-		button.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 60));
+		button.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
 		button.setToolTipText(name);
 		button.setActionCommand(name);
 		button.addActionListener(new ButtonListener());
@@ -112,9 +116,22 @@ public class GUI extends JFrame{
 	}
 
 
+	private JPanel createNumGamesPanel(){
+		JPanel labelPanel = new JPanel();
+		labelPanel.setLayout(new GridLayout(2,1));
 
+		labelPanel.add(new JLabel("Number of Games:",JLabel.CENTER));
+		numGames = new JTextField();
+		labelPanel.add(numGames);
+	
+		return labelPanel;
+	}
 	
 	
+	
+	private void cleanScreen(){
+		results.setText("");
+	}
 	
 	
 	
@@ -124,7 +141,11 @@ public class GUI extends JFrame{
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			// TODO Auto-generated method stub
+			if(arg0.getActionCommand()=="Chicken Little"){
+				
+			}else if(arg0.getActionCommand()=="Rambo"){
+				
+			}
 			
 		}
 		

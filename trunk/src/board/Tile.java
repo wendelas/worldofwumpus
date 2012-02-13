@@ -38,7 +38,9 @@ public class Tile {
 	 * Stores if there is a stench on this tile
 	 */
 	public boolean stench;
+
 	
+
 	
 	/* (non-Javadoc)
 	 * Outputs the tile to a string to be viewed on a console.
