@@ -10,11 +10,11 @@
  ****************************************************************************/
 package agent;
 
+import java.awt.Dimension;
 import java.awt.Point;
 
-import exceptions.IllegalMove;
-
 import board.GameBoard;
+import exceptions.IllegalMove;
 
 /**
  * Agent to traverse the game board
@@ -28,12 +28,15 @@ public abstract class Agent {
 	/**
 	 * Stores the current position of the Agent
 	 */
-	private Point currentPosition;
+	protected Point currentPosition;
+	
+	
+	protected MemoryNode[][] memory;
 	
 	/**
 	 * The game board that the agent is operating on
 	 */
-	private GameBoard board;
+	protected GameBoard board;
 	
 	/**
 	 * Directions that the agent can go
@@ -57,6 +60,8 @@ public abstract class Agent {
 	public Agent(GameBoard board){
 		currentPosition = new Point(0,0);
 		this.board = board;
+		Dimension size = board.getBoardSize();
+		memory = new MemoryNode[size.width][size.width];
 	}
 	
 	/**
@@ -104,6 +109,43 @@ public abstract class Agent {
 				break;
 		}
 	}
+	
+	public void shootArrow(direction direction) throws IllegalMove{
+		switch(direction){
+			case goUp:
+				currentPosition.y++;
+				if(currentPosition.y >= board.getBoardSize().height){
+					currentPosition.y--;
+					throw new IllegalMove("Cannot shoot up.");
+				}
+				break;
+			case goDown:
+				currentPosition.y--;
+				if(currentPosition.y < 0){
+					currentPosition.y++;
+					throw new IllegalMove("Cannot shoot down.");
+				}
+				break;
+			case goRight:
+				currentPosition.x++;
+				if(currentPosition.x >= board.getBoardSize().width){
+					currentPosition.x--;
+					throw new IllegalMove("Cannot shoot right.");
+				}
+				break;
+			case goLeft:
+				currentPosition.x--;
+				if(currentPosition.x < 0){
+					currentPosition.x++;
+					throw new IllegalMove("Cannot shoot left.");
+				}
+				break;
+			default:
+				break;
+		}
+	}
+	
+	
 	
 	/**
 	 * Gets the current position of the agent
