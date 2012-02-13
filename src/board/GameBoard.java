@@ -34,6 +34,7 @@ public class GameBoard {
 	 */
 	private Dimension boardSize;
 	
+	
 	/**
 	 * Default constructor makes a game board of a default size
 	 */
