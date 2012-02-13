@@ -39,9 +39,6 @@ public class Tile {
 	 */
 	public boolean stench;
 
-	
-
-	
 	/* (non-Javadoc)
 	 * Outputs the tile to a string to be viewed on a console.
 	 * 
@@ -49,11 +46,11 @@ public class Tile {
 	 */
 	public String toString(){
 		String output = "";
-		if(gold) output+="A";
-		if(wumpus) output+="W";
-		if(pit) output+="P";
-		if(breeze) output+="B";
-		if(stench) output+="S";
+		if(gold)	output+="A";
+		if(wumpus)	output+="W";
+		if(pit)		output+="P";
+		if(breeze)	output+="B";
+		if(stench)	output+="S";
 		return output;
 	}
 }
