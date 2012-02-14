@@ -39,86 +39,20 @@ public class ChickenLittle extends Agent {
 			Random r = new Random();
 
 			boolean goldFound = false;
-			char[] statuses = board.getStatusAtLocation(board.getAgentLocation());
+			
+			String statuses = board.getStatusAtLocation(board.getAgentLocation());
 			try {
 				Thread.sleep(250);
 			} catch (InterruptedException e1) {
 				e1.printStackTrace();
 			}
 
-			if (containsGold(statuses)) {
+			if (statuses.contains("A")) {
 				board.grabGold();
-				board.climb();
+				board.climb("Gold");
 				goldFound = true;
 			}
-			for (int i = 0; i < statuses.length; i++) {
-				if (statuses[i] == WumpusGame.STATUS_BREEZE) {
-					board.climb();
-					System.out.println("Ah oh Breeze! getting outa here!");
-					goldFound = true;
-					break;
-				} else if (statuses[i] == WumpusGame.STATUS_STENCH) {
-					int x = r.nextInt(2);
-					switch (x) {
-					case 0:
-						try {
-							shootArrow(direction.goUp);
-							System.out.println("Fired up");
-						} catch (IllegalMove e2) {
-							e2.printStackTrace();
-						}
-						break;
-					case 1:
-						try {
-							shootArrow(direction.goRight);
-							System.out.println("Fired right");
-						} catch (IllegalMove e) {
-							e.printStackTrace();
-						}
-						break;
-					}
-					if (board.wumpusDead()) {
-						System.out.println("Killed Wumpus!");
-						try {
-							Thread.sleep(500);
-						} catch (InterruptedException e1) {
-							e1.printStackTrace();
-						}
-						switch (x) {
-						case 0:
-							kb.setWumpusLocation(new Point(board
-									.getAgentLocation().x, +board
-									.getAgentLocation().y - 1));
-							break;
-						case 1:
-							kb.setWumpusLocation(new Point(board
-									.getAgentLocation().x + 1, +board
-									.getAgentLocation().y));
-							break;
-						}
-						kb.setWumpusDead(true);
-					} else {
-						System.out.println("Wumpus survived =(");
-						try {
-							Thread.sleep(500);
-						} catch (InterruptedException e1) {
-							e1.printStackTrace();
-						}
-						switch (x) {
-						case 0:
-							kb.setWumpusLocation(new Point(board
-									.getAgentLocation().x + 1, +board
-									.getAgentLocation().y));
-							break;
-						case 1:
-							kb.setWumpusLocation(new Point(board
-									.getAgentLocation().x, +board
-									.getAgentLocation().y - 1));
-							break;
-						}
-					}
-				}
-			}
+			if(statuses.contains("B") && !statuses.contains("NB")) board.climb("Brease");
 
 			kb.updateTile("NB", new Point(0,0));
 			kb.updateTile("NS", new Point(0,0));
@@ -190,13 +124,13 @@ public class ChickenLittle extends Agent {
 				}
 				currentPoint = nextNode.getState().getAgentLocation();
 				statuses = nextNode.getState().getStatusAtLocation(currentPoint);
-				if (statuses.length == 0) {
+				if (statuses.isEmpty()) {
 					kb.updateTile("NB", currentPoint);
 					kb.updateTile("NS", currentPoint);
 				} else {
 					boolean breeze = false;
 					boolean stench = false;
-					if (containsGold(statuses)) {
+					if (statuses.contains("A")) {
 						try {
 							Thread.sleep(250);
 						} catch (InterruptedException e) {
@@ -206,66 +140,52 @@ public class ChickenLittle extends Agent {
 						System.out.println("Gold Found");
 						goldFound = true;
 					}
-					for (int i = 0; i < statuses.length; i++) {
+					
+					if (statuses.contains("B") && !statuses.contains("NB")) {
+						breeze = true;
+						kb.updateTile("B", currentPoint);
+					} 
+					if (statuses.contains("S") && !statuses.contains("NS")) {
+						stench = true;
+						if (kb.wumpusFound()) {
+							break;
+						}
+						kb.updateTile("S", currentPoint);
+						kb.findWumpus();
+						if (kb.wumpusFound()) {
+							System.out.println("WumpusFound");
+							try {
+								Thread.sleep(250);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+							Point wumpusLocation = kb.getWumpusLocation();
 
-						if (statuses[i] == WumpusGame.STATUS_BREEZE) {
-							breeze = true;
-							kb.updateTile("B", currentPoint);
-						} else if (statuses[i] == WumpusGame.STATUS_STENCH) {
-							stench = true;
-							if (kb.wumpusFound()) {
-								break;
+							direction whereToShoot = null;
+							if (wumpusLocation.x > currentPoint.x) {
+								whereToShoot = direction.goRight;
+							} else if (wumpusLocation.y > currentPoint.y) {
+								whereToShoot = direction.goUp;
+							} else if (wumpusLocation.x < currentPoint.x) {
+								whereToShoot = direction.goLeft;
+							} else if (wumpusLocation.y < currentPoint.y) {
+								whereToShoot = direction.goDown;
 							}
-							kb.updateTile("S", currentPoint);
-							kb.findWumpus();
-							if (kb.wumpusFound()) {
-								System.out.println("WumpusFound");
-								try {
-									Thread.sleep(250);
-								} catch (InterruptedException e) {
-									e.printStackTrace();
-								}
-								Point wumpusLocation = kb.getWumpusLocation();
-								//TODO Rework
-								if (wumpusLocation.x > currentPoint.x) {
-									try {
-										shootArrow(direction.goRight);
-									} catch (IllegalMove e) {
-										e.printStackTrace();
-									}
-								} else if (wumpusLocation.y > currentPoint.y) {
-									try {
-										shootArrow(direction.goDown);
-									} catch (IllegalMove e) {
-										e.printStackTrace();
-									}
-								} else if (wumpusLocation.x < currentPoint.x) {
-									try {
-										shootArrow(direction.goLeft);
-									} catch (IllegalMove e) {
-										e.printStackTrace();
-									}
-								} else if (wumpusLocation.y < currentPoint.y) {
-									try {
-										shootArrow(direction.goLeft);
-									} catch (IllegalMove e) {
-										e.printStackTrace();
-									}
-								}
-								kb.setWumpusDead(true);
+							try {
+								shootArrow(whereToShoot);
+							} catch (IllegalMove e) {
+								e.printStackTrace();
 							}
+							kb.setWumpusDead(board.wumpusDead());
 						}
 					}
-					if (breeze && !stench) {
-						kb.updateTile("B", currentPoint);
-						kb.updateTile("NS", currentPoint);
-					} else if (!breeze && stench) {
-						kb.updateTile("NB", currentPoint);
-						kb.updateTile("S", currentPoint);
-					} else if (stench && breeze) {
-						kb.updateTile("B", currentPoint);
-						kb.updateTile("S", currentPoint);
-					}
+					
+					if(breeze) kb.updateTile("B", currentPoint);
+					else kb.updateTile("NB", currentPoint);
+					
+					if(stench) kb.updateTile("S", currentPoint);
+					else kb.updateTile("S", currentPoint);
+					
 				}
 				currentNode = nextNode;
 			}
@@ -283,8 +203,7 @@ public class ChickenLittle extends Agent {
 				}
 				currentNode = currentNode.getParent();
 			}
-			board.climb();
-
+			board.climb("Give Up");
 		}
 	}
 
