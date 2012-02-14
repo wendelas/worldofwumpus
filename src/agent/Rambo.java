@@ -10,18 +10,23 @@
 package agent;
 
 import board.GameBoard;
+import java.util.Random;
 
 
 public class Rambo extends Agent {
+	
+	
 
 	public Rambo(GameBoard board) {
 		super(board);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public direction search() {
-		// TODO Auto-generated method stub
+		boolean keepGoing = true;
+		while(keepGoing){
+			
+		}
 		return null;
 	}
 
