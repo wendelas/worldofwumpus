@@ -34,6 +34,7 @@ public class GameBoard {
 	 */
 	private Dimension boardSize;
 
+	private Point gold;
 
 	/**
 	 * Default constructor makes a game board of a default size
@@ -71,6 +72,7 @@ public class GameBoard {
 	private void placeGold(){
 		Random gen = new Random();
 		int x =gen.nextInt(4), y = gen.nextInt(4); 
+		gold = new Point(x, y);
 		//Place gold
 		board[x][y].gold = true;
 		//Glitter and gold are the same
@@ -147,14 +149,18 @@ public class GameBoard {
 	}
 
 
-	private boolean hasGold;
-	private boolean wumpusDead;
-	private boolean agentDead;
-	private boolean agentFinished;
+	public Point getWumpusLocation(){
+		return wumpus;
+	}
 
-	private Point wumpusLocation;
-	private Point goldLocation;
-	private Point agentLocation;
+
+	public Point getGoldLocation(){
+		return gold;
+	}
+
+
+
+	private Point agentLocation; //TODO replace with agent.getCurrentLocation or something similar
 	private Point startingLocation;
 
 	private static final char WUMPUS ='W';
@@ -169,10 +175,6 @@ public class GameBoard {
 
 	private void resetWorld(){
 		//Tries++
-		this.agentDead=false;
-		this.agentFinished=false;
-		this.hasGold=false;
-		this.wumpusDead=false;
 		this.agentLocation=new Point(startingLocation.x, startingLocation.y);
 		this.discoveredTiles=new boolean[boardSize.width][boardSize.height];
 
@@ -193,8 +195,8 @@ public class GameBoard {
 		boolean gotten = false;
 		if(hasGold){
 			gotten = false;
-		}else if(agentLocation.x == goldLocation.x && agentLocation.y == goldLocation.y){
-			status[goldLocation.x][goldLocation.y] = status[goldLocation.x][goldLocation.y].replace(""+GOLD, "");
+		}else if(agentLocation.x == gold.x && agentLocation.y == gold.y){
+			status[gold.x][gold.y] = status[gold.x][gold.y].replace(""+GOLD, "");
 			hasGold=true;
 			gotten=true;
 		}
@@ -220,58 +222,14 @@ public class GameBoard {
 	}
 
 	private void killWumpus(){
-		status[wumpusLocation.x][wumpusLocation.y] = status[wumpusLocation.x][wumpusLocation.y].replace(""+WUMPUS, "");
+		status[wumpus.x][wumpus.y] = status[wumpus.x][wumpus.y].replace(""+WUMPUS, "");
 //		gold+=100;
 		wumpusDead = true;
 //		wumpusKills++;
-	}
-
-	private void move(){
-		discoveredTiles[agentLocation.x][agentLocation.y] = true;
-		String agentStats = getStatusAtLocation(agentLocation);
-		boolean dead = false;
-//		for(int i = 0; i<agentStats.length; i++){
-//			if(agentStats[i] == PIT || agentStats[i] == WUMPUS){
-//				dead = true;
-//				break;
-//			}
-//		}
-		if(dead){
-			this.agentDead = true;
-			//gold -= 1000;
-			//deaths++;
-			resetWorld();
-		}else{
-			//gold--;
-		}
-		//numMoves++;
 	}
 
 	public String getStatusAtLocation(Point p){
 		return board[p.x][p.y].toString();
 	}
 
-	public Point getWumpusLocation(){
-		return wumpusLocation;
-	}
-
-	public Point getGoldLocation(){
-		return goldLocation;
-	}
-
-	public Point getAgentLocation(){
-		return agentLocation;
-	}
-
-	public Point getStartLocation(){
-		return startingLocation;
-	}
-
-	public boolean didAgentDie(){
-		return agentDead;
-	}
-
-	public boolean didAgentFinish(){
-		return agentFinished;
-	}
 }
