@@ -39,6 +39,11 @@ public abstract class Agent {
 	protected GameBoard board;
 	
 	/**
+	 * The knowledge connector that will keep track of what the agents will do
+	 */
+	protected KnowledgeConnector kb;
+	
+	/**
 	 * Directions that the agent can go
 	 * 
 	 * @author Karl Schmidbauer <schmidbauerk@msoe.edu>
@@ -62,6 +67,7 @@ public abstract class Agent {
 		this.board = board;
 		Dimension size = board.getBoardSize();
 		memory = new MemoryNode[size.width][size.width];
+		kb = new KnowledgeConnector();
 	}
 	
 	/**
