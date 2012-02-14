@@ -4,55 +4,64 @@ package agent.main;
 public class statistics {
 
 	
-	private int numDeaths;
+	private static int numDeaths;
 	
-	private int numWins;
+	private static int numWins;
 	
-	private int wumpuskills;
+	private static int wumpuskills;
 
-	private int tries;
+	private static int tries;
 	
-	public statistics(){
+	private static statistics Instance;
+	
+	private statistics(){
 		numDeaths = 0;
 		numWins = 0;
 		wumpuskills = 0;
 		tries = 0;
 	}
 	
+	public static synchronized statistics getInstance(){
+		if(Instance == null){
+			Instance = new statistics();
+		}
+		return Instance;
+	}
 	
-	public int getNumDeaths(){
+	
+	public static int getNumDeaths(){
 		return numDeaths;
 	}
 	
-	public int getNumWins(){
+	public static int getNumWins(){
 		return numWins;
 	}
 	
-	public int getWumpusKills(){
+	public static int getWumpusKills(){
 		return wumpuskills;
 	}
 	
-	public int getTries(){
+	public static int getTries(){
 		return tries;
 	}
 	
-	public void incrementDeaths(){
+	public static void incrementDeaths(){
 		numDeaths += 1;
 	}
 	
-	public void incrementWins(){
+	public static void incrementWins(){
 		numWins += 1;
 	}
 	
-	public void incrementKills(){
+	public static void incrementKills(){
 		wumpuskills += 1;
 	}
 	
-	public void incrementTries(){
+	public static void incrementTries(){
 		tries += 1;
 	}
 	
-	public void resetStats(){
+	public static void resetStats(){
 		numDeaths = 0;
 		numWins = 0;
 		wumpuskills = 0;
