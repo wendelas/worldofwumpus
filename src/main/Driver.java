@@ -51,10 +51,10 @@ public class Driver {
 		board = new GameBoard(sizeX,sizeY);
 		kc = new KnowledgeConnector();
 		
-		GUI gi = new GUI();
+		//GUI gi = new GUI();
 		
 		Agent walker = new ChickenLittle(board);
-
+		walker.search();
 		
 	}
 }
