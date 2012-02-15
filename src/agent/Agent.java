@@ -14,6 +14,8 @@ import java.awt.Dimension;
 import java.awt.Point;
 
 import main.KnowledgeConnector;
+import main.Statistics;
+
 import board.GameBoard;
 import exceptions.IllegalMove;
 
@@ -31,19 +33,24 @@ public abstract class Agent {
 	 */
 	protected Point currentPosition;
 	
-	
 	protected MemoryNode[][] memory;
 	
 	/**
 	 * The game board that the agent is operating on
 	 */
 	protected GameBoard board;
+
+	protected boolean[][] discoveredTiles;
 	
 	/**
 	 * The knowledge connector that will keep track of what the agents will do
 	 */
 	protected KnowledgeConnector kb;
-	
+
+	protected boolean hasGold;
+
+	protected Object[][] status;
+
 	/**
 	 * Directions that the agent can go
 	 * 
@@ -115,44 +122,53 @@ public abstract class Agent {
 			default:
 				break;
 		}
+		discoveredTiles[currentPosition.x][currentPosition.y]= true; 
+		String tileInfo = board.getStatusAtLocation(currentPosition);
+		boolean dead = false;
+		if((tileInfo.contains("P") && !tileInfo.contains("NP")) || (tileInfo.contains("W") && !tileInfo.contains("NW"))){
+				dead = true;
+		}
+		if(dead){
+			Statistics.incrementDeaths();
+			 board = new GameBoard(board.getBoardSize().width, board.getBoardSize().height);
+		}
 	}
 	
 	public void shootArrow(direction direction) throws IllegalMove{
 		switch(direction){
 			case goUp:
-				currentPosition.y++;
 				if(currentPosition.y >= board.getBoardSize().height){
-					currentPosition.y--;
 					throw new IllegalMove("Cannot shoot up.");
 				}
+				currentPosition.y++;
 				break;
 			case goDown:
-				currentPosition.y--;
 				if(currentPosition.y < 0){
-					currentPosition.y++;
 					throw new IllegalMove("Cannot shoot down.");
 				}
+				currentPosition.y--;
 				break;
 			case goRight:
-				currentPosition.x++;
 				if(currentPosition.x >= board.getBoardSize().width){
-					currentPosition.x--;
 					throw new IllegalMove("Cannot shoot right.");
 				}
+				currentPosition.x++;
 				break;
 			case goLeft:
-				currentPosition.x--;
 				if(currentPosition.x < 0){
-					currentPosition.x++;
 					throw new IllegalMove("Cannot shoot left.");
 				}
+				currentPosition.x--;
 				break;
 			default:
 				break;
 		}
+		//Try to kill the wumpus (poor, poor wumpus)
+		if(board.killWumpus(currentPosition)){
+			System.out.println("Killed the Wumpus");
+			Statistics.incrementKills();
+		}
 	}
-	
-	
 	
 	/**
 	 * Gets the current position of the agent
@@ -160,5 +176,17 @@ public abstract class Agent {
 	 */
 	public Point getPosition(){
 		return currentPosition;
+	}
+	
+	public void grabGold(){
+		Statistics.incrementWins();
+		climb("Got the gold");
+	}
+	
+	/**
+	 * @param msg
+	 */
+	public void climb(String msg){
+		System.out.println(msg);
 	}
 }

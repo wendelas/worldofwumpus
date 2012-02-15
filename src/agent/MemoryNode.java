@@ -20,7 +20,7 @@ public class MemoryNode {
 		return parent;
 	}
 	
-	public GameBoard getState() {
+	public GameBoard getBoard() {
 		return state;
 	}
 
