@@ -12,7 +12,7 @@ public class Statistics {
 
 	private static int tries;
 	
-	private static Statistics stats;
+	private static Statistics Instance;
 	
 	private Statistics(){
 		numDeaths = 0;
@@ -21,10 +21,13 @@ public class Statistics {
 		tries = 0;
 	}
 	
-	public static Statistics getInstance(){
-		if(stats == null) stats = new Statistics(); 
-		return stats;
+	public static synchronized Statistics getInstance(){
+		if(Instance == null){
+			Instance = new Statistics();
+		}
+		return Instance;
 	}
+	
 	
 	public static int getNumDeaths(){
 		return numDeaths;
@@ -43,19 +46,19 @@ public class Statistics {
 	}
 	
 	public static void incrementDeaths(){
-		numDeaths++;
+		numDeaths += 1;
 	}
 	
 	public static void incrementWins(){
-		numWins++;
+		numWins += 1;
 	}
 	
 	public static void incrementKills(){
-		wumpuskills++;
+		wumpuskills += 1;
 	}
 	
 	public static void incrementTries(){
-		tries++;
+		tries += 1;
 	}
 	
 	public static void resetStats(){
