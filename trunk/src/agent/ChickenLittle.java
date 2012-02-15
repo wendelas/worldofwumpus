@@ -14,10 +14,7 @@ package agent;
 import java.awt.Point;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
-import z.WumpusWorld.WumpusGame.WumpusGame;
-import z.propositional_logic.WumpusWorldKB;
 import board.GameBoard;
 import exceptions.IllegalMove;
 
@@ -30,17 +27,15 @@ public class ChickenLittle extends Agent {
 
 	@Override
 	public direction search() {
+		//TODO FIX
 		while (true) {
-			WumpusWorldKB kb = new WumpusWorldKB();
 			List<MemoryNode> visitedNodes = new LinkedList<MemoryNode>();
 
 			MemoryNode startingNode =  new MemoryNode(null, board, 0, null);
 
-			Random r = new Random();
-
 			boolean goldFound = false;
 			
-			String statuses = board.getStatusAtLocation(board.getAgentLocation());
+			String statuses = board.getStatusAtLocation(currentPosition);
 			try {
 				Thread.sleep(250);
 			} catch (InterruptedException e1) {
@@ -48,11 +43,11 @@ public class ChickenLittle extends Agent {
 			}
 
 			if (statuses.contains("A")) {
-				board.grabGold();
-				board.climb("Gold");
+				grabGold();
+				climb("Gold");
 				goldFound = true;
 			}
-			if(statuses.contains("B") && !statuses.contains("NB")) board.climb("Brease");
+			if(statuses.contains("B") && !statuses.contains("NB")) climb("Brease");
 
 			kb.updateTile("NB", new Point(0,0));
 			kb.updateTile("NS", new Point(0,0));
@@ -67,66 +62,33 @@ public class ChickenLittle extends Agent {
 					e.printStackTrace();
 				}
 				visitedNodes.add(currentNode);
-				Point currentPoint = board.getAgentLocation();
 
-				//TODO Rework
-				MemoryNode nextNode = null;
-				if (kb.isSafe(new Point(currentPoint.x, currentPoint.y - 1))
-						&& memory[currentPoint.x][currentPoint.y - 1] != null) {
-					// create the node where the agent moves up
-					nextNode = new MemoryNode(currentNode, board, currentNode.getPathCost() + 1, direction.goUp);
-					try {
-						move(direction.goUp);
-					} catch (IllegalMove e) {
-						e.printStackTrace();
-					}
-				} else if (kb.isSafe(new Point(currentPoint.x + 1, currentPoint.y))
-						&& memory[currentPoint.x + 1][currentPoint.y]!=null) {
-					// create the node where the agent moves right
-					nextNode = new MemoryNode(currentNode, board, currentNode.getPathCost() + 1, direction.goRight);
-					try {
-						move(direction.goRight);
-					} catch (IllegalMove e) {
-						e.printStackTrace();
-					}
-				} else if (kb.isSafe(new Point(currentPoint.x,
-						currentPoint.y + 1))
-						&& memory[currentPoint.x][currentPoint.y + 1]!=null) {
-					// create the node where the agent moves down
-					nextNode = new MemoryNode(currentNode, board, currentNode.getPathCost() + 1, direction.goDown);
-					try {
-						move(direction.goDown);
-					} catch (IllegalMove e) {
-						e.printStackTrace();
-					}
-				} else if (kb.isSafe(new Point(currentPoint.x - 1,
-						currentPoint.y))
-						&& memory[currentPoint.x - 1][currentPoint.y] !=null) {
-					// create the node where the agent moves left
-					nextNode = new MemoryNode(currentNode, board, currentNode.getPathCost() + 1, direction.goLeft);
-					try {
-						move(direction.goLeft);
-					} catch (IllegalMove e) {
-						e.printStackTrace();
-					}
+				direction choice = null;
+				if (kb.isSafe(new Point(currentPosition.x, currentPosition.y - 1)) && memory[currentPosition.x][currentPosition.y - 1] != null) {
+					choice = direction.goUp; // create the node where the agent moves up
+				} else if (kb.isSafe(new Point(currentPosition.x + 1, currentPosition.y)) && memory[currentPosition.x + 1][currentPosition.y]!=null) {
+					choice = direction.goRight; // create the node where the agent moves right
+				} else if (kb.isSafe(new Point(currentPosition.x, currentPosition.y + 1)) && memory[currentPosition.x][currentPosition.y + 1]!=null) {
+					choice = direction.goDown; // create the node where the agent moves down
+				} else if (kb.isSafe(new Point(currentPosition.x - 1, currentPosition.y)) && memory[currentPosition.x - 1][currentPosition.y] !=null) {
+					choice = direction.goLeft; // create the node where the agent moves left
 				} else {
-					try {
-						move(currentNode.getDirection());
-					} catch (IllegalMove e) {
-						e.printStackTrace();
-					}
-
-					nextNode = currentNode.getParent();
+					choice = currentNode.getDirection();
 				}
-
-				if (goldFound) {
-					break;
+				try {
+					move(choice);
+				} catch (IllegalMove e) {
+					e.printStackTrace();
 				}
-				currentPoint = nextNode.getState().getAgentLocation();
-				statuses = nextNode.getState().getStatusAtLocation(currentPoint);
+				
+				MemoryNode nextNode = null;
+				if(choice == null) nextNode = currentNode.getParent();
+				else nextNode = new MemoryNode(currentNode, board, currentNode.getPathCost() + 1, choice);
+
+				statuses = nextNode.getBoard().getStatusAtLocation(currentPosition);
 				if (statuses.isEmpty()) {
-					kb.updateTile("NB", currentPoint);
-					kb.updateTile("NS", currentPoint);
+					kb.updateTile("NB", currentPosition);
+					kb.updateTile("NS", currentPosition);
 				} else {
 					boolean breeze = false;
 					boolean stench = false;
@@ -136,21 +98,21 @@ public class ChickenLittle extends Agent {
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
-						board.grabGold();
+						grabGold();
 						System.out.println("Gold Found");
 						goldFound = true;
 					}
 					
 					if (statuses.contains("B") && !statuses.contains("NB")) {
 						breeze = true;
-						kb.updateTile("B", currentPoint);
+						kb.updateTile("B", currentPosition);
 					} 
 					if (statuses.contains("S") && !statuses.contains("NS")) {
 						stench = true;
 						if (kb.wumpusFound()) {
 							break;
 						}
-						kb.updateTile("S", currentPoint);
+						kb.updateTile("S", currentPosition);
 						kb.findWumpus();
 						if (kb.wumpusFound()) {
 							System.out.println("WumpusFound");
@@ -162,13 +124,13 @@ public class ChickenLittle extends Agent {
 							Point wumpusLocation = kb.getWumpusLocation();
 
 							direction whereToShoot = null;
-							if (wumpusLocation.x > currentPoint.x) {
+							if (wumpusLocation.x > currentPosition.x) {
 								whereToShoot = direction.goRight;
-							} else if (wumpusLocation.y > currentPoint.y) {
+							} else if (wumpusLocation.y > currentPosition.y) {
 								whereToShoot = direction.goUp;
-							} else if (wumpusLocation.x < currentPoint.x) {
+							} else if (wumpusLocation.x < currentPosition.x) {
 								whereToShoot = direction.goLeft;
-							} else if (wumpusLocation.y < currentPoint.y) {
+							} else if (wumpusLocation.y < currentPosition.y) {
 								whereToShoot = direction.goDown;
 							}
 							try {
@@ -180,11 +142,11 @@ public class ChickenLittle extends Agent {
 						}
 					}
 					
-					if(breeze) kb.updateTile("B", currentPoint);
-					else kb.updateTile("NB", currentPoint);
+					if(breeze) kb.updateTile("B", currentPosition);
+					else kb.updateTile("NB", currentPosition);
 					
-					if(stench) kb.updateTile("S", currentPoint);
-					else kb.updateTile("S", currentPoint);
+					if(stench) kb.updateTile("S", currentPosition);
+					else kb.updateTile("S", currentPosition);
 					
 				}
 				currentNode = nextNode;
@@ -203,19 +165,7 @@ public class ChickenLittle extends Agent {
 				}
 				currentNode = currentNode.getParent();
 			}
-			board.climb("Give Up");
+			climb("Give Up");
 		}
 	}
-
-	private boolean containsGold(char[] statuses) {
-		boolean retval = false;
-		for (int i = 0; i < statuses.length; i++) {
-			if (statuses[i] == WumpusGame.STATUS_GOLD) {
-				retval = true;
-				break;
-			}
-		}
-		return retval;
-	}
-
 }

@@ -14,7 +14,6 @@ import java.awt.Point;
 
 import aima.logic.propositional.algorithms.KnowledgeBase;
 import aima.logic.propositional.algorithms.PLFCEntails;
-import aima.logic.propositional.parsing.PEParser;
 
 
 /**
@@ -27,7 +26,7 @@ public class KnowledgeConnector {
 	/**
 	 * 
 	 */
-	private static PEParser parser = new PEParser();
+	//private static PEParser parser = new PEParser();
 	
 	/**
 	 * 
@@ -56,6 +55,8 @@ public class KnowledgeConnector {
 		
 		kb = new KnowledgeBase();
 		plfce = new PLFCEntails();
+		
+		
 		
 		
 		
@@ -384,6 +385,12 @@ public class KnowledgeConnector {
 				}
 			}
 		}
+	}
+
+
+	public boolean wumpusFound() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 	

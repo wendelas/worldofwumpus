@@ -6,8 +6,6 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -16,7 +14,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
 
 public class GUI extends JFrame{
 
@@ -45,7 +42,6 @@ public class GUI extends JFrame{
 		setSize(WIDTH,HEIGHT);
 		setResizable(RESIZABLE);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		addWindowListener(new WindowEventListener());
 		setLocation((Toolkit.getDefaultToolkit().getScreenSize().width-WIDTH)/2,
 					(Toolkit.getDefaultToolkit().getScreenSize().height-HEIGHT)/2);
 		
@@ -128,12 +124,9 @@ public class GUI extends JFrame{
 	}
 	
 	
-	
 	private void cleanScreen(){
 		results.setText("");
 	}
-	
-	
 	
 	
 	//Listens to any of the Buttons Pressed
@@ -141,70 +134,13 @@ public class GUI extends JFrame{
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			if(arg0.getActionCommand()=="Chicken Little"){
+			if(arg0.getActionCommand().equals("Chicken Little")){
 				
-			}else if(arg0.getActionCommand()=="Rambo"){
+			}else if(arg0.getActionCommand().equals("Rambo")){
 				
+			}else if(arg0.getActionCommand().equals("Reset")){
+				cleanScreen();
 			}
-			
 		}
-		
-	
 	}
-	
-	 
-	 
-	 
-	 
-	 
-	 //Listens for any window state changes like closing
-	private class WindowEventListener implements WindowListener{
-
-		@Override
-		public void windowActivated(WindowEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void windowClosed(WindowEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void windowClosing(WindowEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void windowDeactivated(WindowEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void windowDeiconified(WindowEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void windowIconified(WindowEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void windowOpened(WindowEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-		
-	}
-	
-	
-	
-	
 }

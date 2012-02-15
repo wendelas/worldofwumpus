@@ -13,6 +13,8 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.util.Random;
 
+import main.Statistics;
+
 /**
  * Generates the game board for a wumpus world implementation
  * 
@@ -34,6 +36,7 @@ public class GameBoard {
 	 */
 	private Dimension boardSize;
 
+	private boolean[][] discoveredTiles;
 	private Point gold;
 
 	/**
@@ -47,8 +50,8 @@ public class GameBoard {
 	 * Public constructor takes in parameters the size of the game board
 	 */
 	public GameBoard(int x, int y){
+		Statistics.incrementTries();
 		boardSize = new Dimension(x, y);
-
 		createWorld();
 	}
 
@@ -149,87 +152,25 @@ public class GameBoard {
 	}
 
 
-	public Point getWumpusLocation(){
-		return wumpus;
-	}
-
-
 	public Point getGoldLocation(){
 		return gold;
 	}
 
-
-
-	private Point agentLocation; //TODO replace with agent.getCurrentLocation or something similar
-	private Point startingLocation;
-
-	private static final char WUMPUS ='W';
-	private static final char GOLD = 'G';
-	private static final char BREEZE = 'B';
-	private static final char PIT = 'P';
-	private static final char STENCH = 'S';
-
-
-	private String[][] status;
-
-
-	private void resetWorld(){
-		//Tries++
-		this.agentLocation=new Point(startingLocation.x, startingLocation.y);
-		this.discoveredTiles=new boolean[boardSize.width][boardSize.height];
-
-		createWorld();
-	}
-
-	private boolean[][] discoveredTiles;
 	public boolean[][] getDiscoveredTiles(){
 		return discoveredTiles;
 	}
 
-	public String[][] getStatus(){
-		return status;
-	}
-
-
-	public boolean grabGold(){
-		boolean gotten = false;
-		if(hasGold){
-			gotten = false;
-		}else if(agentLocation.x == gold.x && agentLocation.y == gold.y){
-			status[gold.x][gold.y] = status[gold.x][gold.y].replace(""+GOLD, "");
-			hasGold=true;
-			gotten=true;
-		}
-		return gotten;
-	}
-
-
-
-	public boolean climb(String string){
-		boolean climbed = false;
-		if(agentLocation.x == startingLocation.x && agentLocation.y == startingLocation.y){
-			agentFinished = true;
-			if(hasGold){
-				//gold += 1000;
-				//wins++;
-			}
-			resetWorld();
-			climbed = true;
-			System.out.println("Notifying");
-			System.out.println("Notified");
-		}
-		return climbed;
-	}
-
-	private void killWumpus(){
-		status[wumpus.x][wumpus.y] = status[wumpus.x][wumpus.y].replace(""+WUMPUS, "");
-//		gold+=100;
-		wumpusDead = true;
-//		wumpusKills++;
-	}
-
 	public String getStatusAtLocation(Point p){
 		return board[p.x][p.y].toString();
+	}
+
+	public boolean killWumpus(Point currentPosition) {
+		if(wumpus.x ==currentPosition.x && wumpus.y == currentPosition.y){
+			board[wumpus.x][wumpus.y].wumpus = false;
+			wumpus = null;
+			return true;
+		}
+		return false;
 	}
 
 }

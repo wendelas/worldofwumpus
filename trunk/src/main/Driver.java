@@ -27,10 +27,6 @@ public class Driver {
 	 */
 	private static GameBoard board;
 	/**
-	 * Connector to the AI's knowledge base
-	 */
-	private static KnowledgeConnector kc;
-	/**
 	 * Width of the Game board
 	 */
 	private final static int sizeX = 4;
@@ -49,7 +45,6 @@ public class Driver {
 		
 		
 		board = new GameBoard(sizeX,sizeY);
-		kc = new KnowledgeConnector();
 		
 		//GUI gi = new GUI();
 		
