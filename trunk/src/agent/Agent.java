@@ -47,6 +47,9 @@ public abstract class Agent {
 	 */
 	protected KnowledgeConnector kb;
 
+	/**
+	 * Tracks if the agent has gotten the gold or not
+	 */
 	protected boolean hasGold;
 
 	protected Object[][] status;

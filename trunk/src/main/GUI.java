@@ -138,8 +138,6 @@ public class GUI extends JFrame{
 				
 			}else if(arg0.getActionCommand().equals("Rambo")){
 				
-			}else if(arg0.getActionCommand().equals("Reset")){
-				cleanScreen();
 			}
 		}
 	}
