@@ -9,8 +9,8 @@
  ****************************************************************************/
 package agent;
 
+
 import board.GameBoard;
-import java.util.Random;
 
 
 public class Rambo extends Agent {
@@ -25,6 +25,7 @@ public class Rambo extends Agent {
 	public direction search() {
 		boolean keepGoing = true;
 		while(keepGoing){
+			
 			
 		}
 		return null;
