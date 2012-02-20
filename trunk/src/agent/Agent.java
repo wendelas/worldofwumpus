@@ -13,9 +13,7 @@ package agent;
 import java.awt.Dimension;
 import java.awt.Point;
 
-import main.KnowledgeConnector;
 import main.Statistics;
-
 import board.GameBoard;
 import exceptions.IllegalMove;
 
@@ -28,6 +26,11 @@ import exceptions.IllegalMove;
  */
 public abstract class Agent {
 
+	
+	protected MemoryNode currentNode;
+	
+	protected MemoryNode nextNode;
+	
 	/**
 	 * Stores the current position of the Agent
 	 */
@@ -47,9 +50,6 @@ public abstract class Agent {
 	 */
 	protected KnowledgeConnector kb;
 
-	/**
-	 * Tracks if the agent has gotten the gold or not
-	 */
 	protected boolean hasGold;
 
 	protected Object[][] status;
@@ -79,6 +79,8 @@ public abstract class Agent {
 		Dimension size = board.getBoardSize();
 		memory = new MemoryNode[size.width][size.width];
 		kb = new KnowledgeConnector();
+		discoveredTiles = new boolean[size.width][size.height];
+		
 	}
 	
 	/**
@@ -93,37 +95,39 @@ public abstract class Agent {
 	 * @throws IllegalMove - IllegalMove exception to state that the agent cannot move in the direction specified
 	 */
 	public void move(direction path) throws IllegalMove{
-		switch(path){
+		if(path != null) {
+			switch (path) {
 			case goUp:
 				currentPosition.y++;
-				if(currentPosition.y >= board.getBoardSize().height){
+				if (currentPosition.y >= board.getBoardSize().height) {
 					currentPosition.y--;
 					throw new IllegalMove("Cannot go up.");
 				}
 				break;
 			case goDown:
 				currentPosition.y--;
-				if(currentPosition.y < 0){
+				if (currentPosition.y < 0) {
 					currentPosition.y++;
 					throw new IllegalMove("Cannot go down.");
 				}
 				break;
 			case goRight:
 				currentPosition.x++;
-				if(currentPosition.x >= board.getBoardSize().width){
+				if (currentPosition.x >= board.getBoardSize().width) {
 					currentPosition.x--;
 					throw new IllegalMove("Cannot go right.");
 				}
 				break;
 			case goLeft:
 				currentPosition.x--;
-				if(currentPosition.x < 0){
+				if (currentPosition.x < 0) {
 					currentPosition.x++;
 					throw new IllegalMove("Cannot go left.");
 				}
 				break;
 			default:
 				break;
+			}
 		}
 		discoveredTiles[currentPosition.x][currentPosition.y]= true; 
 		String tileInfo = board.getStatusAtLocation(currentPosition);
