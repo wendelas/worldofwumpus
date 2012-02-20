@@ -36,6 +36,11 @@ import z.WumpusWorld.WumpusGame.WumpusGame;
 */
 public class WumpusGameForm extends javax.swing.JFrame implements Observer {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3518480183692657214L;
+
 	{
 		//Set Look & Feel
 		try {
@@ -60,8 +65,6 @@ public class WumpusGameForm extends javax.swing.JFrame implements Observer {
 	private JLabel lblGold;
 	private GridLayout pnlGameLayout;
 	private boolean gameInitialized = false;
-	private static final int STATUS_LBL_LENGTH = 9;
-	
 	private Color agentColor;
 	
 	public WumpusGameForm(WumpusGame game) {

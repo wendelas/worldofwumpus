@@ -6,6 +6,11 @@ import javax.swing.SwingUtilities;
 public class NewJFrame extends javax.swing.JFrame {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3761689795708152783L;
+
+	/**
 	* Auto-generated main method to display this JFrame
 	*/
 	

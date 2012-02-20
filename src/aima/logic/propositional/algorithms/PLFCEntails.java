@@ -38,31 +38,31 @@ public class PLFCEntails {
 
 	public boolean plfcEntails(KnowledgeBase kb, Symbol q) {
 		
-		System.out.println(q);
-		System.out.println(agenda);
-		System.out.println(count);
-		System.out.println(inferred);
+//		System.out.println(q);
+//		System.out.println(agenda);
+//		System.out.println(count);
+//		System.out.println(inferred);
 		List<HornClause> hornClauses = asHornClauses(kb.getSentences());
-		System.out.println(hornClauses);
+//		System.out.println(hornClauses);
 		while (agenda.size() != 0) {
-			System.out.println(agenda);
-			System.out.println(count);
+//			System.out.println(agenda);
+//			System.out.println(count);
 			Symbol p = agenda.pop();
-			System.out.println(p);
+//			System.out.println(p);
 			while (!inferred(p)) {
 				inferred.put(p, Boolean.TRUE);
-				System.out.println(inferred);
+//				System.out.println(inferred);
 
 				for (int i = 0; i < hornClauses.size(); i++) {
 					HornClause hornClause = hornClauses.get(i);
-					System.out.println(hornClause);
+//					System.out.println(hornClause);
 					// Handle facts in the KB - Jay Urbain
 					if (countisZero(hornClause) && hornClause.head().equals(q)) {
 						return true;
 					}
 					if (hornClause.premisesContainsSymbol(p)) {
 						decrementCount(hornClause);
-						System.out.println(count);
+//						System.out.println(count);
 						if (countisZero(hornClause)) {
 							if (hornClause.head().equals(q)) {
 								return true;
