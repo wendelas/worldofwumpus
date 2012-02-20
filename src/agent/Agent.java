@@ -13,6 +13,7 @@ package agent;
 import java.awt.Dimension;
 import java.awt.Point;
 
+import main.KnowledgeConnector;
 import main.Statistics;
 import board.GameBoard;
 import exceptions.IllegalMove;
