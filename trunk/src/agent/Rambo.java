@@ -29,7 +29,7 @@ public class Rambo extends Agent {
 	}
 
 	@Override
-	public direction search() {
+	public void search() {
 
 		boolean keepGoing = true;
 		while(keepGoing){
@@ -212,7 +212,6 @@ public class Rambo extends Agent {
 			}
 
 		}
-		return null;
 	}
 
 }
