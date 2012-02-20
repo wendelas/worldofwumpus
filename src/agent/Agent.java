@@ -87,7 +87,7 @@ public abstract class Agent {
 	 * Abstract search method to be implemented by the concrete agents
 	 * @return
 	 */
-	public abstract direction search();	
+	public abstract void search();	
 	
 	/**
 	 * Attempts to move the agent

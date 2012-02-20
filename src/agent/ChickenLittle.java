@@ -26,31 +26,38 @@ public class ChickenLittle extends Agent {
 	}
 
 	@Override
-	public direction search() {
+	public void search() {
+		//Creates a list of visited nodes
 		List<MemoryNode> visitedNodes = new LinkedList<MemoryNode>();
-
+		//Creates a starting node
 		MemoryNode startingNode =  new MemoryNode(null, board, 0, null);
-
+		//Has the gold been found variable
 		boolean goldFound = false;
-
+		//Tiles statuses
 		String statuses = board.getStatusAtLocation(currentPosition);
-
+		//If the gold is on the tile pick it up and bounce out
 		if (statuses.contains("A")) {
 			grabGold();
 			climb("Gold");
 			goldFound = true;
 		}
-		if(statuses.contains("B") && !statuses.contains("NB")) climb("Brease");
-
+		//If there is a breeze try to go back or bounce
+		if(statuses.contains("B") && !statuses.contains("NB")){
+			climb("Brease");
+			return;
+		}
+		
+		//Adds what is here to the data base
 		kb.updateTile("NB", new Point(0,0));
 		kb.updateTile("NS", new Point(0,0));
 
 		currentNode = startingNode;
 
 		while (!goldFound) {
-
+			//Adds the current node to the path
 			visitedNodes.add(currentNode);
 
+			//Decides where to move
 			direction choice = null;
 			if (kb.isSafe(new Point(currentPosition.x, currentPosition.y - 1)) && memory[currentPosition.x][currentPosition.y - 1] != null) {
 				choice = direction.goUp; // create the node where the agent moves up
@@ -63,15 +70,18 @@ public class ChickenLittle extends Agent {
 			} else {
 				choice = currentNode.getDirection();
 			}
+			
+			//Tries to move
 			try {
 				move(choice);
 			} catch (IllegalMove e) {
 				e.printStackTrace();
 			}
-
+			//Selects the next node
 			if(choice == null) nextNode = currentNode.getParent();
 			else nextNode = new MemoryNode(currentNode, board, currentNode.getPathCost() + 1, choice);
-
+			
+			
 			statuses = nextNode.getBoard().getStatusAtLocation(currentPosition);
 			if (statuses.isEmpty()) {
 				kb.updateTile("NB", currentPosition);
@@ -89,7 +99,7 @@ public class ChickenLittle extends Agent {
 					System.out.println("Gold Found");
 					goldFound = true;
 				}
-
+				
 				if (statuses.contains("B") && !statuses.contains("NB")) {
 					breeze = true;
 					kb.updateTile("B", currentPosition);
@@ -109,7 +119,7 @@ public class ChickenLittle extends Agent {
 							e.printStackTrace();
 						}
 						Point wumpusLocation = kb.getWumpusLocation();
-
+						
 						direction whereToShoot = null;
 						if (wumpusLocation.x > currentPosition.x) {
 							whereToShoot = direction.goRight;
@@ -128,16 +138,19 @@ public class ChickenLittle extends Agent {
 						kb.setWumpusDead(board.wumpusDead());
 					}
 				}
-
+				
 				if(breeze) kb.updateTile("B", currentPosition);
 				else kb.updateTile("NB", currentPosition);
-
+				
 				if(stench) kb.updateTile("S", currentPosition);
 				else kb.updateTile("S", currentPosition);
-
+				
 			}
 			currentNode = nextNode;
 		}
+		
+		
+
 
 		while (currentNode.getParent() != null) {
 			try {
@@ -153,7 +166,5 @@ public class ChickenLittle extends Agent {
 			currentNode = currentNode.getParent();
 		}
 		climb("Give Up");
-		
-		return null;
 	}
 }
