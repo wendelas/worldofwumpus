@@ -11,6 +11,7 @@ package main;
 
 import agent.Agent;
 import agent.ChickenLittle;
+import agent.Rambo;
 import board.GameBoard;
 
 /**

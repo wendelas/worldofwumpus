@@ -19,8 +19,10 @@ import exceptions.IllegalMove;
 
 
 public class Rambo extends Agent {
-	
+
 	Random rand = new Random();
+	
+	private int turn = 0;
 
 	public Rambo(GameBoard board) {
 		super(board);
@@ -28,17 +30,22 @@ public class Rambo extends Agent {
 
 	@Override
 	public direction search() {
-		
+
 		boolean keepGoing = true;
 		while(keepGoing){
+
+			List<MemoryNode> visitedNodes = new LinkedList<MemoryNode>();
+
+			MemoryNode startingNode = new MemoryNode(null, board, 0, null);
+
 			String status = board.getStatusAtLocation(currentPosition);
-			
+
 			if(status.contains("A")){
 				grabGold();
 				climb("Gold");
 				hasGold = true;
 			}
-			
+
 			if(status.contains("S") && status.contains("B")  && !status.contains("NS") && !status.contains("NB")){
 				int choice = rand.nextInt(2);
 				if(choice==0){
@@ -99,10 +106,18 @@ public class Rambo extends Agent {
 			}
 			kb.updateTile("NB", new Point(0,0));
 			kb.updateTile("NS", new Point(0,0));
+
+			MemoryNode currentNode = startingNode;
+			turn ++;
 			
+			System.out.println("Finished first turn");
+
 			while(!hasGold){
+
+				visitedNodes.add(currentNode);
 				direction choice = null;
-				
+				System.out.println("Turn: "+turn);
+
 				if(kb.isSafe(new Point(currentPosition.x,currentPosition.y-1)) && memory[currentPosition.x][currentPosition.y-1] != null ){
 					choice = direction.goUp;
 				}else if(kb.isSafe(new Point(currentPosition.x + 1, currentPosition.y)) && memory[currentPosition.x + 1][currentPosition.y] != null){
@@ -114,41 +129,42 @@ public class Rambo extends Agent {
 				}else{
 					choice = currentNode.getDirection();
 				}
-				
+
+				System.out.println("Choice :"+ choice);
 				try{
 					move(choice);
 				}catch(IllegalMove m){
 					System.out.println("Attempting an Illegal Move at Position: ("+currentPosition.x+","+currentPosition.y+")");
 				}
-				
-				
+
+
+				MemoryNode nextNode = null;
+
+
 				if(choice == null){
-					
+					nextNode = currentNode.getParent();
 				}else{
-					
+					nextNode = new MemoryNode(currentNode, board, currentNode.getPathCost()+1, choice);
 				}
-				
+
 				status = nextNode.getBoard().getStatusAtLocation(currentPosition);
-				
-				
+
+
 				if(status.isEmpty()){
 					kb.updateTile("NB", currentPosition);
 					kb.updateTile("NS", currentPosition);
 				}else{
-					boolean breeze = false;
-					boolean stench = false;
 					if(status.contains("A")){
 						grabGold();
-						System.out.println("Gold Found");
+						System.out.println("Gold Found at: "+currentPosition);
 						hasGold = true;
 					}
-					
+
 					if(status.contains("B") && !status.contains("NB")){
-						breeze = true;
+						System.out.println("Found Breeze at: "+currentPosition);
 						kb.updateTile("B", currentPosition);
 					}
 					if(status.contains("S") && !status.contains("NS")){
-						stench = true;
 						if(kb.wumpusFound()){
 							break;
 						}
@@ -157,9 +173,9 @@ public class Rambo extends Agent {
 						if(kb.foundWumpus()){
 							System.out.println("Wumpus Found");
 							Point wumpusLocation = kb.getWumpusLocation();
-							
+
 							direction whereToShoot = null;
-							
+
 							if(wumpusLocation.x > currentPosition.x){
 								whereToShoot = direction.goRight;
 							}else if(wumpusLocation.y > currentPosition.y){
@@ -169,7 +185,7 @@ public class Rambo extends Agent {
 							}else if(wumpusLocation.y < currentPosition.y){
 								whereToShoot = direction.goDown;
 							}
-							
+
 							try{
 								shootArrow(whereToShoot);
 							}catch(IllegalMove m){
@@ -178,22 +194,11 @@ public class Rambo extends Agent {
 							kb.setWumpusDead(board.wumpusDead());
 						}
 					}
-					
-					if(breeze){
-						kb.updateTile("B", currentPosition);
-					}else{
-						kb.updateTile("NB", currentPosition);
-					}
-					
-					if(stench){
-						kb.updateTile("S", currentPosition);
-					}else{
-						kb.updateTile("NS", currentPosition);
-					}
 				}
 				currentNode = nextNode;
+				turn++;
 			}
-			
+
 			while(currentNode.getParent() != null){
 				try{
 					move(currentNode.getDirection());
@@ -202,7 +207,7 @@ public class Rambo extends Agent {
 				}
 				currentNode = currentNode.getParent();
 			}
-			
+
 		}
 		return null;
 	}
