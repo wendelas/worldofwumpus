@@ -48,8 +48,8 @@ public class Driver {
 		
 		//GUI gi = new GUI();
 		
-		Agent walker = new ChickenLittle(board);
-		walker.search();
+		Agent smith = new ChickenLittle(board);
+		smith.search();
 		
 	}
 }

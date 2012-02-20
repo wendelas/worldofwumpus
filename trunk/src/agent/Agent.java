@@ -194,6 +194,7 @@ public abstract class Agent {
 	 * @param msg
 	 */
 	public void climb(String msg){
+		//TODO SET END OF GAME
 		System.out.println(msg);
 	}
 }

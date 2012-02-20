@@ -318,13 +318,13 @@ public class KnowledgeConnector {
 	public void updateTile(String s, Point p){
 		String temp = "" + s + "" + p.x + "" + p.y;
 		kb.tell(temp);
-		System.out.println(temp);
+		//System.out.println(temp);
 	}
 	
 	
 	public boolean isNotPit(Point p){
 		boolean isNotAPit = plfce.plfcEntails(kb, "NP" + p.x + "" + p.y);
-		System.out.println(isNotAPit);
+		//System.out.println(isNotAPit);
 		return isNotAPit;
 	}
 	
@@ -336,7 +336,7 @@ public class KnowledgeConnector {
 			isNotAWumpus = !p.equals(wumpusLocation);
 		}else{
 			isNotAWumpus = plfce.plfcEntails(kb, "NW" + p.x + "" + p.y);
-			System.out.println(isNotAWumpus);
+			//System.out.println(isNotAWumpus);
 		}
 		return isNotAWumpus;
 	}

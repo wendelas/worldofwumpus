@@ -34,11 +34,6 @@ public class ChickenLittle extends Agent {
 		boolean goldFound = false;
 
 		String statuses = board.getStatusAtLocation(currentPosition);
-		try {
-			Thread.sleep(250);
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
-		}
 
 		if (statuses.contains("A")) {
 			grabGold();
@@ -54,11 +49,6 @@ public class ChickenLittle extends Agent {
 
 		while (!goldFound) {
 
-			try {
-				Thread.sleep(400);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
 			visitedNodes.add(currentNode);
 
 			direction choice = null;

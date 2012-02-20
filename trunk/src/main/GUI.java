@@ -123,12 +123,6 @@ public class GUI extends JFrame{
 		return labelPanel;
 	}
 	
-	
-	private void cleanScreen(){
-		results.setText("");
-	}
-	
-	
 	//Listens to any of the Buttons Pressed
 	 private class ButtonListener implements ActionListener{
 
