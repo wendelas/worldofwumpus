@@ -49,7 +49,7 @@ public class Driver {
 		
 		//GUI gi = new GUI();
 		
-		Agent smith = new ChickenLittle(board);
+		Agent smith = new Rambo(board);
 		smith.search();
 		
 	}

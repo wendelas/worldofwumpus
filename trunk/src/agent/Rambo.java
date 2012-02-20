@@ -117,14 +117,15 @@ public class Rambo extends Agent {
 				visitedNodes.add(currentNode);
 				direction choice = null;
 				System.out.println("Turn: "+turn);
-
-				if(kb.isSafe(new Point(currentPosition.x,currentPosition.y-1)) && memory[currentPosition.x][currentPosition.y-1] != null ){
+				System.out.println("Current Postion: "+currentPosition.x + ":"+currentPosition.y);
+				
+				if(kb.isSafe(new Point(currentPosition.x,currentPosition.y-1)) && discoveredTiles[currentPosition.x][currentPosition.y-1] != true ){
 					choice = direction.goUp;
-				}else if(kb.isSafe(new Point(currentPosition.x + 1, currentPosition.y)) && memory[currentPosition.x + 1][currentPosition.y] != null){
+				}else if(kb.isSafe(new Point(currentPosition.x + 1, currentPosition.y)) && discoveredTiles[currentPosition.x + 1][currentPosition.y] != true){
 					choice = direction.goRight;
-				}else if(kb.isSafe(new Point(currentPosition.x, currentPosition.y + 1)) && memory[currentPosition.x][currentPosition.y + 1] != null){
+				}else if(kb.isSafe(new Point(currentPosition.x, currentPosition.y + 1)) && discoveredTiles[currentPosition.x][currentPosition.y + 1] != true){
 					choice = direction.goDown;
-				}else if(kb.isSafe(new Point(currentPosition.x - 1, currentPosition.y)) && memory[currentPosition.x - 1][currentPosition.y] != null){
+				}else if(kb.isSafe(new Point(currentPosition.x - 1, currentPosition.y)) && discoveredTiles[currentPosition.x - 1][currentPosition.y] != true){
 					choice = direction.goLeft;
 				}else{
 					choice = currentNode.getDirection();
@@ -133,6 +134,8 @@ public class Rambo extends Agent {
 				System.out.println("Choice :"+ choice);
 				try{
 					move(choice);
+				//	memory[currentPosition.x][currentPosition.y] = currentNode;
+					System.out.println("1");
 				}catch(IllegalMove m){
 					System.out.println("Attempting an Illegal Move at Position: ("+currentPosition.x+","+currentPosition.y+")");
 				}
