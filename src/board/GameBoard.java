@@ -172,5 +172,10 @@ public class GameBoard {
 		}
 		return false;
 	}
+	
+	public GameBoard resetBoard(){
+		GameBoard ret = new GameBoard();
+		return ret;
+	}
 
 }

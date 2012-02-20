@@ -13,7 +13,6 @@ package agent;
 import java.awt.Dimension;
 import java.awt.Point;
 
-import main.KnowledgeConnector;
 import main.Statistics;
 import board.GameBoard;
 import exceptions.IllegalMove;
@@ -138,7 +137,8 @@ public abstract class Agent {
 		}
 		if(dead){
 			Statistics.incrementDeaths();
-			 board = new GameBoard(board.getBoardSize().width, board.getBoardSize().height);
+			Statistics.decrementGold(1000);
+			 resetBoard();
 		}
 	}
 	
@@ -175,6 +175,7 @@ public abstract class Agent {
 		if(board.killWumpus(currentPosition)){
 			System.out.println("Killed the Wumpus");
 			Statistics.incrementKills();
+			Statistics.incrementGold(100);
 		}
 	}
 	
@@ -188,6 +189,7 @@ public abstract class Agent {
 	
 	public void grabGold(){
 		Statistics.incrementWins();
+		Statistics.incrementGold(1000);
 		climb("Got the gold");
 	}
 	
@@ -195,7 +197,25 @@ public abstract class Agent {
 	 * @param msg
 	 */
 	public void climb(String msg){
-		//TODO SET END OF GAME
+		resetBoard();
 		System.out.println(msg);
+		search();
+	}
+	
+	/**
+	 * 
+	 */
+	public void resetBoard(){
+		hasGold = false;
+		currentNode = null;
+		nextNode = null;
+		currentPosition = new Point(0,0);
+		Dimension size = board.getBoardSize();
+		memory = new MemoryNode[size.width][size.width];
+		status = new Object[size.width][size.width];
+		kb = new KnowledgeConnector();
+		discoveredTiles = new boolean[size.width][size.height];
+		
+		board = board.resetBoard();
 	}
 }

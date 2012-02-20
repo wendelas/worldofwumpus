@@ -14,11 +14,14 @@ public class Statistics {
 	
 	private static Statistics Instance;
 	
+	private static int gold;
+	
 	private Statistics(){
 		numDeaths = 0;
 		numWins = 0;
 		wumpuskills = 0;
 		tries = 0;
+		gold = 0;
 	}
 	
 	public static synchronized Statistics getInstance(){
@@ -61,10 +64,23 @@ public class Statistics {
 		tries += 1;
 	}
 	
+	public static void incrementGold(int amount){
+		gold +=amount;
+	}
+	
+	public static int getGold(){
+		return gold;
+	}
+	
+	public static void decrementGold(int amount){
+		gold -= amount;
+	}
+	
 	public static void resetStats(){
 		numDeaths = 0;
 		numWins = 0;
 		wumpuskills = 0;
 		tries = 0;
+		gold = 0;
 	}
 }
