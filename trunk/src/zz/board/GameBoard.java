@@ -7,13 +7,14 @@
  * PURPOSE: Creates and stores the game board.
  * 
  ****************************************************************************/
-package board;
+package zz.board;
 
 import java.awt.Dimension;
 import java.awt.Point;
 import java.util.Random;
 
-import main.Statistics;
+import zz.main.Statistics;
+
 
 /**
  * Generates the game board for a wumpus world implementation

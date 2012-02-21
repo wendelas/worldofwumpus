@@ -7,12 +7,12 @@
  * PURPOSE: Provides a main method for running and testing the AI.
  * 
  ****************************************************************************/
-package main;
+package zz.main;
 
-import agent.Agent;
-import agent.ChickenLittle;
-import agent.Rambo;
-import board.GameBoard;
+import zz.agent.Agent;
+import zz.agent.ChickenLittle;
+import zz.agent.Rambo;
+import zz.board.GameBoard;
 
 /**
  * Main method to control and run tests on the AI

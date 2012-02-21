@@ -8,7 +8,7 @@
  * 			or room on the game board.
  * 
  ****************************************************************************/
-package board;
+package zz.board;
 
 /**
  * Storage for the configuration of each tile or room on the game board

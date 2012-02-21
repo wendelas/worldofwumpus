@@ -1,4 +1,4 @@
-package main;
+package zz.main;
 
 import java.awt.Color;
 import java.awt.Font;

@@ -7,15 +7,16 @@
  * PURPOSE: Aggressive searcher willing to take risks.
  * 
  ****************************************************************************/
-package agent;
+package zz.agent;
 
 
-import board.GameBoard;
 
 import java.awt.Point;
 import java.util.*;
 
-import exceptions.IllegalMove;
+import zz.board.GameBoard;
+import zz.exceptions.IllegalMove;
+
 
 
 public class Rambo extends Agent {
@@ -33,8 +34,7 @@ public class Rambo extends Agent {
 
 		boolean keepGoing = true;
 		while(keepGoing){
-			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			//Initial Starting Position
+
 			List<MemoryNode> visitedNodes = new LinkedList<MemoryNode>();
 
 			MemoryNode startingNode = new MemoryNode(null, board, 0, null);
@@ -133,10 +133,8 @@ public class Rambo extends Agent {
 				}
 				
 			}
-			//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			
 
-			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			//Any Concurrent Turns
 			MemoryNode currentNode = new MemoryNode(startingNode,board,startingNode.getPathCost()+1,temp);
 			turn ++;
 			
@@ -240,7 +238,7 @@ public class Rambo extends Agent {
 				}
 				currentNode = currentNode.getParent();
 			}
-			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 		}
 	}
 

@@ -8,7 +8,7 @@
  * 			move was made. 
  * 
  ****************************************************************************/
-package exceptions;
+package zz.exceptions;
 
 
 /**
