@@ -1,6 +1,3 @@
-/**
- * 
- */
 package z.agent;
 
 import java.util.LinkedList;
@@ -11,8 +8,9 @@ import z.wumpus.StateSpace;
 import aima.util.Pair;
 
 /**
- * @author iannonen
- *
+ * @author ebertb, Schmidbauerk
+ * @date 2/17/12
+ * This class is the agent that the AI's extend
  */
 public abstract class Agent {
 	

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package z.main;
 
 import java.util.LinkedList;
@@ -19,8 +16,9 @@ import z.wumpus.LogLevel;
 import z.wumpus.WumpusWorld;
 
 /**
- * @author iannonen
- *
+ * @author ebertb, Schmidbauerk
+ * @date 2/17/12
+ *This class is the main driver for the program
  */
 public class Driver {
 
@@ -70,8 +68,8 @@ public class Driver {
 		List<Agent> resolvers = new LinkedList<Agent>();
 		resolvers.add(new ChickenLittle());
 		resolvers.add(new Rambo());
-		resolvers.add(new Heuristic());
-		resolvers.add(new GoldSeeking());
+	//	resolvers.add(new Heuristic());
+	//	resolvers.add(new GoldSeeking());
 		
 		for (Agent resolver : resolvers) {
 			KBWumpusAgent agent = new KBWumpusAgent((WumpusWorld)w.clone(), resolver);

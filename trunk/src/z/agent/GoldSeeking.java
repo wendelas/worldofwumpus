@@ -1,6 +1,3 @@
-/**
- * 
- */
 package z.agent;
 
 import java.util.List;
@@ -11,22 +8,19 @@ import z.wumpus.WumpusWorld;
 import aima.util.Pair;
 
 /**
- * @author iannonen
- *
+ * @author ebertb, Schmidbauerk
+ * @date 2/17/12
+ * This class seeks the gold
  */
 public class GoldSeeking extends Agent {
 
-	/**
-	 * @see z.agent.Agent#identify()
-	 */
+
 	@Override
 	public String identify() {
-		return "Gandalf the Gold";
+		return "Gold AI";
 	}
 
-	/**
-	 * @see z.agent.Agent#resolveFringe(aima.util.Pair, z.wumpus.StateSpace)
-	 */
+
 	@Override
 	public Pair<Integer, Integer> resolveFringe(Pair<Integer, Integer> current, StateSpace stateSpace) {
 		
@@ -63,7 +57,7 @@ public class GoldSeeking extends Agent {
 	 * @return The approximate move cost for the estimate.
 	 */
 	private double approximateMoveCost(Pair<Integer, Integer> space, Pair<Double, Double> estimate) {
-		// Null-check.
+		
 		if (space == null || estimate == null) {
 			return 0.0;
 		}

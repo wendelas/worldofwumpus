@@ -1,11 +1,9 @@
-/**
- * 
- */
 package z.wumpus;
 
 /**
- * @author iannonen
- *
+ * @author ebertb, Schmidbauerk
+ * @date 2/17/12
+ * This class keeps track Directions we can go
  */
 public enum Direction {
 	NORTH(0,1),

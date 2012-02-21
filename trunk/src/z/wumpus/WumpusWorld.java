@@ -1,13 +1,11 @@
-/**
- * 
- */
 package z.wumpus;
 
 import java.util.Random;
 
 /**
- * @author iannonen
- *
+ * @author ebertb, Schmidbauerk
+ * @date 2/17/12
+ * This class keeps track of the wumpus world
  */
 public class WumpusWorld implements Cloneable {
 
@@ -31,7 +29,7 @@ public class WumpusWorld implements Cloneable {
 	public static final int NUM_PITS = 3;
 	
 	public static final int DEATH_COST = 1000;
-	public static final int STEP_COST = 1;
+	public static final int STOP_COST = 1;
 	public static final int ARROW_COST = 10;
 	public static final int GOLD_VALUE = 1000;
 	public static final double CRUMB_COST = 0.5;

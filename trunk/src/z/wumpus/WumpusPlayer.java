@@ -1,13 +1,11 @@
-/**
- * 
- */
 package z.wumpus;
 
 import z.main.Statistics;
 
 /**
- * @author iannonen
- *
+ * @author ebertb, Schmidbauerk
+ * @date 2/17/12
+ * This class plays the wumpus game and is the main AI controller
  */
 public abstract class WumpusPlayer {
 	
@@ -139,7 +137,7 @@ public abstract class WumpusPlayer {
 		}
 		
 		if (wumpusHit) {
-			results.confirmKill();
+			results.KilledWumpus();
 			logMessage("You hear a hearty scream, signifying that your arrow has flown true into the beast's heart.");
 			onScream();
 		} else {
@@ -166,7 +164,7 @@ public abstract class WumpusPlayer {
 		// Take that step forward.
 		x = mx;
 		y = my;
-		results.addStep();
+		results.addStops();
 		logMessage("You enter the next room.");
 		onMove();
 		

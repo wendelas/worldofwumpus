@@ -1,6 +1,3 @@
-/**
- * 
- */
 package z.wumpus;
 
 import java.util.List;
@@ -13,8 +10,9 @@ import aima.logic.propositional.algorithms.PLFCEntails;
 import aima.util.Pair;
 
 /**
- * @author iannonen
- *
+ * @author ebertb, Schmidbauerk
+ * @date 2/17/12
+ * This class runs the interface between the WumpusPlayer and the Knowledge Database
  */
 public class KBWumpusAgent extends WumpusPlayer {
 
