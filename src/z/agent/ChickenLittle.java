@@ -1,9 +1,11 @@
 /**
  * 
  */
-package z.wumpus;
+package z.agent;
 
 import java.util.List;
+
+import z.wumpus.StateSpace;
 
 import aima.util.Pair;
 
@@ -11,14 +13,14 @@ import aima.util.Pair;
  * @author iannonen
  *
  */
-public class ChickenLittleExplorer extends ExplorerStrategy {
+public class ChickenLittle extends Agent {
 
 	@Override
 	public Pair<Integer, Integer> resolveFringe(Pair<Integer, Integer> current, StateSpace stateSpace) {
 		// TODO Auto-generated method stub
 		Pair<Integer, Integer> resolved = null;
 		
-		List<Pair<Integer, Integer>> safeMoves = ExplorerStrategy.getSafeMoves(stateSpace);
+		List<Pair<Integer, Integer>> safeMoves = Agent.getSafeMoves(stateSpace);
 		
 		if (safeMoves.size() > 0) {
 			resolved = safeMoves.get(0);
@@ -31,7 +33,6 @@ public class ChickenLittleExplorer extends ExplorerStrategy {
 	
 	@Override
 	public String identify() {
-		// TODO Auto-generated method stub
 		return "Chicken Little the Wumpus Novice";
 	}
 

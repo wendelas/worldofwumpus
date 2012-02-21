@@ -3,6 +3,8 @@
  */
 package z.wumpus;
 
+import z.main.Statistics;
+
 /**
  * @author iannonen
  *
@@ -35,7 +37,7 @@ public abstract class WumpusPlayer {
 	
 	private boolean stopped;
 
-	private ResultsData results;
+	private Statistics results;
 	
 	private WumpusWorld world;
 	private LogLevel logLevel;
@@ -46,7 +48,7 @@ public abstract class WumpusPlayer {
 		y = WumpusWorld.START_Y;
 		direction = Direction.NORTH;
 		stopped = false;
-		results = new ResultsData();
+		results = new Statistics();
 		logLevel = DEFAULT_LOG_LEVEL;
 		this.logMessage("You are in a maze of blocky passageways, all alike. Behind you is the door you entered through, now locked. Two doors lead further into the maze.");
 	}
@@ -323,7 +325,7 @@ public abstract class WumpusPlayer {
 		return logLevel;
 	}
 	
-	public ResultsData getResults() {
+	public Statistics getResults() {
 		return results;
 	}
 }

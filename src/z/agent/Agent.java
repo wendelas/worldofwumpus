@@ -1,10 +1,12 @@
 /**
  * 
  */
-package z.wumpus;
+package z.agent;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import z.wumpus.StateSpace;
 
 import aima.util.Pair;
 
@@ -12,7 +14,7 @@ import aima.util.Pair;
  * @author iannonen
  *
  */
-public abstract class ExplorerStrategy {
+public abstract class Agent {
 	
 	/**
 	 * Gets a subset of "safe" spaces from the given fringe set.
