@@ -198,7 +198,7 @@ public abstract class Agent {
 	 */
 	public void climb(String msg){
 		resetBoard();
-		System.out.println(msg);
+		System.out.println(msg+'\n'+board.toString());
 		search();
 	}
 	
