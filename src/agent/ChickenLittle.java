@@ -40,6 +40,7 @@ public class ChickenLittle extends Agent {
 			grabGold();
 			climb("Gold");
 			goldFound = true;
+			return;
 		}
 		//If there is a breeze try to go back or bounce
 		if(statuses.contains("B") && !statuses.contains("NB")){
@@ -81,7 +82,7 @@ public class ChickenLittle extends Agent {
 			if(choice == null) nextNode = currentNode.getParent();
 			else nextNode = new MemoryNode(currentNode, board, currentNode.getPathCost() + 1, choice);
 			
-			
+			if(nextNode == null) break;
 			statuses = nextNode.getBoard().getStatusAtLocation(currentPosition);
 			if (statuses.isEmpty()) {
 				kb.updateTile("NB", currentPosition);
