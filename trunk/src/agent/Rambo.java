@@ -39,6 +39,8 @@ public class Rambo extends Agent {
 			MemoryNode startingNode = new MemoryNode(null, board, 0, null);
 
 			String status = board.getStatusAtLocation(currentPosition);
+			
+			direction temp = null;
 
 			if(status.contains("A")){
 				grabGold();
@@ -50,6 +52,7 @@ public class Rambo extends Agent {
 				int choice = rand.nextInt(2);
 				if(choice==0){
 					try{
+						temp = direction.goUp;
 						shootArrow(direction.goUp);
 						move(direction.goUp);
 						kb.updateTile("S", new Point(0,0));
@@ -59,6 +62,7 @@ public class Rambo extends Agent {
 					}
 				}else{
 					try{
+						temp = direction.goRight;
 						shootArrow(direction.goRight);
 						move(direction.goRight);
 						kb.updateTile("S", new Point(0,0));
@@ -71,6 +75,7 @@ public class Rambo extends Agent {
 				int choice = rand.nextInt(2);
 				if(choice==0){
 					try{
+						temp = direction.goUp;
 						shootArrow(direction.goUp);
 						move(direction.goUp);
 						kb.updateTile("S", new Point(0,0));
@@ -79,6 +84,7 @@ public class Rambo extends Agent {
 					}
 				}else{
 					try{
+						temp = direction.goRight;
 						shootArrow(direction.goRight);
 						move(direction.goRight);
 						kb.updateTile("S", new Point(0,0));
@@ -90,6 +96,7 @@ public class Rambo extends Agent {
 				int choice = rand.nextInt(2);
 				if(choice==0){
 					try{
+						temp = direction.goUp;
 						move(direction.goUp);
 						kb.updateTile("B", new Point(0,0));
 					}catch(IllegalMove m){
@@ -97,17 +104,37 @@ public class Rambo extends Agent {
 					}
 				}else{
 					try{
+						temp = direction.goRight;
 						move(direction.goRight);
 						kb.updateTile("B", new Point(0,0));
 					}catch(IllegalMove m){
 						System.out.println("Attempting an Illegal Move");
 					}
 				}
+			}else{
+				int choice = rand.nextInt(2);
+				kb.updateTile("NB", new Point(0,0));
+				kb.updateTile("NS", new Point(0,0));
+				if(choice==0){
+					try {
+						temp = direction.goUp;
+						move(direction.goUp);
+					} catch (IllegalMove e) {
+						System.out.println("Attempting an Illegal Move");
+					}
+				}else{
+					try {
+						temp = direction.goRight;
+						move(direction.goRight);
+					} catch (IllegalMove e) {
+						System.out.println("Attempting an Illegal Move");
+					}
+				}
+				
 			}
-			kb.updateTile("NB", new Point(0,0));
-			kb.updateTile("NS", new Point(0,0));
+			
 
-			MemoryNode currentNode = startingNode;
+			MemoryNode currentNode = new MemoryNode(startingNode,board,startingNode.getPathCost()+1,temp);
 			turn ++;
 			
 			System.out.println("Finished first turn");
