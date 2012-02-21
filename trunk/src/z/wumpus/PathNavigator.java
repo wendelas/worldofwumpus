@@ -33,7 +33,7 @@ public class PathNavigator {
 	 */
 	public List<Point> resolvePath(Point start, Point goal) throws IllegalArgumentException, IllegalStateException {
 		
-		// Perform null-checking.
+		
 		if (start == null) {
 			throw new IllegalArgumentException("Error: Start space must not be null!");
 		}
@@ -41,23 +41,23 @@ public class PathNavigator {
 			throw new IllegalArgumentException("Error: Goal space must not be null!");
 		}
 		
-		// Perform equality checking.
+		
 		if (start.equals(goal)) {
 			return new LinkedList<Point>();
 		}
 		
-		// Check our explored set for the start space.
+		
 		if (!stateSpace.isVisited(start.x, start.y)) {
 			throw new IllegalArgumentException("Error: Start space has not been visited!");
 		}
 		
-		// Check our fringe and our explored set for the goal space.
+		
 		List<Point> fringe = stateSpace.getFringe();
 		if (!stateSpace.isVisited(goal.x, goal.y) && !fringe.contains(goal)) {
 			throw new IllegalArgumentException("Error: Goal space must be within visited set or fringe set!");
 		}
 		
-		// Perform A* pathfinding.
+		
 		Map<Point, Point> cameFrom = new HashMap<Point, Point>();
 		Map<Point, Double> gScore = new HashMap<Point, Double>();
 		List<Point> closedSet = new LinkedList<Point>();
@@ -81,8 +81,8 @@ public class PathNavigator {
 					continue;
 				}
 				
-				// We factor in the safety cost here, since we want to avoid pits and wumpi.
-				double tentativeGScore = g(x, gScore) + stateSpace.getMoveCost(x, y); //distBetween(x, y) + getSafetyCost(y);
+				
+				double tentativeGScore = g(x, gScore) + stateSpace.getMoveCost(x, y);
 				boolean tentativeIsBetter;
 				
 				if (!openSet.contains(y)) {
@@ -129,7 +129,7 @@ public class PathNavigator {
 		for (Point neighbor : initialList) {
 			int x = neighbor.x;
 			int y = neighbor.y;
-			// Only add if the neighbor is on the fringe, or if they are visited and safe.
+			
 			if (fringe.contains(neighbor) || (stateSpace.isVisited(x, y) && stateSpace.isSafe(x, y))) {
 				finalList.add(neighbor);
 			}

@@ -29,7 +29,6 @@ public class Driver {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		Random r = new Random();
 		
 		WumpusWorld w;
@@ -48,28 +47,16 @@ public class Driver {
 				reset = reset || r.nextBoolean();
 			}
 		} while (w.hasGold(0, 1) || w.hasGold(1, 0) || r.nextBoolean());
-		/*
-		do {
-			w = new WumpusWorld();
-			w.randomize(r);
-		} while (!w.hasGold(3, 3) || !w.hasPit(3, 2) || !w.hasPit(2, 3));
-		*/
-		/*
-		do {
-			w = new WumpusWorld();
-			w.randomize(r);
-		} while (!w.hasGold(2, 2) || !(w.hasPit(2, 3) || w.hasWumpus(2, 3)) || !(w.hasPit(2,1) || w.hasWumpus(2,1)) || !(w.hasPit(1,2) || w.hasWumpus(1,2)) || !(w.hasPit(3,2) || w.hasWumpus(3,2)));
-		*/
+
 		System.out.println(w);
 		
 		Map<String, Statistics> results = new TreeMap<String, Statistics>();
 		
-		// Generate the list of agents.
+
 		List<Agent> resolvers = new LinkedList<Agent>();
 		resolvers.add(new ChickenLittle());
 		resolvers.add(new Rambo());
-	//	resolvers.add(new Heuristic());
-	//	resolvers.add(new GoldSeeking());
+
 		
 		for (Agent resolver : resolvers) {
 			KBWumpusAgent agent = new KBWumpusAgent((WumpusWorld)w.clone(), resolver);

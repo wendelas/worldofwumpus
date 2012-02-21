@@ -51,7 +51,7 @@ public abstract class WumpusPlayer {
 		this.logMessage("You are in a maze of blocky passageways, all alike. Behind you is the door you entered through, now locked. Two doors lead further into the maze.");
 	}
 	
-	// The entry point for evaluating the next move.
+	
 	public abstract void update();
 	
 	public boolean isStopped() {
@@ -238,25 +238,25 @@ public abstract class WumpusPlayer {
 		}
 	}
 	
-	// Called when the player bumps into the edge of the Wumpus World.
+	
 	public abstract void onBump();
 	
-	// Called when the player falls into a pit.
+	
 	public abstract void onPitfall();
 	
-	// Called when the player is killed by bumping into the Wumpus.
+	
 	public abstract void onDeath();
 	
-	// Called when the player safely enters a space.
+	
 	public abstract void onMove();
 	
-	// Called when the player safely retrieves the gold.
+	
 	public abstract void onGrab();
 	
-	// Called when the player drops the gold.
+	
 	public abstract void onDrop();
 	
-	// On-demand sensors:
+	
 	public boolean isSmelly() {
 		if (world.hasStench(x, y)) {
 			logMessage("Something rancid taunts your nostrils, and sends chills down your spine. The Wumpus is near.");
