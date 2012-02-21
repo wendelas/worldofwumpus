@@ -1,9 +1,11 @@
 /**
  * 
  */
-package z.wumpus;
+package z.agent;
 
 import java.util.List;
+
+import z.wumpus.StateSpace;
 
 import aima.util.Pair;
 
@@ -11,17 +13,17 @@ import aima.util.Pair;
  * @author iannonen
  *
  */
-public class HeuristicExplorer extends ExplorerStrategy {
+public class Heuristic extends Agent {
 
 	/**
-	 * @see z.wumpus.ExplorerStrategy#resolveFringe(aima.util.Pair, java.util.List, aima.logic.propositional.algorithms.KnowledgeBase, boolean)
+	 * @see z.agent.Agent#resolveFringe(aima.util.Pair, java.util.List, aima.logic.propositional.algorithms.KnowledgeBase, boolean)
 	 */
 	@Override
 	public Pair<Integer, Integer> resolveFringe(Pair<Integer, Integer> current, StateSpace stateSpace) {
 
 		Pair<Integer, Integer> resolved = null;
 		
-		List<Pair<Integer, Integer>> safeMoves = ExplorerStrategy.getSafeMoves(stateSpace);
+		List<Pair<Integer, Integer>> safeMoves = Agent.getSafeMoves(stateSpace);
 		
 		if (safeMoves.isEmpty()) {
 			resolved = null;

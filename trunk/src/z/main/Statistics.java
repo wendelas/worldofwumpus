@@ -1,13 +1,15 @@
 /**
  * 
  */
-package z.wumpus;
+package z.main;
+
+import z.wumpus.WumpusWorld;
 
 /**
  * @author iannonen
  *
  */
-public class ResultsData {
+public class Statistics {
 
 	private int score;
 	private int numDeaths;
@@ -20,7 +22,7 @@ public class ResultsData {
 	
 	private long time;
 	
-	public ResultsData() {
+	public Statistics() {
 		score = 0;
 		numDeaths = 0;
 		numSteps = 0;

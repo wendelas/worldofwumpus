@@ -6,6 +6,8 @@ package z.wumpus;
 import java.util.List;
 import java.util.Random;
 
+import z.agent.Agent;
+
 import aima.logic.propositional.algorithms.KnowledgeBase;
 import aima.logic.propositional.algorithms.PLFCEntails;
 import aima.util.Pair;
@@ -22,7 +24,7 @@ public class KBWumpusAgent extends WumpusPlayer {
 	
 	private StateSpace stateSpace;
 	private KnowledgeBase kb;
-	private ExplorerStrategy explorer;
+	private Agent explorer;
 	private PathNavigator navigator;
 	private boolean firstTurn;
 	private int numberCrumbsEncountered;
@@ -36,7 +38,7 @@ public class KBWumpusAgent extends WumpusPlayer {
 	 * @param world
 	 * @param explorer
 	 */
-	public KBWumpusAgent(WumpusWorld world, ExplorerStrategy explorer) {
+	public KBWumpusAgent(WumpusWorld world, Agent explorer) {
 		super(world);
 		this.explorer = explorer;
 		kb = generateInitialKB();
@@ -49,7 +51,7 @@ public class KBWumpusAgent extends WumpusPlayer {
 	}
 	
 	/**
-	 * @see z.wumpus.ExplorerStrategy#identify()
+	 * @see z.agent.Agent#identify()
 	 */
 	public String identify() {
 		return explorer.identify();

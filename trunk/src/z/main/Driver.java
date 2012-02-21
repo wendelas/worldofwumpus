@@ -1,13 +1,22 @@
 /**
  * 
  */
-package z.wumpus;
+package z.main;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
+
+import z.agent.Agent;
+import z.agent.ChickenLittle;
+import z.agent.GoldSeeking;
+import z.agent.Heuristic;
+import z.agent.Rambo;
+import z.wumpus.KBWumpusAgent;
+import z.wumpus.LogLevel;
+import z.wumpus.WumpusWorld;
 
 /**
  * @author iannonen
@@ -55,16 +64,16 @@ public class Driver {
 		*/
 		System.out.println(w);
 		
-		Map<String, ResultsData> results = new TreeMap<String, ResultsData>();
+		Map<String, Statistics> results = new TreeMap<String, Statistics>();
 		
 		// Generate the list of agents.
-		List<ExplorerStrategy> resolvers = new LinkedList<ExplorerStrategy>();
-		resolvers.add(new ChickenLittleExplorer());
-		resolvers.add(new RamboExplorer());
-		resolvers.add(new HeuristicExplorer());
-		resolvers.add(new GoldSeekingExplorer());
+		List<Agent> resolvers = new LinkedList<Agent>();
+		resolvers.add(new ChickenLittle());
+		resolvers.add(new Rambo());
+		resolvers.add(new Heuristic());
+		resolvers.add(new GoldSeeking());
 		
-		for (ExplorerStrategy resolver : resolvers) {
+		for (Agent resolver : resolvers) {
 			KBWumpusAgent agent = new KBWumpusAgent((WumpusWorld)w.clone(), resolver);
 			if (MOVE_LOGGING) {
 				System.out.println("--------------------------------------------");
@@ -82,7 +91,7 @@ public class Driver {
 					agent.printStateSpace();
 				}
 			}
-			ResultsData result = agent.getResults();
+			Statistics result = agent.getResults();
 			result.markTime(time);
 			results.put(agent.identify(), result);
 		}
@@ -91,9 +100,9 @@ public class Driver {
 		System.out.println("--------------------------------------------");
 		System.out.println("Final results:,");
 		System.out.println("--------------------------------------------");
-		System.out.println("Name:," + ResultsData.getHeader());
+		System.out.println("Name:," + Statistics.getHeader());
 		for (String agentName : results.keySet()) {
-			ResultsData data = results.get(agentName);
+			Statistics data = results.get(agentName);
 			System.out.println(agentName + "," + data.toString());
 		}
 		System.out.println("--------------------------------------------");

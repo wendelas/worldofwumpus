@@ -1,10 +1,12 @@
 /**
  * 
  */
-package z.wumpus;
+package z.agent;
 
 import java.util.List;
 import java.util.Random;
+
+import z.wumpus.StateSpace;
 
 import aima.util.Pair;
 
@@ -12,19 +14,19 @@ import aima.util.Pair;
  * @author iannonen
  *
  */
-public class RamboExplorer extends ExplorerStrategy {
+public class Rambo extends Agent {
 
 	public static Random r = new Random();
 	
 	/**
-	 * @see z.wumpus.ExplorerStrategy#resolveFringe(aima.util.Pair, java.util.List, z.wumpus.StateSpace)
+	 * @see z.agent.Agent#resolveFringe(aima.util.Pair, java.util.List, z.wumpus.StateSpace)
 	 */
 	@Override
 	public Pair<Integer, Integer> resolveFringe(Pair<Integer, Integer> current, StateSpace stateSpace) {
 		
 		Pair<Integer, Integer> resolved = null;
 		
-		List<Pair<Integer, Integer>> safeMoves = ExplorerStrategy.getSafeMoves(stateSpace);
+		List<Pair<Integer, Integer>> safeMoves = Agent.getSafeMoves(stateSpace);
 		
 		if (safeMoves.size() < 1) {
 			System.out.println("I'm trapped. Crap.");

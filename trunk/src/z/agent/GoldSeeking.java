@@ -1,9 +1,12 @@
 /**
  * 
  */
-package z.wumpus;
+package z.agent;
 
 import java.util.List;
+
+import z.wumpus.StateSpace;
+import z.wumpus.WumpusWorld;
 
 import aima.util.Pair;
 
@@ -11,10 +14,10 @@ import aima.util.Pair;
  * @author iannonen
  *
  */
-public class GoldSeekingExplorer extends ExplorerStrategy {
+public class GoldSeeking extends Agent {
 
 	/**
-	 * @see z.wumpus.ExplorerStrategy#identify()
+	 * @see z.agent.Agent#identify()
 	 */
 	@Override
 	public String identify() {
@@ -22,14 +25,14 @@ public class GoldSeekingExplorer extends ExplorerStrategy {
 	}
 
 	/**
-	 * @see z.wumpus.ExplorerStrategy#resolveFringe(aima.util.Pair, z.wumpus.StateSpace)
+	 * @see z.agent.Agent#resolveFringe(aima.util.Pair, z.wumpus.StateSpace)
 	 */
 	@Override
 	public Pair<Integer, Integer> resolveFringe(Pair<Integer, Integer> current, StateSpace stateSpace) {
 		
 		Pair<Integer, Integer> resolved = null;
 		
-		List<Pair<Integer, Integer>> safeMoves = ExplorerStrategy.getSafeMoves(stateSpace);
+		List<Pair<Integer, Integer>> safeMoves = Agent.getSafeMoves(stateSpace);
 		
 		if (safeMoves.isEmpty()) {
 			resolved = null;
