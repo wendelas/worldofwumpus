@@ -1,4 +1,4 @@
-package main;
+package zz.main;
 
 
 public class Statistics {

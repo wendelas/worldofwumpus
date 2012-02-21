@@ -8,14 +8,15 @@
  * 			extending agent type.
  * 
  ****************************************************************************/
-package agent;
+package zz.agent;
 
 import java.awt.Dimension;
 import java.awt.Point;
 
-import main.Statistics;
-import board.GameBoard;
-import exceptions.IllegalMove;
+import zz.board.GameBoard;
+import zz.exceptions.IllegalMove;
+import zz.main.Statistics;
+
 
 /**
  * Agent to traverse the game board

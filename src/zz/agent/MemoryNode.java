@@ -1,7 +1,7 @@
-package agent;
+package zz.agent;
 
-import agent.Agent.direction;
-import board.GameBoard;
+import zz.agent.Agent.direction;
+import zz.board.GameBoard;
 
 public class MemoryNode {
 	private GameBoard state;

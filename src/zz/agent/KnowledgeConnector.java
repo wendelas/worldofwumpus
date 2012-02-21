@@ -7,7 +7,7 @@
  * PURPOSE: Provides a connection between the AI and its knowledge base.
  * 
  ****************************************************************************/
-package agent;
+package zz.agent;
 
 
 import java.awt.Point;

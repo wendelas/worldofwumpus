@@ -8,15 +8,16 @@
  * 			Will avoid taking risks when possible.
  * 
  ****************************************************************************/
-package agent;
+package zz.agent;
 
 
 import java.awt.Point;
 import java.util.LinkedList;
 import java.util.List;
 
-import board.GameBoard;
-import exceptions.IllegalMove;
+import zz.board.GameBoard;
+import zz.exceptions.IllegalMove;
+
 
 public class ChickenLittle extends Agent {
 
