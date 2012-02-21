@@ -1,6 +1,3 @@
-/**
- * 
- */
 package z.agent;
 
 import java.util.List;
@@ -10,14 +7,13 @@ import z.wumpus.StateSpace;
 import aima.util.Pair;
 
 /**
- * @author iannonen
- *
+ * @author ebertb, Schmidbauerk
+ * @date 2/17/12
+ * This class is the Heuristic AI
  */
 public class Heuristic extends Agent {
 
-	/**
-	 * @see z.agent.Agent#resolveFringe(aima.util.Pair, java.util.List, aima.logic.propositional.algorithms.KnowledgeBase, boolean)
-	 */
+	
 	@Override
 	public Pair<Integer, Integer> resolveFringe(Pair<Integer, Integer> current, StateSpace stateSpace) {
 
@@ -33,7 +29,7 @@ public class Heuristic extends Agent {
 				if (move == null) {
 					continue;
 				}
-				double utility = stateSpace.getMoveCost(current, move);//KBWumpusAgent.getHeuristic(current, move, kb, skipWumpus);
+				double utility = stateSpace.getMoveCost(current, move);
 				if (utility < leastUtility) {
 					leastUtility = utility;
 					resolved = move;
@@ -47,8 +43,7 @@ public class Heuristic extends Agent {
 
 	@Override
 	public String identify() {
-		// TODO Auto-generated method stub
-		return "HeuristicBot-3000 the Wumpus Mastermind";
+		return "Heuristic AI";
 	}
 
 }

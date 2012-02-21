@@ -1,6 +1,3 @@
-/**
- * 
- */
 package z.wumpus;
 
 import java.util.HashMap;
@@ -11,8 +8,9 @@ import java.util.Map;
 import aima.util.Pair;
 
 /**
- * @author iannonen
- *
+ * @author ebertb, Schmidbauerk
+ * @date 2/17/12
+ * This class allows the AIs to get the next state's status
  */
 public class PathNavigator {
 

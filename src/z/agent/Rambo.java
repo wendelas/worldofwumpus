@@ -1,6 +1,3 @@
-/**
- * 
- */
 package z.agent;
 
 import java.util.List;
@@ -11,8 +8,9 @@ import z.wumpus.StateSpace;
 import aima.util.Pair;
 
 /**
- * @author iannonen
- *
+ * @author ebertb, Schmidbauerk
+ * @date 2/17/12
+ * This class is the Rambo AI
  */
 public class Rambo extends Agent {
 
@@ -43,8 +41,7 @@ public class Rambo extends Agent {
 	
 	@Override
 	public String identify() {
-		// TODO Auto-generated method stub
-		return "Rambo the Random-Resolving Wumpus Hunter";
+		return "Rambo";
 	}
 
 }

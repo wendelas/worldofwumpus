@@ -1,6 +1,3 @@
-/**
- * 
- */
 package z.wumpus;
 
 import java.util.HashMap;
@@ -12,9 +9,9 @@ import aima.logic.propositional.algorithms.KnowledgeBase;
 import aima.util.Pair;
 
 /**
- * This class keeps track of traversed spaces in the 
- * @author iannonen
- *
+ * @author ebertb, Schmidbauerk
+ * @date 2/17/12
+ * This class keeps track of the spaces traveled to
  */
 public class StateSpace {
 
@@ -163,7 +160,7 @@ public class StateSpace {
 	public static double distBetween(Pair<Integer, Integer> a, Pair<Integer, Integer> b) {
 		double dx = (double)(a.getFirst() - b.getFirst());
 		double dy = (double)(a.getSecond() - b.getSecond());
-		return ((double)WumpusWorld.STEP_COST * Math.sqrt((dx * dx) + (dy * dy)));
+		return ((double)WumpusWorld.STOP_COST * Math.sqrt((dx * dx) + (dy * dy)));
 	}
 	
 	/**
@@ -524,7 +521,7 @@ public class StateSpace {
 		
 		// Go through each of the neighbors of all nodes of the state space.
 		for (Pair<Integer, Integer> space : spaceMap.keySet()) {
-			if (isVisited(space.getFirst(), space.getSecond())) {	// TODO Test this if-statement!
+			if (isVisited(space.getFirst(), space.getSecond())) {
 				List<Pair<Integer, Integer>> neighbors = getNeighbors(space);
 				for (Pair<Integer, Integer> neighbor : neighbors) {
 					int nx = neighbor.getFirst();

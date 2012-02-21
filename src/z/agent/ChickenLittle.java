@@ -1,6 +1,3 @@
-/**
- * 
- */
 package z.agent;
 
 import java.util.List;
@@ -10,14 +7,14 @@ import z.wumpus.StateSpace;
 import aima.util.Pair;
 
 /**
- * @author iannonen
- *
+ * @author ebertb, Schmidbauerk
+ * @date 2/17/12
+ * This class is the Chicken Little AI
  */
 public class ChickenLittle extends Agent {
 
 	@Override
 	public Pair<Integer, Integer> resolveFringe(Pair<Integer, Integer> current, StateSpace stateSpace) {
-		// TODO Auto-generated method stub
 		Pair<Integer, Integer> resolved = null;
 		
 		List<Pair<Integer, Integer>> safeMoves = Agent.getSafeMoves(stateSpace);
@@ -33,7 +30,7 @@ public class ChickenLittle extends Agent {
 	
 	@Override
 	public String identify() {
-		return "Chicken Little the Wumpus Novice";
+		return "Chicken Little";
 	}
 
 }
