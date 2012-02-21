@@ -31,14 +31,6 @@ public class Statistics {
 		time = 0L;
 	}
 	
-	
-	
-	/**
-	 * Modifiers
-	 */
-	
-	
-	
 	/**
 	 * 
 	 */

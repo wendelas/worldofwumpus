@@ -9,24 +9,24 @@ import java.util.Random;
  */
 public class WumpusWorld implements Cloneable {
 
-	public static final int STENCH_FLAG = (1<<0);
-	public static final int BREEZE_FLAG = (1<<1);
-	public static final int GOLD_FLAG = (1<<2);
-	public static final int PIT_FLAG = (1<<3);
-	public static final int WUMPUS_FLAG = (1<<4);
-	public static final int START_FLAG = (1<<5);
-	public static final int CRUMB_FLAG = (1<<6);
-	public static final int VISITED_FLAG = (1<<7);
+	public static int STENCH_FLAG = (1<<0);
+	public static int BREEZE_FLAG = (1<<1);
+	public static int GOLD_FLAG = (1<<2);
+	public static int PIT_FLAG = (1<<3);
+	public static int WUMPUS_FLAG = (1<<4);
+	public static int START_FLAG = (1<<5);
+	public static int CRUMB_FLAG = (1<<6);
+	public static int VISITED_FLAG = (1<<7);
 	
-	public static final int WORLD_WIDTH = 4;
-	public static final int WORLD_HEIGHT = 4;
+	public static int WORLD_WIDTH = 4;
+	public static int WORLD_HEIGHT = 4;
 	
-	public static final int START_X = 0;
-	public static final int START_Y = 0;
+	public static int START_X = 0;
+	public static int START_Y = 0;
 	
-	public static final int NUM_WUMPUS = 1;
-	public static final int NUM_GOLD = 1;
-	public static final int NUM_PITS = 3;
+	public static int NUM_WUMPUS = 1;
+	public static int NUM_GOLD = 1;
+	public static int NUM_PITS = 3;
 	
 	public static final int DEATH_COST = 1000;
 	public static final int STOP_COST = 1;
@@ -41,13 +41,7 @@ public class WumpusWorld implements Cloneable {
 	 * Initializes the Wumpus World as empty.
 	 */
 	public WumpusWorld() {
-		flags = new int[WORLD_WIDTH][];
-		for (int i = 0; i < WORLD_WIDTH; i++) {
-			flags[i] = new int[WORLD_HEIGHT];
-			for (int j = 0; j < WORLD_HEIGHT; j++) {
-				flags[i][j] = 0;
-			}
-		}
+		flags = new int[WORLD_WIDTH][WORLD_HEIGHT];
 		
 		// Designate the lower-left corner as the start location.
 		flags[START_X][START_Y] = START_FLAG;

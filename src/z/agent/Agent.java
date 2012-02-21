@@ -1,11 +1,10 @@
 package z.agent;
 
+import java.awt.Point;
 import java.util.LinkedList;
 import java.util.List;
 
 import z.wumpus.StateSpace;
-
-import aima.util.Pair;
 
 /**
  * @author ebertb, Schmidbauerk
@@ -19,12 +18,12 @@ public abstract class Agent {
 	 * @param stateSpace The state space.
 	 * @return A list of "safe" spaces.
 	 */
-	public static List<Pair<Integer, Integer>> getSafeMoves(StateSpace stateSpace) {
-		List<Pair<Integer, Integer>> safeMoves = new LinkedList<Pair<Integer, Integer>>();
-		List<Pair<Integer, Integer>> fringe = stateSpace.getFringe();
-		for (Pair<Integer, Integer> move : fringe) {
-			int x = move.getFirst();
-			int y = move.getSecond();
+	public static List<Point> getSafeMoves(StateSpace stateSpace) {
+		List<Point> safeMoves = new LinkedList<Point>();
+		List<Point> fringe = stateSpace.getFringe();
+		for (Point move : fringe) {
+			int x = move.x;
+			int y = move.y;
 			if (stateSpace.isSafe(x, y)) {
 				safeMoves.add(move);
 			}
@@ -45,5 +44,5 @@ public abstract class Agent {
 	 * @param stateSpace The state space.
 	 * @return A fringe space to move to, or <b>null</b> if no space is selected.
 	 */
-	public abstract Pair<Integer, Integer> resolveFringe(Pair<Integer, Integer> current, StateSpace stateSpace);
+	public abstract Point search(Point current, StateSpace stateSpace);
 }

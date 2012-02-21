@@ -1,11 +1,10 @@
 package z.agent;
 
+import java.awt.Point;
 import java.util.List;
 import java.util.Random;
 
 import z.wumpus.StateSpace;
-
-import aima.util.Pair;
 
 /**
  * @author ebertb, Schmidbauerk
@@ -20,11 +19,11 @@ public class Rambo extends Agent {
 	 * @see z.agent.Agent#resolveFringe(aima.util.Pair, java.util.List, z.wumpus.StateSpace)
 	 */
 	@Override
-	public Pair<Integer, Integer> resolveFringe(Pair<Integer, Integer> current, StateSpace stateSpace) {
+	public Point search(Point current, StateSpace stateSpace) {
 		
-		Pair<Integer, Integer> resolved = null;
+		Point resolved = null;
 		
-		List<Pair<Integer, Integer>> safeMoves = Agent.getSafeMoves(stateSpace);
+		List<Point> safeMoves = Agent.getSafeMoves(stateSpace);
 		
 		if (safeMoves.size() < 1) {
 			System.out.println("I'm trapped. Crap.");

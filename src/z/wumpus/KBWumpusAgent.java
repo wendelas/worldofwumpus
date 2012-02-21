@@ -1,13 +1,12 @@
 package z.wumpus;
 
+import java.awt.Point;
 import java.util.List;
 import java.util.Random;
 
 import z.agent.Agent;
-
 import aima.logic.propositional.algorithms.KnowledgeBase;
 import aima.logic.propositional.algorithms.PLFCEntails;
-import aima.util.Pair;
 
 /**
  * @author ebertb, Schmidbauerk
@@ -27,7 +26,7 @@ public class KBWumpusAgent extends WumpusPlayer {
 	private boolean firstTurn;
 	private int numberCrumbsEncountered;
 	
-	private List<Pair<Integer, Integer>> currentPath;
+	private List<Point> currentPath;
 	
 	private boolean printMoves = false;
 	
@@ -97,9 +96,9 @@ public class KBWumpusAgent extends WumpusPlayer {
 		// Check for the wumpus.
 		if (!stateSpace.isWumpusDead() && stateSpace.knowsWumpusSpace() && hasArrow()) {
 			// If we're in the same row or column as the wumpus, try and kill it.
-			Pair<Integer, Integer> wumpusSpace = stateSpace.getWumpusSpace();
-			int wx = wumpusSpace.getFirst();
-			int wy = wumpusSpace.getSecond();
+			Point wumpusSpace = stateSpace.getWumpusSpace();
+			int wx = wumpusSpace.x;
+			int wy = wumpusSpace.y;
 			if (wx == getX() || wy == getY()) {
 				Direction d = null;
 				if (wx < getX()) {
@@ -127,8 +126,8 @@ public class KBWumpusAgent extends WumpusPlayer {
 		
 		// If not, drop a crumb, and use our explorer to select a fringe node.
 		dropCrumb();
-		Pair<Integer, Integer> current = new Pair<Integer, Integer>(getX(), getY());
-		Pair<Integer, Integer> nextNode = explorer.resolveFringe(current, stateSpace);
+		Point current = new Point(getX(), getY());
+		Point nextNode = explorer.search(current, stateSpace);
 		
 		if (nextNode == null) {
 			stop(true);
@@ -282,7 +281,7 @@ public class KBWumpusAgent extends WumpusPlayer {
 	 * Sets the path for the agent to follow.
 	 * @param path The path.
 	 */
-	public void followPath(List<Pair<Integer, Integer>> path) {
+	public void followPath(List<Point> path) {
 		if (path == null || path.size() == 0) {
 			return;
 		}
@@ -296,11 +295,11 @@ public class KBWumpusAgent extends WumpusPlayer {
 	private void proceedAlongPath() {
 		if (currentPath != null) {
 			if (!currentPath.isEmpty()) {
-				Pair<Integer, Integer> nextSpace = currentPath.remove(0);
+				Point nextSpace = currentPath.remove(0);
 				for (Direction d : Direction.values()) {
 					int dx = getX() + d.dx;
 					int dy = getY() + d.dy;
-					if (dx == nextSpace.getFirst() && dy == nextSpace.getSecond()) {
+					if (dx == nextSpace.x && dy == nextSpace.y) {
 						turnToFace(d);
 						moveForward();
 						break;
