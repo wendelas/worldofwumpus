@@ -1,10 +1,10 @@
 package z.agent;
 
+import java.awt.Point;
 import java.util.List;
 
 import z.wumpus.StateSpace;
 import z.wumpus.WumpusWorld;
-
 import aima.util.Pair;
 
 /**
@@ -20,13 +20,12 @@ public class GoldSeeking extends Agent {
 		return "Gold AI";
 	}
 
-
 	@Override
-	public Pair<Integer, Integer> resolveFringe(Pair<Integer, Integer> current, StateSpace stateSpace) {
+	public Point search(Point current, StateSpace stateSpace) {
 		
-		Pair<Integer, Integer> resolved = null;
+		Point resolved = null;
 		
-		List<Pair<Integer, Integer>> safeMoves = Agent.getSafeMoves(stateSpace);
+		List<Point> safeMoves = Agent.getSafeMoves(stateSpace);
 		
 		if (safeMoves.isEmpty()) {
 			resolved = null;
@@ -35,7 +34,7 @@ public class GoldSeeking extends Agent {
 			Pair<Double, Double> goldEstimate = stateSpace.estimateGoldSpace();
 			// Calculate the lowest utility, as a combination of move cost and distance to the gold.
 			double leastUtility = Double.POSITIVE_INFINITY;
-			for (Pair<Integer, Integer> move : safeMoves) {
+			for (Point move : safeMoves) {
 				if (move == null) {
 					continue;
 				}
@@ -56,7 +55,7 @@ public class GoldSeeking extends Agent {
 	 * @param estimate The estimated location.
 	 * @return The approximate move cost for the estimate.
 	 */
-	private double approximateMoveCost(Pair<Integer, Integer> space, Pair<Double, Double> estimate) {
+	private double approximateMoveCost(Point space, Pair<Double, Double> estimate) {
 		
 		if (space == null || estimate == null) {
 			return 0.0;
@@ -70,7 +69,7 @@ public class GoldSeeking extends Agent {
 					continue;
 				}
 				n++;
-				Pair<Integer, Integer> goldGuess = new Pair<Integer, Integer>(x,y);
+				Point goldGuess = new Point(x,y);
 				cost += StateSpace.distBetween(space, goldGuess);
 			}
 		}

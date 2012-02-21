@@ -1,10 +1,9 @@
 package z.agent;
 
+import java.awt.Point;
 import java.util.List;
 
 import z.wumpus.StateSpace;
-
-import aima.util.Pair;
 
 /**
  * @author ebertb, Schmidbauerk
@@ -15,17 +14,17 @@ public class Heuristic extends Agent {
 
 	
 	@Override
-	public Pair<Integer, Integer> resolveFringe(Pair<Integer, Integer> current, StateSpace stateSpace) {
+	public Point search(Point current, StateSpace stateSpace) {
 
-		Pair<Integer, Integer> resolved = null;
+		Point resolved = null;
 		
-		List<Pair<Integer, Integer>> safeMoves = Agent.getSafeMoves(stateSpace);
+		List<Point> safeMoves = Agent.getSafeMoves(stateSpace);
 		
 		if (safeMoves.isEmpty()) {
 			resolved = null;
 		} else {
 			double leastUtility = Double.POSITIVE_INFINITY;
-			for (Pair<Integer, Integer> move : safeMoves) {
+			for (Point move : safeMoves) {
 				if (move == null) {
 					continue;
 				}

@@ -1,11 +1,10 @@
 package z.wumpus;
 
+import java.awt.Point;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
-import aima.util.Pair;
 
 /**
  * @author ebertb, Schmidbauerk
@@ -32,7 +31,7 @@ public class PathNavigator {
 	 * @throws IllegalArgumentException if the start or goal spaces are not within the appropriate sets.
 	 * @throws IllegalStateException if there is no safe path between the two states. Should never be thrown.
 	 */
-	public List<Pair<Integer, Integer>> resolvePath(Pair<Integer, Integer> start, Pair<Integer, Integer> goal) throws IllegalArgumentException, IllegalStateException {
+	public List<Point> resolvePath(Point start, Point goal) throws IllegalArgumentException, IllegalStateException {
 		
 		// Perform null-checking.
 		if (start == null) {
@@ -44,31 +43,31 @@ public class PathNavigator {
 		
 		// Perform equality checking.
 		if (start.equals(goal)) {
-			return new LinkedList<Pair<Integer, Integer>>();
+			return new LinkedList<Point>();
 		}
 		
 		// Check our explored set for the start space.
-		if (!stateSpace.isVisited(start.getFirst(), start.getSecond())) {
+		if (!stateSpace.isVisited(start.x, start.y)) {
 			throw new IllegalArgumentException("Error: Start space has not been visited!");
 		}
 		
 		// Check our fringe and our explored set for the goal space.
-		List<Pair<Integer, Integer>> fringe = stateSpace.getFringe();
-		if (!stateSpace.isVisited(goal.getFirst(), goal.getSecond()) && !fringe.contains(goal)) {
+		List<Point> fringe = stateSpace.getFringe();
+		if (!stateSpace.isVisited(goal.x, goal.y) && !fringe.contains(goal)) {
 			throw new IllegalArgumentException("Error: Goal space must be within visited set or fringe set!");
 		}
 		
 		// Perform A* pathfinding.
-		Map<Pair<Integer, Integer>, Pair<Integer, Integer>> cameFrom = new HashMap<Pair<Integer, Integer>, Pair<Integer, Integer>>();
-		Map<Pair<Integer, Integer>, Double> gScore = new HashMap<Pair<Integer, Integer>, Double>();
-		List<Pair<Integer, Integer>> closedSet = new LinkedList<Pair<Integer, Integer>>();
-		List<Pair<Integer, Integer>> openSet = new LinkedList<Pair<Integer, Integer>>();
+		Map<Point, Point> cameFrom = new HashMap<Point, Point>();
+		Map<Point, Double> gScore = new HashMap<Point, Double>();
+		List<Point> closedSet = new LinkedList<Point>();
+		List<Point> openSet = new LinkedList<Point>();
 		
 		openSet.add(start);
 		gScore.put(start, 0.0);
 		
 		while (!openSet.isEmpty()) {
-			Pair<Integer, Integer> x = lowestFScore(openSet, gScore, goal);
+			Point x = lowestFScore(openSet, gScore, goal);
 			if (x.equals(goal)) {
 				return reconstructPath(cameFrom, goal);
 			}
@@ -76,8 +75,8 @@ public class PathNavigator {
 			openSet.remove(x);
 			closedSet.add(x);
 			
-			List<Pair<Integer, Integer>> neighbors = neighborNodes(x, fringe);
-			for (Pair<Integer, Integer> y : neighbors) {
+			List<Point> neighbors = neighborNodes(x, fringe);
+			for (Point y : neighbors) {
 				if (closedSet.contains(y)) {
 					continue;
 				}
@@ -111,7 +110,7 @@ public class PathNavigator {
 	 * @param gScore The previously-recorded map of weighted depth scores from the starting space.
 	 * @return The weighted depth score for the given space.
 	 */
-	private double g(Pair<Integer, Integer> space, Map<Pair<Integer, Integer>, Double> gScore) {
+	private double g(Point space, Map<Point, Double> gScore) {
 		if (gScore.containsKey(space)) {
 			return gScore.get(space);
 		}
@@ -124,12 +123,12 @@ public class PathNavigator {
 	 * @param fringe The fringe set for the Wumpus World agent.
 	 * @return A list of spaces.
 	 */
-	private List<Pair<Integer, Integer>> neighborNodes(Pair<Integer, Integer> space, List<Pair<Integer, Integer>> fringe) {
-		List<Pair<Integer, Integer>> initialList =  stateSpace.getNeighbors(space);
-		List<Pair<Integer, Integer>> finalList = new LinkedList<Pair<Integer, Integer>>();
-		for (Pair<Integer, Integer> neighbor : initialList) {
-			int x = neighbor.getFirst();
-			int y = neighbor.getSecond();
+	private List<Point> neighborNodes(Point space, List<Point> fringe) {
+		List<Point> initialList =  stateSpace.getNeighbors(space);
+		List<Point> finalList = new LinkedList<Point>();
+		for (Point neighbor : initialList) {
+			int x = neighbor.x;
+			int y = neighbor.y;
 			// Only add if the neighbor is on the fringe, or if they are visited and safe.
 			if (fringe.contains(neighbor) || (stateSpace.isVisited(x, y) && stateSpace.isSafe(x, y))) {
 				finalList.add(neighbor);
@@ -145,10 +144,10 @@ public class PathNavigator {
 	 * @param goal The goal space; used to determine the heuristic cost estimate.
 	 * @return The space in the open set with the lowest combined utility score.
 	 */
-	private Pair<Integer, Integer> lowestFScore(List<Pair<Integer, Integer>> openSet, Map<Pair<Integer, Integer>, Double> gScore, Pair<Integer, Integer> goal) {
+	private Point lowestFScore(List<Point> openSet, Map<Point, Double> gScore, Point goal) {
 		double lowestScore = Double.POSITIVE_INFINITY;
-		Pair<Integer, Integer> bestSpace = null;
-		for (Pair<Integer, Integer> space : openSet) {
+		Point bestSpace = null;
+		for (Point space : openSet) {
 			double score = f(space, gScore, goal);
 			if (score < lowestScore) {
 				bestSpace = space;
@@ -165,7 +164,7 @@ public class PathNavigator {
 	 * @param goal The goal space; used to determine the heuristic cost estimate.
 	 * @return A utility score, as a positive double value.
 	 */
-	private double f(Pair<Integer, Integer> space, Map<Pair<Integer, Integer>, Double> gScore, Pair<Integer, Integer> goal) {
+	private double f(Point space, Map<Point, Double> gScore, Point goal) {
 		return g(space, gScore) + StateSpace.distBetween(space, goal);
 	}
 
@@ -175,8 +174,8 @@ public class PathNavigator {
 	 * @param target The space closer to the goal for this iteration; on the first iteration, will be the goal space.
 	 * @return A list of spaces comprising a path segment; for the first iteration, will end with the goal space and begin one space away from the starting space.
 	 */
-	private List<Pair<Integer, Integer>> reconstructPath(Map<Pair<Integer, Integer>, Pair<Integer, Integer>> cameFrom, Pair<Integer, Integer> target) {
-		List<Pair<Integer, Integer>> path = new LinkedList<Pair<Integer, Integer>>();
+	private List<Point> reconstructPath(Map<Point, Point> cameFrom, Point target) {
+		List<Point> path = new LinkedList<Point>();
 		if (cameFrom.containsKey(target)) {
 			path = reconstructPath(cameFrom, cameFrom.get(target));
 			path.add(0, target);
@@ -190,24 +189,24 @@ public class PathNavigator {
 	 * @param stateSpace The state space.
 	 * @return The safety cost of the given space.
 	 */
-	public static double getSafetyCost(Pair<Integer, Integer> space, StateSpace stateSpace) {
+	public static double getSafetyCost(Point space, StateSpace stateSpace) {
 		double cost = 0.0;
 		
 		if (space == null) {
 			return cost;
 		}
 		
-		int x = space.getFirst();
-		int y = space.getSecond();
+		int x = space.x;
+		int y = space.y;
 		
 		if (stateSpace.isPit(x, y) || (!stateSpace.isWumpusDead() && stateSpace.isWumpus(x, y))) {
 			cost = 15.0;
 		}
 		
-		List<Pair<Integer, Integer>> neighbors = stateSpace.getNeighbors(space);
-		for (Pair<Integer, Integer> neighbor : neighbors) {
-			int nx = neighbor.getFirst();
-			int ny = neighbor.getSecond();
+		List<Point> neighbors = stateSpace.getNeighbors(space);
+		for (Point neighbor : neighbors) {
+			int nx = neighbor.x;
+			int ny = neighbor.y;
 			if (stateSpace.isBreezy(nx, ny)) {
 				cost += 0.25;
 			}

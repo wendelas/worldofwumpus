@@ -1,10 +1,9 @@
 package z.agent;
 
+import java.awt.Point;
 import java.util.List;
 
 import z.wumpus.StateSpace;
-
-import aima.util.Pair;
 
 /**
  * @author ebertb, Schmidbauerk
@@ -14,10 +13,10 @@ import aima.util.Pair;
 public class ChickenLittle extends Agent {
 
 	@Override
-	public Pair<Integer, Integer> resolveFringe(Pair<Integer, Integer> current, StateSpace stateSpace) {
-		Pair<Integer, Integer> resolved = null;
+	public Point search(Point current, StateSpace stateSpace) {
+		Point resolved = null;
 		
-		List<Pair<Integer, Integer>> safeMoves = Agent.getSafeMoves(stateSpace);
+		List<Point> safeMoves = Agent.getSafeMoves(stateSpace);
 		
 		if (safeMoves.size() > 0) {
 			resolved = safeMoves.get(0);
