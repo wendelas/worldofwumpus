@@ -85,35 +85,35 @@ public class StateSpace {
 		int x = space.x;
 		int y = space.y;
 		
-		// If the pit contains a breadcrumb, increase the cost by 0.5.
+		
 		if (isCrumb(x,y)) {
 			cost += WumpusWorld.CRUMB_COST;
 		}
 		
-		// Regardless of whether we've visited it or not, if we know it's a pit or a wumpus, then we know it's deadly.
+		
 		if (isPit(x,y) || (!isWumpusDead() && isWumpus(x,y))) {
 			
-			cost += (double)WumpusWorld.DEATH_COST;	// Score hit taken when falling into a pit or being eaten.
+			cost += (double)WumpusWorld.DEATH_COST;	
 			
 		} else if (!isVisited(x,y)) {
-			// If we haven't visited it, try it out.
+			
 			int numUnvisitedSpaces = getUnvisitedSpaces().size();
 			if (numUnvisitedSpaces > 0 && !isVisited(x, y)) {
 				
-				// Get the number of pits/wumpi still not found.
+				
 				int numMissingPits = WumpusWorld.NUM_PITS - getKnownPitSpaces().size();
 				int numMissingWumpi = WumpusWorld.NUM_WUMPUS - getKnownWumpusSpaces().size();
 				
-				// Compute the base likelihood that a space is a pit.
+				
 				double baseChanceOfPit = ((double)numMissingPits) / ((double)numUnvisitedSpaces);
 				
-				// Compute the base likelihood that a space is a wumpus.
+				
 				double baseChanceOfWumpus = 0.0;
 				if (!isWumpusDead()) {
 					baseChanceOfWumpus = ((double)numMissingWumpi) / ((double)numUnvisitedSpaces);
 				}
 			
-				// Offset the likelihoods by doing a search of the neighboring spaces.
+				
 				List<Point> neighbors = getNeighbors(space);
 				int numBreezes = 0;
 				int numStenches = 0;
@@ -121,7 +121,7 @@ public class StateSpace {
 					int nx = neighbor.x;
 					int ny = neighbor.y;
 					
-					// If we've visited a surrounding space and found it to not have a breeze or stench, drop to 0%.
+					
 					if (isVisited(nx, ny)) {
 						if (!isBreezy(nx, ny)) {
 							baseChanceOfPit = 0.0;
@@ -131,24 +131,23 @@ public class StateSpace {
 						}
 					}
 					
-					// If the space is breezy, add one to the number of surrounding breezes.
+					
 					if (isBreezy(nx, ny)) {
 						numBreezes++;
 					}
-					// If the space is smelly, add one to the number of surrounding stenches.
+					
 					if (isSmelly(nx, ny)) {
 						numStenches++;
 					}
 				}
 				
-				// Recompute the estimated cost for pit guessing.
-				// Take the number of confirmed breezes/stenches over the max amount, times the cost of death, times the base chance of there being a pit.
+
 				cost += (((double)numBreezes / 4.0) * ((double)WumpusWorld.DEATH_COST) * (baseChanceOfPit))
 						+ (((double)numStenches / 4.0) * ((double)WumpusWorld.DEATH_COST) * (baseChanceOfWumpus));
 			}
 		}
 		
-		// Store the computed cost.
+		
 		safetyMap.put(space, cost);
 	}
 
@@ -178,10 +177,8 @@ public class StateSpace {
 	 */
 	public Pair<Double, Double> estimateGoldSpace() {
 		if (goldSpace != null) {
-			// If we know where the gold is, give that space.
 			return new Pair<Double, Double>((double)goldSpace.x, (double)goldSpace.y);
 		} else {
-			// If we don't, take all unexplored spaces, and retrieve a path for them.
 			double dx = 0.0;
 			double dy = 0.0;
 			List<Point> unvisited = getUnvisitedSpaces();
@@ -202,10 +199,8 @@ public class StateSpace {
 	 */
 	public Point estimateWumpusSpace() {
 		if (wumpusSpace != null) {
-			// If we know where the wumpus is, give that space.
 			return new Point(wumpusSpace.x, wumpusSpace.y);
 		} else {
-			// If we don't, take all unexplored spaces, wumpus spaces, and smelly spaces, and average them, repeating two more times for smelly/wumpus spaces.
 			double dx = 0.0;
 			double dy = 0.0;
 			List<Point> territory = getWumpusTerritory();
@@ -416,10 +411,8 @@ public class StateSpace {
 			}
 		}
 		
-		// Invalidate the cache of safety costs.
 		safetyMap.clear();
 		
-		// Forward-compute the safety costs of the fringe; it's the most intensive.
 		List<Point> fringe = getFringe();
 		for (Point space : fringe) {
 			updateSafetyCost(space);
@@ -520,22 +513,20 @@ public class StateSpace {
 		
 		List<Point> fringe = new LinkedList<Point>();
 		
-		// Go through each of the neighbors of all nodes of the state space.
 		for (Point space : spaceMap.keySet()) {
 			if (isVisited(space.x, space.y)) {
 				List<Point> neighbors = getNeighbors(space);
 				for (Point neighbor : neighbors) {
 					int nx = neighbor.x;
 					int ny = neighbor.y;
-					// If the neighbor has been visited, or isn't safe, skip it.
 					if (isVisited(nx, ny) || !isSafe(nx, ny)) {
 						continue;
 					}
-					// If the fringe already has the neighbor, skip it.
+
 					if (fringe.contains(neighbor)) {
 						continue;
 					}
-					// Otherwise, add it.
+
 					fringe.add(neighbor);
 				}
 			}
@@ -705,17 +696,17 @@ public class StateSpace {
 						data = "_";
 					}
 					
-					// If the space has been visited, mark it with square brackets.
+
 					if ((code & WumpusWorld.VISITED_FLAG) != 0) {
 						start = "[";
 						end = "]";
 					}
-					// If the space has been marked with a crumb, surround it with parentheses.
+
 					if ((code & WumpusWorld.CRUMB_FLAG) != 0) {
 						start = "(";
 						end = ")";
 					}
-					// If the space contains the player, surround it with angle braces.
+
 					if (x == currX && y == currY) {
 						start = "<";
 						end = ">";
@@ -724,7 +715,6 @@ public class StateSpace {
 					data = "?";
 				}
 				
-				// If the space is in the fringe, mark it with curly braces.
 				if (fringe.contains(space)) {
 					start = "{";
 					end = "}";

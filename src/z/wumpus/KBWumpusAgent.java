@@ -41,7 +41,6 @@ public class KBWumpusAgent extends WumpusPlayer {
 		kb = generateInitialKB();
 		stateSpace = new StateSpace(kb);
 		navigator = new PathNavigator(stateSpace);
-		//goldCollected = false;
 		numberCrumbsEncountered = 0;
 		firstTurn = true;
 		onMove();
@@ -60,42 +59,29 @@ public class KBWumpusAgent extends WumpusPlayer {
 	@Override
 	public void update() {
 		
-		// First, we check for the first turn.
+
 		if (firstTurn) {
-			// Pick a random direction, north or east.
 			Random r = new Random();
 			if (r.nextBoolean()) {
 				turnToFace(Direction.EAST);
 			} else {
 				turnToFace(Direction.NORTH);
 			}
-			// Walk ahead one square.
+
 			moveForward();
 			firstTurn = false;
 			return;
 		}
 		
-		// Now, we check to see if we have the gold already.
+
 		if (hasGold()) {
 			stop(false);
 			return;
 		}
 		
-		// Now, we check to see if we can pick up the gold and stop.
-		/*
-		if (stateSpace.isGold(getX(), getY())) {
-			// Check to see if we're in the same space.
-			if (grabGold()) {
-				onGrab();
-				//goldCollected = true;
-				return;
-			}
-		}
-		*/
 		
-		// Check for the wumpus.
+		
 		if (!stateSpace.isWumpusDead() && stateSpace.knowsWumpusSpace() && hasArrow()) {
-			// If we're in the same row or column as the wumpus, try and kill it.
 			Point wumpusSpace = stateSpace.getWumpusSpace();
 			int wx = wumpusSpace.x;
 			int wy = wumpusSpace.y;
@@ -111,20 +97,20 @@ public class KBWumpusAgent extends WumpusPlayer {
 					d = Direction.NORTH;
 				}
 				if (d != null) {
-					// If necessary, turn towards the beast and fire.
+
 					turnToFace(d);
 					fireArrow();
 				}
 			}
 		}
 		
-		// Now, we check to see if we're on a path.
+	
 		if (isOnPath()) {
 			proceedAlongPath();
 			return;
 		}
 		
-		// If not, drop a crumb, and use our explorer to select a fringe node.
+		
 		dropCrumb();
 		Point current = new Point(getX(), getY());
 		Point nextNode = explorer.search(current, stateSpace);
@@ -136,12 +122,11 @@ public class KBWumpusAgent extends WumpusPlayer {
 			try {
 				followPath(navigator.resolvePath(current, nextNode));
 			} catch (IllegalStateException e) {
-				// Unable to find a path to the next fringe state.
+				
 				stop(true);
 			} catch (IllegalArgumentException e) {
 				stop(true);
 			}
-			//followPath(navigator.resolvePath(current, nextNode));
 		}
 	}
 
