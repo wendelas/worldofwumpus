@@ -1,5 +1,8 @@
 package environment;
-
+/**
+ * @author ebertb schmidbauerk
+ * Keeps track of different things
+ */
 public class Memory extends Tile {
 	
 	public boolean the_agent_started_here;
@@ -11,7 +14,7 @@ public class Memory extends Tile {
 	public void this_is_where_I_begin()
 		{this.the_agent_started_here = true;}
 	
-	//Threat gauger mods
+	
 	public void pit_threat()
 		{this.threat_rating +=1;}
 	
@@ -34,7 +37,7 @@ public class Memory extends Tile {
 		{this.threat_rating -=5;}
 	}
 	
-	//Land copy constructor
+	
 	public void becomes_l(Tile the_World)
 	{
 		this.threat_rating = 0;
@@ -51,7 +54,7 @@ public class Memory extends Tile {
 		this.East_of_here = the_World.East_of_here;
 	}
 
-	//perception copy constructor
+	
 	public void becomes_p(Memory the_World)
 	{
 		this.threat_rating = 0;

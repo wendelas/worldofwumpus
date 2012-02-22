@@ -1,5 +1,9 @@
 package Agents;
 
+/**
+ * @author ebertb schmidbauerk
+ * keeps the stats
+ */
 public class pass_fail_test 
 {
 	public boolean pass;

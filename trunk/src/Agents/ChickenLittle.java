@@ -3,35 +3,18 @@ package Agents;
 import environment.*;
 
 /**
- * Agent Fear
- * @author patrickj
- * Agent Fear is a coward who cannot bear the thought of danger.
- * If he is confronted with something too scary (such as no clear 
- * route through) he will fall over and give up
+ * @author ebertb schmidbauerk
+ * Chicken Little agent.
  */
 public class ChickenLittle extends Actions
 {
 	
-	/* My intentions for my Agents memories is that they are able to move and walk
-	 * and talk whenever they desire and to make intelligent decisions on it, however
-	 * I seem to be having trouble with a Linked List inside of a linked list with
-	 * accessing and setting the various components within it. 
-	 * 
-	 * Instead, I intend to have an ArrayList of all of the places that the agent has 
-	 * been as well as a single tile as his perceptions of the current area. Each tile 
-	 * in memory has pointers to the other tiles around it. So in a way, the agent has 
-	 * a history based memory of each place he has been, and the order in which he got 
-	 * there, but they will also be linked by their pointers inherent in the tiles.
-	 */
-	
 
-	
-	//Agent Fear's Constructor
 	public ChickenLittle(GameBoard where_I_go)
 	{
-		//Basic agent memory setup------------------------------------------------------------
+
 		memory = new Tile[where_I_go.the_World.length][where_I_go.the_World.length];
-		//intialize the memory
+
 		for(int Q = 0; Q < memory.length; Q++)
 		{
 			for(int W = 0; W < memory.length; W++)
@@ -42,19 +25,18 @@ public class ChickenLittle extends Actions
 				}
 		}		
 		
-		//ach laddie- this be your one arrow. use it well
-		//Arrow code
+
 		arrow = true;
-		//List of places to see and go
+
 		agenda = new Directions();
-		//Where I currently am
+
 		current_location = new Tile();
 		
 		where_I_go.the_World[where_I_go.get_Size()-1][0].Here().has_been_explored = true;
 		current_location.becomes(where_I_go.the_World[where_I_go.get_Size()-1][0].Here());
 		memory[where_I_go.get_Size()-1][0].becomes(current_location);
 		
-		//Agents' agenda setup----------------------------------------------------------------
+
 		assess_threat();
 		agenda.add(current_location);
 		
@@ -136,7 +118,7 @@ public class ChickenLittle extends Actions
 			
 				
 				assess_threat();
-				//what_are_you_thinking();
+			
 				agenda.add(current_location);
 			}
 	
@@ -154,10 +136,10 @@ public class ChickenLittle extends Actions
 	
 	public void what_are_you_thinking()
 	{
-		//Rows
+		
 		for (int o = 0; o < memory.length; o++)
 		{
-			//Columns
+			
 			for(int i = 0; i < memory.length; i++)
 			{
 				if((o == current_location.x_coordinate) &&(i == current_location.y_coordinate))

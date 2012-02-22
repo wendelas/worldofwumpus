@@ -1,6 +1,9 @@
 package environment;
 
-
+/**
+ * @author ebertb schmidbauerk
+ * Keeps track what is in each tile
+ */
 public class Tile {
 	
 	public int x_coordinate;
@@ -97,7 +100,7 @@ public class Tile {
 	public Tile Here()
 		{return this;}
 	
-	//Land copy constructor
+	
 	public void becomes(Tile the_World)
 	{
 		x_coordinate = the_World.x_coordinate;
@@ -150,7 +153,7 @@ public class Tile {
 		return false;
 	}
 	
-	//public void
+	
 	
 }
 
