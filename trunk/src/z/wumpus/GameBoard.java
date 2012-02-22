@@ -7,7 +7,7 @@
  * PURPOSE: Creates and stores the game board.
  * 
  ****************************************************************************/
-package zz.board;
+package z.wumpus;
 
 import java.awt.Dimension;
 import java.awt.Point;
@@ -22,27 +22,19 @@ import zz.main.Statistics;
  * @author Karl Schmidbauer <schmidbauerk@msoe.edu>
  *
  */
-public class GameBoard {
+public class GameBoard implements Cloneable {
 
-	/**
-	 * The point where the wupus is. If null the wumpus is dead.
-	 */
-	private Point wumpus;
+
 	/**
 	 * The game board stored as a two dimensional array of tiles
 	 */
-	private Tile[][] board;
-	
+	private static Tile[][] board;
 
-	private boolean[][] discoveredTiles;
-	private Point gold;
-	
-	
 	
 	/**
 	 * Stores the board size
 	 */
-	private Dimension boardSize;
+	private static Dimension boardSize;
 	public static int WIDTH = 4;
 	public static int HEIGHT = 4;
 	
@@ -87,20 +79,94 @@ public class GameBoard {
 		placeWumpus();
 		placePits();
 	}
+	
+	public GameBoard clone(){
+		GameBoard newBoard = new GameBoard();
+		for(int x = 0; x < boardSize.width; x++){
+			for(int y = 0; y < boardSize.height; y++){
+				newBoard.board[x][y]=board[x][y];
+			}
+		}
+		return newBoard;
+	}
+	
+	
+	
 
-
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	public String toString(){
+		String output = "";
+		for(int y = board.length-1; y>=0;y--){
+			for(int x = 0; x<board[y].length; x++){
+				output+="|"+
+						(hasStench(x,y) ? "S" : "") +
+						(hasBreeze(x,y) ? "B" : "") +
+						(hasGold(x,y) ? "G" : "") +
+						(hasPit(x,y) ? "P" : "") +
+						(hasWumpus(x,y) ? "W" : "") +
+						"\t|";
+			}
+			output+="\n";
+		}
+		return output;
+	}
+	
+	/////////////////////////////////////////////////////////////////////////////////
+	//Setters
+	public boolean markVisited(int x, int y){
+		if(!inBounds(x,y)){
+			return false;
+		}
+		board[x][y].visited=true;
+		return true;
+	}
+	
+	public boolean grabGold(int x, int y){
+		if(!inBounds(x,y) || !hasGold(x,y)){
+			return false;
+		}
+		board[x][y].gold=false;
+		return true;
+	}
+	
+	public boolean killWumpus(int x, int y){
+		if(!inBounds(x,y) || !hasWumpus(x,y)){
+			return false;
+		}
+		board[x][y].wumpus = false;
+		return true;
+	}
+	
+	public boolean dropMileMarker(int x, int y){
+		if(!inBounds(x,y)){
+			return false;
+		}
+		board[x][y].mileMarker = true;
+		return true;
+	}
+	
+	public boolean placeGold(int x, int y){
+		if(!inBounds(x,y) || hasGold(x,y)){
+			return false;
+		}
+		board[x][y].gold = true;
+		return true;
+		
+	}
+	
 	/**
 	 * Places the gold on a random tile on the board
 	 */
 	private void placeGold(){
 		Random gen = new Random();
 		int x =gen.nextInt(4), y = gen.nextInt(4); 
-		gold = new Point(x, y);
 		//Place gold
 		board[x][y].gold = true;
 		//Glitter and gold are the same
 	}
-
+	
 	/**
 	 * Places the wumpus on a random tile on the board
 	 */
@@ -113,7 +179,6 @@ public class GameBoard {
 		}
 
 		//Place Wumpus
-		wumpus = new Point(x, y);
 		board[x][y].wumpus = true;
 		//Add stench
 		if(x!=board.length-1) board[x+1][y].stench=true;
@@ -121,8 +186,7 @@ public class GameBoard {
 		if(y!=board[x].length-1) board[x][y+1].stench = true;
 		if(y!=0) board[x][y-1].stench = true;
 	}
-
-
+	
 	/**
 	 * Places pits with a 20% chance on tiles
 	 */
@@ -132,7 +196,7 @@ public class GameBoard {
 			for(int y = 0; y<board[x].length; y++){
 				//Determines if the tile has a pit
 				if(((gen.nextInt(4)+1)%4)==2){
-					if((x==0&&y==0) || (wumpus.x==x&&wumpus.y==y) || (board[x][y].gold)) break;
+					if((x==0&&y==0) || (!hasWumpus(x,y)) || (board[x][y].gold)) break;
 					//Add pit
 					board[x][y].pit = true;
 					//Add breeze
@@ -144,21 +208,70 @@ public class GameBoard {
 			}
 		}
 	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	public String toString(){
-		String output = "";
-		for(int y = board.length-1; y>=0;y--){
-			for(int x = 0; x<board[y].length; x++){
-				output+="|"+board[y][x]+"\t|";
-			}
-			output+="\n";
+	/////////////////////////////////////////////////////////////////////////////////
+	
+	
+	/////////////////////////////////////////////////////////////////////////////////
+	//Checkers
+	public boolean inBounds(int x, int y) {
+		if (x < 0 || x >= boardSize.width) {
+			return false;
 		}
-		return output;
+		if (y < 0 || y >= boardSize.height) {
+			return false;
+		}
+		return true;
 	}
-
+	
+	public boolean hasStench(int x, int y){
+		if(!inBounds(x,y)){
+			return false;
+		}
+		return board[x][y].stench;
+	}
+	
+	public boolean hasBreeze(int x, int y){
+		if(!inBounds(x,y)){
+			return false;
+		}
+		return board[x][y].breeze;
+	}
+	
+	public boolean hasWumpus(int x, int y){
+		if(!inBounds(x,y)){
+			return false;
+		}
+		return board[x][y].wumpus;
+	}
+	
+	public boolean hasPit(int x, int y){
+		if(!inBounds(x,y)){
+			return false;
+		}
+		return board[x][y].pit;
+	}
+	
+	public boolean hasGold(int x, int y){
+		if(!inBounds(x,y)){
+			return false;
+		}
+		return board[x][y].gold;
+	}
+	
+	public boolean isVisited(int x, int y){
+		if(!inBounds(x,y)){
+			return false;
+		}
+		return board[x][y].visited;
+	}
+	
+	public boolean hasMileMarker(int x, int y){
+		if(!inBounds(x,y)){
+			return false;
+		}
+		return board[x][y].mileMarker;
+	}
+	/////////////////////////////////////////////////////////////////////////////////
 	/**
 	 * Get the size of the game board
 	 * @return - dimension of the game board
@@ -167,35 +280,8 @@ public class GameBoard {
 		return boardSize;
 	}
 
-	public boolean wumpusDead() {
-		return (wumpus==null);
-	}
-
-
-	public Point getGoldLocation(){
-		return gold;
-	}
-
-	public boolean[][] getDiscoveredTiles(){
-		return discoveredTiles;
-	}
-
 	public String getStatusAtLocation(Point p){
 		return board[p.x][p.y].toString();
-	}
-
-	public boolean killWumpus(Point currentPosition) {
-		if(wumpus.x ==currentPosition.x && wumpus.y == currentPosition.y){
-			board[wumpus.x][wumpus.y].wumpus = false;
-			wumpus = null;
-			return true;
-		}
-		return false;
-	}
-	
-	public GameBoard resetBoard(){
-		GameBoard ret = new GameBoard();
-		return ret;
 	}
 
 }

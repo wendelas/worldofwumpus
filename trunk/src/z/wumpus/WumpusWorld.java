@@ -82,20 +82,20 @@ public class WumpusWorld implements Cloneable {
 		return true;
 	}
 	
-	public boolean hasCrumb(int x, int y) {
-		if (!inBounds(x,y)) {
-			return false;
-		}
-		return ((flags[x][y] & CRUMB_FLAG) != 0);
-	}
-	
-	public boolean dropCrumb(int x, int y) {
-		if (!inBounds(x,y)) {
-			return false;
-		}
-		flags[x][y] |= CRUMB_FLAG;
-		return true;
-	}
+//	public boolean hasCrumb(int x, int y) {
+//		if (!inBounds(x,y)) {
+//			return false;
+//		}
+//		return ((flags[x][y] & CRUMB_FLAG) != 0);
+//	}
+//	
+//	public boolean dropCrumb(int x, int y) {
+//		if (!inBounds(x,y)) {
+//			return false;
+//		}
+//		flags[x][y] |= CRUMB_FLAG;
+//		return true;
+//	}
 	
 	public boolean hasWumpus(int x, int y) {
 		if (!inBounds(x,y)) {
