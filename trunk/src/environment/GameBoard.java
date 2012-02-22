@@ -14,7 +14,6 @@ public class GameBoard
 	 */
 	public GameBoard(int size, double percent_pits)
 	{
-		boolean TESTING = false;
 		//The world will now have a size
 		set_Size(size);
 		this.the_World = new Tile[get_Size()][get_Size()];

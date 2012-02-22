@@ -1,3 +1,5 @@
+package main;
+
 import java.text.NumberFormat;
 
 import Agents.ChickenLittle;
@@ -6,7 +8,6 @@ import Agents.pass_fail_test;
 import environment.GameBoard;
 
 
-@SuppressWarnings("unused")
 public class main {
 
 	/**

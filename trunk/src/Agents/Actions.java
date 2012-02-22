@@ -34,8 +34,6 @@ public class Actions
 		 * y is cols
 		 */
 		int threat = 0;
-		int x = 0;
-		int y = 0;
 		
 		//System.out.println("Cur_pos " + " X: " + (current_location.x_coordinate) + " Y: " + (current_location.y_coordinate));
 		//-----------------------------------------------------------
