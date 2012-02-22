@@ -86,7 +86,7 @@ public class StateSpace {
 		int y = space.y;
 		
 		// Checks to see if the tile contains a breadcrumb.
-		if (isCrumb(x,y)) cost += GameBoard.COST_TO_LEAVE_CRUMB;
+		if (isMileMarker(x,y)) cost += GameBoard.COST_TO_LEAVE_CRUMB;
 		
 		if (isPit(x,y) || (!isWumpusDead() && isWumpus(x,y))) {
 			cost += (double)GameBoard.COST_OF_DEATH;
@@ -118,20 +118,20 @@ public class StateSpace {
 					
 					
 					if (isVisited(nx, ny)) {
-						if (!isBreezy(nx, ny)) {
+						if (!isBreeze(nx, ny)) {
 							baseChanceOfPit = 0.0;
 						}
-						if (!isSmelly(nx, ny)) {
+						if (!isStench(nx, ny)) {
 							baseChanceOfWumpus = 0.0;
 						}
 					}
 					
 					
-					if (isBreezy(nx, ny)) {
+					if (isBreeze(nx, ny)) {
 						numBreezes++;
 					}
 					
-					if (isSmelly(nx, ny)) {
+					if (isStench(nx, ny)) {
 						numStenches++;
 					}
 				}
@@ -203,7 +203,7 @@ public class StateSpace {
 			for (Point space : territory) {
 				int px = space.x;
 				int py = space.y;
-				if (isSmelly(px, py) || isWumpus(px, py)) {
+				if (isStench(px, py) || isWumpus(px, py)) {
 					px *= 3;
 					py *= 3;
 					n += 2;
@@ -253,7 +253,7 @@ public class StateSpace {
 		List<Point> list = new LinkedList<Point>();
 		for (int x = 0; x < GameBoard.WIDTH; x++)
 			for (int y = 0; y < GameBoard.HEIGHT; y++)
-				if (isWumpus(x, y) || isSmelly(x, y) || !isVisited(x, y))
+				if (isWumpus(x, y) || isStench(x, y) || !isVisited(x, y))
 					list.add(new Point(x, y));
 		return list;
 	}
@@ -304,7 +304,7 @@ public class StateSpace {
 		List<Point> list = new LinkedList<Point>();
 		for (int x = 0; x < GameBoard.WIDTH; x++)
 			for (int y = 0; y < GameBoard.HEIGHT; y++)
-				if(isBreezy(x,y))
+				if(isBreeze(x,y))
 					list.add(new Point(x, y));
 		return list;
 	}
@@ -317,7 +317,7 @@ public class StateSpace {
 		List<Point> list = new LinkedList<Point>();
 		for (int x = 0; x < GameBoard.WIDTH; x++)
 			for (int y = 0; y < GameBoard.HEIGHT; y++)
-				if(isSmelly(x,y))
+				if(isStench(x,y))
 					list.add(new Point(x, y));
 		return list;
 	}
@@ -348,10 +348,10 @@ public class StateSpace {
 			for (int y = 0; y < GameBoard.HEIGHT; y++) {
 				String p = toKBCoords(x,y);
 				if (KBWumpusAgent.plfce.plfcEntails(kb, "P" + p)) markPit(x,y);
-				if (KBWumpusAgent.plfce.plfcEntails(kb, "S" + p)) markSmelly(x,y);
+				if (KBWumpusAgent.plfce.plfcEntails(kb, "S" + p)) markStench(x,y);
 				if (!killedWumpus && KBWumpusAgent.plfce.plfcEntails(kb, "W" + p)) markWumpus(x,y);
-				if (KBWumpusAgent.plfce.plfcEntails(kb, "B" + p)) markBreezy(x,y);
-				if (KBWumpusAgent.plfce.plfcEntails(kb, "C" + p)) markCrumb(x,y);
+				if (KBWumpusAgent.plfce.plfcEntails(kb, "B" + p)) markBreeze(x,y);
+				if (KBWumpusAgent.plfce.plfcEntails(kb, "C" + p)) markMileMarker(x,y);
 				if (KBWumpusAgent.plfce.plfcEntails(kb, "G" + p)) markGold(x,y);
 				if (KBWumpusAgent.plfce.plfcEntails(kb, "V" + p)) markVisited(x,y);
 			}
@@ -383,7 +383,7 @@ public class StateSpace {
 	 * @param y The y-coordinate.
 	 */
 	public void markVisited(int x, int y) {
-		GameBoard.board[x][y].visited = true; ////////////////////////
+		GameBoard.board[x][y].visited = true;
 	}
 	
 	/**
@@ -391,8 +391,8 @@ public class StateSpace {
 	 * @param x The x-coordinate.
 	 * @param y The y-coordinate.
 	 */
-	public void markSmelly(int x, int y) {
-		GameBoard.board[x][y].stench = true; //////////////////////////
+	public void markStench(int x, int y) {
+		GameBoard.board[x][y].stench = true;
 	}
 	
 	/**
@@ -401,7 +401,7 @@ public class StateSpace {
 	 * @param y The y-coordinate.
 	 */
 	public void markPit(int x, int y) {
-		markFlag(x,y,GameBoard.PIT_FLAG);
+		GameBoard.board[x][y].pit = true;
 	}
 	
 	/**
@@ -410,7 +410,7 @@ public class StateSpace {
 	 * @param y The y-coordinate.
 	 */
 	public void markWumpus(int x, int y) {
-		markFlag(x,y,GameBoard.WUMPUS_FLAG);
+		GameBoard.board[x][y].wumpus = true;
 		Point space = new Point(x,y);
 		if (wumpusSpace == null || !wumpusSpace.equals(space)) wumpusSpace = space;
 	}
@@ -420,8 +420,8 @@ public class StateSpace {
 	 * @param x The x-coordinate.
 	 * @param y The y-coordinate.
 	 */
-	public void markBreezy(int x, int y) {
-		markFlag(x,y,GameBoard.BREEZE_FLAG);
+	public void markBreeze(int x, int y) {
+		GameBoard.board[x][y].breeze = true;
 	}
 	
 	/**
@@ -430,7 +430,7 @@ public class StateSpace {
 	 * @param y The y-coordinate.
 	 */
 	public void markGold(int x, int y) {
-		markFlag(x,y,GameBoard.GOLD_FLAG);
+		GameBoard.board[x][y].gold = true;
 		Point space = new Point(x,y);
 		if (goldSpace == null || !goldSpace.equals(space)) goldSpace = space;
 	}
@@ -440,8 +440,8 @@ public class StateSpace {
 	 * @param x The x-coordinate.
 	 * @param y The y-coordinate.
 	 */
-	public void markCrumb(int x, int y) {
-		markFlag(x,y,GameBoard.CRUMB_FLAG);
+	public void markMileMarker(int x, int y) {
+		GameBoard.board[x][y].mileMarker = true;
 	}
 	
 	/**
@@ -477,7 +477,7 @@ public class StateSpace {
 	 * @return <b>true</b> if all of the flag's bits are set; <b>false</b> otherwise.
 	 */
 	private boolean isFlagSet(int x, int y, int flags) {
-		Point space = new Point(x,y);
+		Point space = new Point(x,y);//////////////////////////////////////////
 		if (!spaceMap.containsKey(space)) return false;
 		else return ((spaceMap.get(space) & flags) == flags);
 	}
@@ -489,7 +489,7 @@ public class StateSpace {
 	 * @return <b>true</b> if the space has been visited; <b>false</b> otherwise.
 	 */
 	public boolean isVisited(int x, int y) {
-		return isFlagSet(x,y,GameBoard.VISITED_FLAG);
+		return GameBoard.board[x][y].visited;
 	}
 	
 	/**
@@ -509,7 +509,7 @@ public class StateSpace {
 	 * @return <b>true</b> if the space has a pit; <b>false</b> otherwise.
 	 */
 	public boolean isPit(int x, int y) {
-		return isFlagSet(x,y,GameBoard.PIT_FLAG);
+		return GameBoard.board[x][y].pit;
 	}
 	
 	/**
@@ -519,7 +519,7 @@ public class StateSpace {
 	 * @return <b>true</b> if the space has a wumpus; <b>false</b> otherwise.
 	 */
 	public boolean isWumpus(int x, int y) {
-		return isFlagSet(x,y,GameBoard.WUMPUS_FLAG);
+		return GameBoard.board[x][y].wumpus;
 	}
 	
 	/**
@@ -528,8 +528,8 @@ public class StateSpace {
 	 * @param y The y-coordinate.
 	 * @return <b>true</b> if the space has a breeze; <b>false</b> otherwise.
 	 */
-	public boolean isBreezy(int x, int y) {
-		return isFlagSet(x,y,GameBoard.BREEZE_FLAG);
+	public boolean isBreeze(int x, int y) {
+		return GameBoard.board[x][y].breeze;
 	}
 	
 	/**
@@ -538,8 +538,8 @@ public class StateSpace {
 	 * @param y The y-coordinate.
 	 * @return <b>true</b> if the space has a stench; <b>false</b> otherwise.
 	 */
-	public boolean isSmelly(int x, int y) {
-		return isFlagSet(x,y,GameBoard.STENCH_FLAG);
+	public boolean isStench(int x, int y) {
+		return GameBoard.board[x][y].stench;
 	}
 	
 	/**
@@ -548,8 +548,8 @@ public class StateSpace {
 	 * @param y The y-coordinate.
 	 * @return <b>true</b> if the space has a crumb; <b>false</b> otherwise.
 	 */
-	public boolean isCrumb(int x, int y) {
-		return isFlagSet(x,y,GameBoard.CRUMB_FLAG);
+	public boolean isMileMarker(int x, int y) {
+		return GameBoard.board[x][y].mileMarker;
 	}
 	
 	/**
@@ -559,7 +559,7 @@ public class StateSpace {
 	 * @return <b>true</b> if the space has gold; <b>false</b> otherwise.
 	 */
 	public boolean isGold(int x, int y) {
-		return isFlagSet(x,y,GameBoard.GOLD_FLAG);
+		return GameBoard.board[x][y].gold;
 	}
 	
 	/**
@@ -613,21 +613,21 @@ public class StateSpace {
 					int code = spaceMap.get(space);
 					String wumpusLabel = isWumpusDead() ? "x" : "W";
 					
-					data = ((code & GameBoard.STENCH_FLAG) != 0 ? "S" : "") +
-							((code & GameBoard.BREEZE_FLAG) != 0 ? "B" : "") +
-							((code & GameBoard.GOLD_FLAG) != 0 ? "G" : "") +
-							((code & GameBoard.PIT_FLAG) != 0 ? "P" : "") +
-							((code & GameBoard.WUMPUS_FLAG) != 0 ? wumpusLabel : "");
+					data = (isStench(x,y) ? "S" : "") +
+							(isBreeze(x,y) ? "B" : "") +
+							(isGold(x,y)  ? "G" : "") +
+							(isPit(x,y) ? "P" : "") +
+							(isWumpus(x,y) ? wumpusLabel : "");
 					
 					if (data.isEmpty())	data = "_";
 					
 
-					if ((code & GameBoard.VISITED_FLAG) != 0) {
+					if (isVisited(x,y)) {
 						start = "[";
 						end = "]";
 					}
 
-					if ((code & GameBoard.CRUMB_FLAG) != 0) {
+					if (isMileMarker(x,y)) {
 						start = "(";
 						end = ")";
 					}

@@ -192,10 +192,10 @@ public class PathNavigator {
 		for (Point neighbor : neighbors) {
 			int nx = neighbor.x;
 			int ny = neighbor.y;
-			if (stateSpace.isBreezy(nx, ny)) {
+			if (stateSpace.isBreeze(nx, ny)) {
 				cost += 0.25;
 			}
-			if (stateSpace.isSmelly(nx, ny)) {
+			if (stateSpace.isStench(nx, ny)) {
 				cost += 0.2;
 			}
 		}
