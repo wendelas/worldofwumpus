@@ -1,6 +1,6 @@
 package Agents;
 
-import environment.Land;
+import environment.Tile;
 /**
  * To do List:
  * 
@@ -9,8 +9,8 @@ import environment.Land;
  */
 public class Actions 
 {	
-	Land[][] memory;
-	Land current_location;
+	Tile[][] memory;
+	Tile current_location;
 	
 	pass_fail_test pass_fail;
 	
@@ -74,7 +74,7 @@ public class Actions
 							}
 							
 							//New Tile
-							Land N = new Land();
+							Tile N = new Tile();
 							//the tile becomes the Northern piece of Land
 							N.becomes(memory[current_location.x_coordinate][current_location.y_coordinate].North_of_here);
 							//The new tile's threat rating becomes the current threat level
@@ -138,7 +138,7 @@ public class Actions
 							}
 							
 							//New Tile
-							Land N = new Land();
+							Tile N = new Tile();
 							//the tile becomes the Northern piece of Land
 							N.becomes(memory[current_location.x_coordinate][current_location.y_coordinate].North_of_here);
 							//The new tile's threat rating becomes the current threat level
@@ -215,7 +215,7 @@ public class Actions
 							}
 							
 							//New Tile
-							Land N = new Land();
+							Tile N = new Tile();
 							//the tile becomes the Northern piece of Land
 							N.becomes(memory[current_location.x_coordinate][current_location.y_coordinate].South_of_here);
 							//The new tile's threat rating becomes the current threat level
@@ -278,7 +278,7 @@ public class Actions
 							}
 							
 							//New Tile
-							Land N = new Land();
+							Tile N = new Tile();
 							//the tile becomes the Northern piece of Land
 							N.becomes(memory[current_location.x_coordinate][current_location.y_coordinate].South_of_here);
 							//The new tile's threat rating becomes the current threat level
@@ -355,7 +355,7 @@ public class Actions
 							}
 							
 							//New Tile
-							Land N = new Land();
+							Tile N = new Tile();
 							//the tile becomes the Northern piece of Land
 							N.becomes(memory[current_location.x_coordinate][current_location.y_coordinate].East_of_here);
 							//The new tile's threat rating becomes the current threat level
@@ -420,7 +420,7 @@ public class Actions
 							}
 							
 							//New Tile
-							Land N = new Land();
+							Tile N = new Tile();
 							//the tile becomes the Northern piece of Land
 							N.becomes(memory[current_location.x_coordinate][current_location.y_coordinate].East_of_here);
 							//The new tile's threat rating becomes the current threat level
@@ -497,7 +497,7 @@ public class Actions
 							}
 							
 							//New Tile
-							Land N = new Land();
+							Tile N = new Tile();
 							//the tile becomes the Northern piece of Land
 							N.becomes(memory[current_location.x_coordinate][current_location.y_coordinate].West_of_here);
 							//The new tile's threat rating becomes the current threat level
@@ -560,7 +560,7 @@ public class Actions
 							}
 							
 							//New Tile
-							Land N = new Land();
+							Tile N = new Tile();
 							//the tile becomes the Northern piece of Land
 							N.becomes(memory[current_location.x_coordinate][current_location.y_coordinate].West_of_here);
 							//The new tile's threat rating becomes the current threat level

@@ -1,9 +1,9 @@
 import java.text.NumberFormat;
 
-import Agents.Fear;
-import Agents.Shadowrunner;
+import Agents.ChickenLittle;
+import Agents.Rambo;
 import Agents.pass_fail_test;
-import environment.Wumpus_World;
+import environment.GameBoard;
 
 
 @SuppressWarnings("unused")
@@ -59,10 +59,10 @@ public class main {
 				for(int i = 0; i < 666; i++)
 				{
 					
-					Wumpus_World the_Land = new Wumpus_World(size, pit_rate); 
+					GameBoard the_Land = new GameBoard(size, pit_rate); 
 					//the_Land.revealed();
 					
-					Fear agent = new Fear(the_Land);
+					ChickenLittle agent = new ChickenLittle(the_Land);
 					//agent.what_are_you_thinking();
 					A = agent.move(the_Land);
 					
@@ -119,10 +119,10 @@ public class main {
 				for(int i = 0; i < 666; i++)
 				{
 					
-					Wumpus_World the_Land = new Wumpus_World(size, pit_rate); 
+					GameBoard the_Land = new GameBoard(size, pit_rate); 
 					//the_Land.revealed();
 					
-					Shadowrunner agent = new Shadowrunner(the_Land);
+					Rambo agent = new Rambo(the_Land);
 					//agent.what_are_you_thinking();
 					A = agent.move(the_Land);
 					

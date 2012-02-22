@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import environment.*;
 
 public class places_to_go {
-	ArrayList<Land> _List_next;
+	ArrayList<Tile> _List_next;
 	
 	public places_to_go()
-		{_List_next = new ArrayList<Land>(1);}
+		{_List_next = new ArrayList<Tile>(1);}
 	/**
 	 * big, and expensive, but it will make sure that it will not repeat itself
 	 * @param to_add
 	 */
-	public void add(Land to_add)
+	public void add(Tile to_add)
 	{
 	if(_List_next.isEmpty() == true)
 			{
@@ -106,9 +106,9 @@ public class places_to_go {
 		}
 	}
 		
-	public Land next()
+	public Tile next()
 	{
-		Land TEMP = new Land();
+		Tile TEMP = new Tile();
 		if(_List_next.isEmpty())
 		{
 			return null;

@@ -1,8 +1,8 @@
 package environment;
 
-public class Wumpus_World 
+public class GameBoard 
 {
-	public Land[][] the_World;
+	public Tile[][] the_World;
 	private int size_of_the_World;
 	
 	/**
@@ -12,18 +12,18 @@ public class Wumpus_World
 	 * The wumpus World's size is generated on start and cannot be changed
 	 * after creation. The area generated will always be a square
 	 */
-	public Wumpus_World(int size, double percent_pits)
+	public GameBoard(int size, double percent_pits)
 	{
 		boolean TESTING = false;
 		//The world will now have a size
 		set_Size(size);
-		this.the_World = new Land[get_Size()][get_Size()];
+		this.the_World = new Tile[get_Size()][get_Size()];
 		
 		for (int o = 0; o < this.get_Size(); o++)
 		{
 			for(int i = 0; i < this.get_Size(); i++)
 			{
-				the_World[o][i] = new Land();
+				the_World[o][i] = new Tile();
 				the_World[o][i].x_coordinate = o;
 				the_World[o][i].y_coordinate = i;
 			}
@@ -184,7 +184,7 @@ public class Wumpus_World
 		return size_of_the_World;
 	}
 
-	public Land here(int x, int y) {
+	public Tile here(int x, int y) {
 		return the_World[x][y];
 	}
 	

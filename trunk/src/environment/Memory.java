@@ -1,11 +1,11 @@
 package environment;
 
-public class perception_of_land extends Land {
+public class Memory extends Tile {
 	
 	public boolean the_agent_started_here;
 	
 
-	public perception_of_land()
+	public Memory()
 		{threat_rating = 0;}
 	
 	public void this_is_where_I_begin()
@@ -35,7 +35,7 @@ public class perception_of_land extends Land {
 	}
 	
 	//Land copy constructor
-	public void becomes_l(Land the_World)
+	public void becomes_l(Tile the_World)
 	{
 		this.threat_rating = 0;
 		
@@ -52,7 +52,7 @@ public class perception_of_land extends Land {
 	}
 
 	//perception copy constructor
-	public void becomes_p(perception_of_land the_World)
+	public void becomes_p(Memory the_World)
 	{
 		this.threat_rating = 0;
 		

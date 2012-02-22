@@ -9,7 +9,7 @@ import environment.*;
  * If he is confronted with something too scary (such as no clear 
  * route through) he will fall over and give up
  */
-public class Fear extends Actions
+public class ChickenLittle extends Actions
 {
 	
 	/* My intentions for my Agents memories is that they are able to move and walk
@@ -27,16 +27,16 @@ public class Fear extends Actions
 
 	
 	//Agent Fear's Constructor
-	public Fear(Wumpus_World where_I_go)
+	public ChickenLittle(GameBoard where_I_go)
 	{
 		//Basic agent memory setup------------------------------------------------------------
-		memory = new Land[where_I_go.the_World.length][where_I_go.the_World.length];
+		memory = new Tile[where_I_go.the_World.length][where_I_go.the_World.length];
 		//intialize the memory
 		for(int Q = 0; Q < memory.length; Q++)
 		{
 			for(int W = 0; W < memory.length; W++)
 			{
-					Land _LND = new Land();
+					Tile _LND = new Tile();
 					memory[Q][W] = _LND;
 					memory[Q][W].becomes_low_data(where_I_go.the_World[Q][W].Here());
 				}
@@ -48,7 +48,7 @@ public class Fear extends Actions
 		//List of places to see and go
 		agenda = new places_to_go();
 		//Where I currently am
-		current_location = new Land();
+		current_location = new Tile();
 		
 		where_I_go.the_World[where_I_go.get_Size()-1][0].Here().has_been_explored = true;
 		current_location.becomes(where_I_go.the_World[where_I_go.get_Size()-1][0].Here());
@@ -68,7 +68,7 @@ public class Fear extends Actions
 		pass_fail.die = false;
 	}
 	
-	public pass_fail_test move(Wumpus_World the_Land)
+	public pass_fail_test move(GameBoard the_Land)
 	{
 		boolean mission_complete = false;
 		boolean mission_failed = false;
@@ -77,7 +77,7 @@ public class Fear extends Actions
 		
 		while (end == 0) 
 		{
-			Land location = new Land();
+			Tile location = new Tile();
 			while(threat == 0)
 			{
 				location = agenda.next();

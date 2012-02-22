@@ -1,7 +1,7 @@
 package environment;
 
 
-public class Land {
+public class Tile {
 	
 	public int x_coordinate;
 	public int y_coordinate;
@@ -13,17 +13,17 @@ public class Land {
 	public boolean is_breezy;
 	public boolean glitters;
 	
-	public Land North_of_here;
-	public Land South_of_here;
-	public Land West_of_here;
-	public Land East_of_here;
+	public Tile North_of_here;
+	public Tile South_of_here;
+	public Tile West_of_here;
+	public Tile East_of_here;
 	
 	public int threat_rating;
 	
 	public boolean has_been_explored;
 	
 
-	public Land()
+	public Tile()
 	{
 		x_coordinate = 0;
 		y_coordinate = 0;
@@ -82,23 +82,23 @@ public class Land {
 		
 	}
 
-	public Land North()
+	public Tile North()
 		{return North_of_here;}
 	
-	public Land South()
+	public Tile South()
 		{return South_of_here;}
 	
-	public Land West()
+	public Tile West()
 		{return West_of_here;}
 	
-	public Land East()
+	public Tile East()
 		{return East_of_here;}
 
-	public Land Here()
+	public Tile Here()
 		{return this;}
 	
 	//Land copy constructor
-	public void becomes(Land the_World)
+	public void becomes(Tile the_World)
 	{
 		x_coordinate = the_World.x_coordinate;
 		y_coordinate = the_World.y_coordinate;
@@ -120,7 +120,7 @@ public class Land {
 		has_been_explored = the_World.has_been_explored;
 	}
 	
-	public void becomes_low_data(Land the_World)
+	public void becomes_low_data(Tile the_World)
 	{
 		
 		x_coordinate = the_World.x_coordinate;
@@ -143,7 +143,7 @@ public class Land {
 		has_been_explored = the_World.has_been_explored;
 	}
 	
-	public boolean coords (Land RHS)
+	public boolean coords (Tile RHS)
 	{
 		if(((x_coordinate == RHS.x_coordinate) &&y_coordinate == RHS.y_coordinate) == false)
 			{return true;}
