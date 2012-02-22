@@ -14,9 +14,9 @@ import z.wumpus.StateSpace;
 public abstract class Agent {
 	
 	/**
-	 * Gets a subset of "safe" spaces from the given fringe set.
-	 * @param stateSpace The state space.
-	 * @return A list of "safe" spaces.
+	 * Returns a List of safe spaces from the given tile
+	 * @param stateSpace The tiles.
+	 * @return A list of safe tiles to go into
 	 */
 	public static List<Point> getSafeMoves(StateSpace stateSpace) {
 		List<Point> safeMoves = new LinkedList<Point>();
@@ -32,17 +32,10 @@ public abstract class Agent {
 	}
 
 	/**
-	 * Gets a string name which identifies the specific explorer implementation.
-	 * @return A string name.
-	 */
-	public abstract String identify();
-	
-	/**
-	 * Chooses a next state from the fringe of unexplored states using a user-defined selection algorithm.
-	 * May return <b>null</b> to indicate that the explorer cannot proceed further.
-	 * @param current The current space.
-	 * @param stateSpace The state space.
-	 * @return A fringe space to move to, or <b>null</b> if no space is selected.
+	 * Chooses where to go to next from the list of unexplored tiles using various agents.
+	 * @param current The current tile.
+	 * @param stateSpace The state.
+	 * @return A fringe space to move to, or null if the agent cannot proceed.
 	 */
 	public abstract Point search(Point current, StateSpace stateSpace);
 }

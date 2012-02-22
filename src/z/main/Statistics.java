@@ -1,6 +1,7 @@
 package z.main;
 
-import z.wumpus.WumpusWorld;
+import z.wumpus.GameBoard;
+
 
 /**
  * @author ebertb, Schmidbauerk
@@ -10,189 +11,153 @@ import z.wumpus.WumpusWorld;
 public class Statistics {
 
 	private int score;
-	private int Deaths;
+	private int deaths;
 	private int numStops;
 	
 	private boolean hasArrow;
 	private boolean foundGold;
 	private boolean wumpusKilled;
-	private boolean unwinnable;
+	private boolean unsolvable;
 	
 	private long time;
 	
+	
+	/**
+	 * Default constructor to keep track of statistics
+	 */
 	public Statistics() {
-		score = 0;
-		Deaths = 0;
-		numStops = 0;
-		hasArrow = true;
-		foundGold = false;
-		wumpusKilled = false;
-		unwinnable = false;
-		time = 0L;
+		hasArrow = true; //Starts with the arrow
 	}
 	
 	/**
-	 * 
+	 * Increases the number of stops
 	 */
 	public void addStops() {
 		numStops++;
-		score -= WumpusWorld.STOP_COST;
+		score -= GameBoard.COST_TO_STEP;
 	}
 
 	/**
-	 * 
+	 * Uses up the arrow
 	 */
 	public void useArrow() {
-		if (hasArrow) {
-			hasArrow = false;
-			score -= WumpusWorld.ARROW_COST;
-		}
+		if (hasArrow) score -= GameBoard.COST_TO_FIRE_ARROW;
+		hasArrow = false;
 	}
 	
 	/**
-	 * 
+	 * Marks the wumpus as killed
 	 */
-	public void KilledWumpus() {
+	public void killedWumpus() {
 		wumpusKilled = true;
 	}
 	
 	/**
-	 * 
+	 * Increases the death toll
 	 */
 	public void addDeath() {
-		Deaths++;
-		score -= WumpusWorld.DEATH_COST;
+		deaths++;
+		score -= GameBoard.COST_OF_DEATH;
 	}
 
 	/**
-	 * 
+	 * Gets the gold
 	 */
 	public void acquireGold() {
-		if (!foundGold) {
-			foundGold = true;
-			score += WumpusWorld.GOLD_VALUE;
-		}
+		if (!foundGold) score += GameBoard.VALUE_OF_GOLD;
+		foundGold = true;
 	}
 
 	/**
-	 * 
+	 * Drops the gold
 	 */
 	public void releaseGold() {
-		if (foundGold) {
-			foundGold = false;
-			score -= WumpusWorld.GOLD_VALUE;
-		}
+		if (foundGold) score -= GameBoard.VALUE_OF_GOLD;
+		foundGold = false;
 	}
 	
 	/**
-	 * 
+	 * Marks the board as unsolvable
 	 */
-	public void markUnwinnable() {
-		unwinnable = true;
+	public void markUnsolvable() {
+		unsolvable = true;
 	}
 	
 	
 	/**
-	 * 
+	 * Sets the time
 	 * @param t
 	 */
-	public void markTime(long t) {
+	public void setTime(long t) {
 		time = t;
 	}
 	
-	
-	
-	
-	
-	
 	/**
-	 * Getters
+	 * @return If the board is unsolvable
 	 */
-	
-	/**
-	 * 
-	 * @return
-	 */
-	public boolean isUnwinnable() {
-		return unwinnable;
+	public boolean isSolvable() {
+		return unsolvable;
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * @return Returns if the gold was found
 	 */
 	public boolean hasGold() {
-		return (foundGold);
+		return foundGold;
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * @return Returns if the wumpus is dead
 	 */
 	public boolean hasKilledWumpus() {
-		return (wumpusKilled);
+		return wumpusKilled;
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * @return returns the total number of agent deaths
 	 */
 	public int getNumDeaths() {
-		return Deaths;
+		return deaths;
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * @return gets the number of tile stops
 	 */
 	public int getNumSteps() {
 		return numStops;
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * @return Returns the current score
 	 */
 	public int getScore() {
 		return score;
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * @return Returns if the agent still has the arrow
 	 */
 	public boolean hasArrow() {
 		return hasArrow;
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * @return Returns the time
 	 */
 	public long getTime() {
 		return time;
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * @return Default column headers 
 	 */
 	public static String getHeader() {
-		return "Score:,Deaths:,Steps:,Has Arrow?:,Has Gold?:,Wumpus Dead?:,Unwinnable?,Time (ms):,";
+		return "Score: \tDeaths: \tSteps: \tHas Arrow?: \tHas Gold?: \tWumpus Dead?: \tUnwinnable? \tTime (ms):";
 	}
 	
-
 	@Override
 	public String toString() {
-		return String.format("%d,%d,%d,%b,%b,%b,%b,%f,",
-				score,
-				Deaths,
-				numStops,
-				hasArrow,
-				foundGold,
-				wumpusKilled,
-				unwinnable,
-				((double)time) / 1000000f
-			);
+		return String.format("%d \t%d \t%d\t%b \t%b \t%b \t%b \t%f", score, deaths, 
+				numStops, hasArrow, foundGold, wumpusKilled, unsolvable, ((double)time)/1000000f);
 	}
 }

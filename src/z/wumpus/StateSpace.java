@@ -85,24 +85,19 @@ public class StateSpace {
 		int x = space.x;
 		int y = space.y;
 		
-		
-		if (isCrumb(x,y)) {
-			cost += WumpusWorld.CRUMB_COST;
-		}
-		
+		// Checks to see if the tile contains a breadcrumb.
+		if (isCrumb(x,y)) cost += GameBoard.COST_TO_LEAVE_CRUMB;
 		
 		if (isPit(x,y) || (!isWumpusDead() && isWumpus(x,y))) {
-			
-			cost += (double)WumpusWorld.DEATH_COST;	
-			
+			cost += (double)GameBoard.COST_OF_DEATH;
 		} else if (!isVisited(x,y)) {
 			
 			int numUnvisitedSpaces = getUnvisitedSpaces().size();
 			if (numUnvisitedSpaces > 0 && !isVisited(x, y)) {
 				
 				
-				int numMissingPits = WumpusWorld.NUM_PITS - getKnownPitSpaces().size();
-				int numMissingWumpi = WumpusWorld.NUM_WUMPUS - getKnownWumpusSpaces().size();
+				int numMissingPits = GameBoard.NUMBER_OF_PITS - getKnownPitSpaces().size();
+				int numMissingWumpi = GameBoard.NUMBER_OF_WUMPUS - getKnownWumpusSpaces().size();
 				
 				
 				double baseChanceOfPit = ((double)numMissingPits) / ((double)numUnvisitedSpaces);
@@ -142,8 +137,8 @@ public class StateSpace {
 				}
 				
 
-				cost += (((double)numBreezes / 4.0) * ((double)WumpusWorld.DEATH_COST) * (baseChanceOfPit))
-						+ (((double)numStenches / 4.0) * ((double)WumpusWorld.DEATH_COST) * (baseChanceOfWumpus));
+				cost += (((double)numBreezes / 4.0) * ((double)GameBoard.COST_OF_DEATH) * (baseChanceOfPit))
+						+ (((double)numStenches / 4.0) * ((double)GameBoard.COST_OF_DEATH) * (baseChanceOfWumpus));
 			}
 		}
 		
@@ -160,7 +155,7 @@ public class StateSpace {
 	public static double distBetween(Point a, Point b) {
 		double dx = (double)(a.x - b.x);
 		double dy = (double)(a.y - b.y);
-		return ((double)WumpusWorld.STOP_COST * Math.sqrt((dx * dx) + (dy * dy)));
+		return ((double)GameBoard.COST_TO_STEP * Math.sqrt((dx * dx) + (dy * dy)));
 	}
 	
 	/**
@@ -239,49 +234,15 @@ public class StateSpace {
 	}
 	
 	/**
-	 * Represents a conditional function object, which serves as a search criteria for the state space.
-	 * @author iannonen
-	 */
-	public interface Conditional {
-		
-		/**
-		 * Evaluates the condition.
-		 * @return <b>true</b> if the space is to be selected, <b>false</b> otherwise.
-		 */
-		public boolean evaluate(int x, int y);
-		
-	};
-	
-	/**
-	 * Fetches a list of all matching spaces which satisfy a given condition.
-	 * @param c A condition to evaluate.
-	 * @return A list of matching states.
-	 */
-	public List<Point> selectMatchingSpaces(Conditional c) {
-		List<Point> list = new LinkedList<Point>();
-		if (c != null) {
-			for (int x = 0; x < WumpusWorld.WORLD_WIDTH; x++) {
-				for (int y = 0; y < WumpusWorld.WORLD_HEIGHT; y++) {
-					if (c.evaluate(x, y)) {
-						list.add(new Point(x,y));
-					}
-				}
-			}
-		}
-		return list;
-	}
-	
-	/**
 	 * Gets a set of all previously-traversed, safe spaces. To be used by the PathResolver.
 	 * @return A list of spaces.
 	 */
 	public List<Point> getTraversableSpaces() {
-		return selectMatchingSpaces(new Conditional() {
-			@Override
-			public boolean evaluate(int x, int y) {
-				return (isVisited(x,y) && isSafe(x,y));
-			}
-		});
+		List<Point> list = new LinkedList<Point>();
+			for (int x = 0; x < GameBoard.WIDTH; x++)
+				for (int y = 0; y < GameBoard.HEIGHT; y++)
+					if(isVisited(x,y) && isSafe(x,y)) list.add(new Point(x,y));
+		return list;
 	}
 	
 	/**
@@ -289,25 +250,24 @@ public class StateSpace {
 	 * @return A list of spaces.
 	 */
 	public List<Point> getWumpusTerritory() {
-		return selectMatchingSpaces(new Conditional() {
-			@Override
-			public boolean evaluate(int x, int y) {
-				return (isWumpus(x,y) || isSmelly(x,y) || !isVisited(x,y));
-			}
-		});
+		List<Point> list = new LinkedList<Point>();
+		for (int x = 0; x < GameBoard.WIDTH; x++)
+			for (int y = 0; y < GameBoard.HEIGHT; y++)
+				if (isWumpus(x, y) || isSmelly(x, y) || !isVisited(x, y))
+					list.add(new Point(x, y));
+		return list;
 	}
 	
 	/**
 	 * Gets a set of all untraversed spaces.
 	 * @return A list of spaces.
 	 */
-	public List<Point> getUnvisitedSpaces() {
-		return selectMatchingSpaces(new Conditional() {
-			@Override
-			public boolean evaluate(int x, int y) {
-				return (!isVisited(x,y));
-			}
-		});
+	public List<Point> getUnvisitedSpaces() {		List<Point> list = new LinkedList<Point>();
+		for (int x = 0; x < GameBoard.WIDTH; x++)
+			for (int y = 0; y < GameBoard.HEIGHT; y++)
+				if (!isVisited(x, y))
+					list.add(new Point(x, y));
+		return list;
 	}
 	
 	/**
@@ -315,12 +275,12 @@ public class StateSpace {
 	 * @return A list of spaces with wumpi.
 	 */
 	public List<Point> getKnownWumpusSpaces() {
-		return selectMatchingSpaces(new Conditional() {
-			@Override
-			public boolean evaluate(int x, int y) {
-				return (isWumpus(x,y));
-			}
-		});
+		List<Point> list = new LinkedList<Point>();
+		for (int x = 0; x < GameBoard.WIDTH; x++)
+			for (int y = 0; y < GameBoard.HEIGHT; y++)
+				if(isWumpus(x,y))
+					list.add(new Point(x, y));
+		return list;
 	}
 	
 	/**
@@ -328,12 +288,12 @@ public class StateSpace {
 	 * @return A list of spaces with pits.
 	 */
 	public List<Point> getKnownPitSpaces() {
-		return selectMatchingSpaces(new Conditional() {
-			@Override
-			public boolean evaluate(int x, int y) {
-				return (isPit(x,y));
-			}
-		});
+		List<Point> list = new LinkedList<Point>();
+		for (int x = 0; x < GameBoard.WIDTH; x++)
+			for (int y = 0; y < GameBoard.HEIGHT; y++)
+				if(isPit(x,y))
+					list.add(new Point(x, y));
+		return list;
 	}
 	
 	/**
@@ -341,12 +301,12 @@ public class StateSpace {
 	 * @return A list of spaces with breezes.
 	 */
 	public List<Point> getKnownBreezySpaces() {
-		return selectMatchingSpaces(new Conditional() {
-			@Override
-			public boolean evaluate(int x, int y) {
-				return (isBreezy(x,y));
-			}
-		});
+		List<Point> list = new LinkedList<Point>();
+		for (int x = 0; x < GameBoard.WIDTH; x++)
+			for (int y = 0; y < GameBoard.HEIGHT; y++)
+				if(isBreezy(x,y))
+					list.add(new Point(x, y));
+		return list;
 	}
 	
 	/**
@@ -354,18 +314,18 @@ public class StateSpace {
 	 * @return A list of spaces with stench.
 	 */
 	public List<Point> getKnownStinkySpaces() {
-		return selectMatchingSpaces(new Conditional() {
-			@Override
-			public boolean evaluate(int x, int y) {
-				return (isSmelly(x,y));
-			}
-		});
+		List<Point> list = new LinkedList<Point>();
+		for (int x = 0; x < GameBoard.WIDTH; x++)
+			for (int y = 0; y < GameBoard.HEIGHT; y++)
+				if(isSmelly(x,y))
+					list.add(new Point(x, y));
+		return list;
 	}
 	
 	/**
 	 * Marks the wumpus as having been killed.
 	 */
-	public void noteWumpusDead() {
+	public void markWumpusDead() {
 		killedWumpus = true;
 		wumpusSpace = null;
 	}
@@ -384,30 +344,16 @@ public class StateSpace {
 	 * Updates the state space via the knowledge base. Should be called whenever new percepts are entered into the knowledge base.
 	 */
 	public void update() {
-		for (int x = 0; x < WumpusWorld.WORLD_WIDTH; x++) {
-			for (int y = 0; y < WumpusWorld.WORLD_HEIGHT; y++) {
+		for (int x = 0; x < GameBoard.WIDTH; x++) {
+			for (int y = 0; y < GameBoard.HEIGHT; y++) {
 				String p = toKBCoords(x,y);
-				if (KBWumpusAgent.plfce.plfcEntails(kb, "P" + p)) {
-					markPit(x,y);
-				}
-				if (KBWumpusAgent.plfce.plfcEntails(kb, "S" + p)) {
-					markSmelly(x,y);
-				}
-				if (!killedWumpus && KBWumpusAgent.plfce.plfcEntails(kb, "W" + p)) {
-					markWumpus(x,y);
-				}
-				if (KBWumpusAgent.plfce.plfcEntails(kb, "B" + p)) {
-					markBreezy(x,y);
-				}
-				if (KBWumpusAgent.plfce.plfcEntails(kb, "C" + p)) {
-					markCrumb(x,y);
-				}
-				if (KBWumpusAgent.plfce.plfcEntails(kb, "G" + p)) {
-					markGold(x,y);
-				}
-				if (KBWumpusAgent.plfce.plfcEntails(kb, "V" + p)) {
-					markVisited(x,y);
-				}
+				if (KBWumpusAgent.plfce.plfcEntails(kb, "P" + p)) markPit(x,y);
+				if (KBWumpusAgent.plfce.plfcEntails(kb, "S" + p)) markSmelly(x,y);
+				if (!killedWumpus && KBWumpusAgent.plfce.plfcEntails(kb, "W" + p)) markWumpus(x,y);
+				if (KBWumpusAgent.plfce.plfcEntails(kb, "B" + p)) markBreezy(x,y);
+				if (KBWumpusAgent.plfce.plfcEntails(kb, "C" + p)) markCrumb(x,y);
+				if (KBWumpusAgent.plfce.plfcEntails(kb, "G" + p)) markGold(x,y);
+				if (KBWumpusAgent.plfce.plfcEntails(kb, "V" + p)) markVisited(x,y);
 			}
 		}
 		
@@ -427,11 +373,8 @@ public class StateSpace {
 	 */
 	private void markFlag(int x, int y, int flags) {
 		Point p = new Point(x,y);
-		if (!spaceMap.containsKey(p)) {
-			spaceMap.put(p, flags);
-		} else {
-			spaceMap.put(p, spaceMap.get(p) | flags);
-		}
+		if (!spaceMap.containsKey(p)) spaceMap.put(p, flags);
+		else spaceMap.put(p, spaceMap.get(p) | flags);
 	}
 	
 	/**
@@ -440,7 +383,7 @@ public class StateSpace {
 	 * @param y The y-coordinate.
 	 */
 	public void markVisited(int x, int y) {
-		markFlag(x,y,WumpusWorld.VISITED_FLAG);
+		markFlag(x,y,GameBoard.VISITED_FLAG);
 	}
 	
 	/**
@@ -449,7 +392,7 @@ public class StateSpace {
 	 * @param y The y-coordinate.
 	 */
 	public void markSmelly(int x, int y) {
-		markFlag(x,y,WumpusWorld.STENCH_FLAG);
+		markFlag(x,y,GameBoard.STENCH_FLAG);
 	}
 	
 	/**
@@ -458,7 +401,7 @@ public class StateSpace {
 	 * @param y The y-coordinate.
 	 */
 	public void markPit(int x, int y) {
-		markFlag(x,y,WumpusWorld.PIT_FLAG);
+		markFlag(x,y,GameBoard.PIT_FLAG);
 	}
 	
 	/**
@@ -467,11 +410,9 @@ public class StateSpace {
 	 * @param y The y-coordinate.
 	 */
 	public void markWumpus(int x, int y) {
-		markFlag(x,y,WumpusWorld.WUMPUS_FLAG);
+		markFlag(x,y,GameBoard.WUMPUS_FLAG);
 		Point space = new Point(x,y);
-		if (wumpusSpace == null || !wumpusSpace.equals(space)) {
-			wumpusSpace = space;
-		}
+		if (wumpusSpace == null || !wumpusSpace.equals(space)) wumpusSpace = space;
 	}
 	
 	/**
@@ -480,7 +421,7 @@ public class StateSpace {
 	 * @param y The y-coordinate.
 	 */
 	public void markBreezy(int x, int y) {
-		markFlag(x,y,WumpusWorld.BREEZE_FLAG);
+		markFlag(x,y,GameBoard.BREEZE_FLAG);
 	}
 	
 	/**
@@ -489,11 +430,9 @@ public class StateSpace {
 	 * @param y The y-coordinate.
 	 */
 	public void markGold(int x, int y) {
-		markFlag(x,y,WumpusWorld.GOLD_FLAG);
+		markFlag(x,y,GameBoard.GOLD_FLAG);
 		Point space = new Point(x,y);
-		if (goldSpace == null || !goldSpace.equals(space)) {
-			goldSpace = space;
-		}
+		if (goldSpace == null || !goldSpace.equals(space)) goldSpace = space;
 	}
 	
 	/**
@@ -502,7 +441,7 @@ public class StateSpace {
 	 * @param y The y-coordinate.
 	 */
 	public void markCrumb(int x, int y) {
-		markFlag(x,y,WumpusWorld.CRUMB_FLAG);
+		markFlag(x,y,GameBoard.CRUMB_FLAG);
 	}
 	
 	/**
@@ -519,19 +458,14 @@ public class StateSpace {
 				for (Point neighbor : neighbors) {
 					int nx = neighbor.x;
 					int ny = neighbor.y;
-					if (isVisited(nx, ny) || !isSafe(nx, ny)) {
-						continue;
-					}
+					if (isVisited(nx, ny) || !isSafe(nx, ny)) continue;
 
-					if (fringe.contains(neighbor)) {
-						continue;
-					}
+					if (fringe.contains(neighbor)) continue;
 
 					fringe.add(neighbor);
 				}
 			}
 		}
-		
 		return fringe;
 	}
 	
@@ -544,11 +478,8 @@ public class StateSpace {
 	 */
 	private boolean isFlagSet(int x, int y, int flags) {
 		Point space = new Point(x,y);
-		if (!spaceMap.containsKey(space)) {
-			return false;
-		} else {
-			return ((spaceMap.get(space) & flags) == flags);
-		}
+		if (!spaceMap.containsKey(space)) return false;
+		else return ((spaceMap.get(space) & flags) == flags);
 	}
 	
 	/**
@@ -558,7 +489,7 @@ public class StateSpace {
 	 * @return <b>true</b> if the space has been visited; <b>false</b> otherwise.
 	 */
 	public boolean isVisited(int x, int y) {
-		return isFlagSet(x,y,WumpusWorld.VISITED_FLAG);
+		return isFlagSet(x,y,GameBoard.VISITED_FLAG);
 	}
 	
 	/**
@@ -578,7 +509,7 @@ public class StateSpace {
 	 * @return <b>true</b> if the space has a pit; <b>false</b> otherwise.
 	 */
 	public boolean isPit(int x, int y) {
-		return isFlagSet(x,y,WumpusWorld.PIT_FLAG);
+		return isFlagSet(x,y,GameBoard.PIT_FLAG);
 	}
 	
 	/**
@@ -588,7 +519,7 @@ public class StateSpace {
 	 * @return <b>true</b> if the space has a wumpus; <b>false</b> otherwise.
 	 */
 	public boolean isWumpus(int x, int y) {
-		return isFlagSet(x,y,WumpusWorld.WUMPUS_FLAG);
+		return isFlagSet(x,y,GameBoard.WUMPUS_FLAG);
 	}
 	
 	/**
@@ -598,7 +529,7 @@ public class StateSpace {
 	 * @return <b>true</b> if the space has a breeze; <b>false</b> otherwise.
 	 */
 	public boolean isBreezy(int x, int y) {
-		return isFlagSet(x,y,WumpusWorld.BREEZE_FLAG);
+		return isFlagSet(x,y,GameBoard.BREEZE_FLAG);
 	}
 	
 	/**
@@ -608,7 +539,7 @@ public class StateSpace {
 	 * @return <b>true</b> if the space has a stench; <b>false</b> otherwise.
 	 */
 	public boolean isSmelly(int x, int y) {
-		return isFlagSet(x,y,WumpusWorld.STENCH_FLAG);
+		return isFlagSet(x,y,GameBoard.STENCH_FLAG);
 	}
 	
 	/**
@@ -618,7 +549,7 @@ public class StateSpace {
 	 * @return <b>true</b> if the space has a crumb; <b>false</b> otherwise.
 	 */
 	public boolean isCrumb(int x, int y) {
-		return isFlagSet(x,y,WumpusWorld.CRUMB_FLAG);
+		return isFlagSet(x,y,GameBoard.CRUMB_FLAG);
 	}
 	
 	/**
@@ -628,7 +559,7 @@ public class StateSpace {
 	 * @return <b>true</b> if the space has gold; <b>false</b> otherwise.
 	 */
 	public boolean isGold(int x, int y) {
-		return isFlagSet(x,y,WumpusWorld.GOLD_FLAG);
+		return isFlagSet(x,y,GameBoard.GOLD_FLAG);
 	}
 	
 	/**
@@ -646,14 +577,10 @@ public class StateSpace {
 	 */
 	public List<Point> getNeighbors(Point space) {
 		List<Point> list = new LinkedList<Point>();
-		if (space == null) {
-			return list;
-		}
+		if (space == null) return list;
 		for (Direction d : Direction.values()) {
 			Point neighbor = new Point(space.x + d.dx, space.y + d.dy);
-			if (WumpusWorld.inBounds(neighbor.x, neighbor.y)) {
-				list.add(neighbor);
-			}
+			if (GameBoard.inBounds(neighbor.x, neighbor.y)) list.add(neighbor);
 		}
 		return list;
 	}
@@ -675,8 +602,8 @@ public class StateSpace {
 	public String makeString(int currX, int currY) {
 		List<Point> fringe = getFringe();
 		String s = "-----------------------------------\n";
-		for (int y = WumpusWorld.WORLD_HEIGHT - 1; y >= 0; y--) {
-			for (int x = 0; x < WumpusWorld.WORLD_WIDTH; x++) {
+		for (int y = GameBoard.HEIGHT - 1; y >= 0; y--) {
+			for (int x = 0; x < GameBoard.WIDTH; x++) {
 				Point space = new Point(x,y);
 				String data = "?";
 				String start = "*";
@@ -686,23 +613,21 @@ public class StateSpace {
 					int code = spaceMap.get(space);
 					String wumpusLabel = isWumpusDead() ? "x" : "W";
 					
-					data = ((code & WumpusWorld.STENCH_FLAG) != 0 ? "S" : "") +
-							((code & WumpusWorld.BREEZE_FLAG) != 0 ? "B" : "") +
-							((code & WumpusWorld.GOLD_FLAG) != 0 ? "G" : "") +
-							((code & WumpusWorld.PIT_FLAG) != 0 ? "P" : "") +
-							((code & WumpusWorld.WUMPUS_FLAG) != 0 ? wumpusLabel : "");
+					data = ((code & GameBoard.STENCH_FLAG) != 0 ? "S" : "") +
+							((code & GameBoard.BREEZE_FLAG) != 0 ? "B" : "") +
+							((code & GameBoard.GOLD_FLAG) != 0 ? "G" : "") +
+							((code & GameBoard.PIT_FLAG) != 0 ? "P" : "") +
+							((code & GameBoard.WUMPUS_FLAG) != 0 ? wumpusLabel : "");
 					
-					if (data.isEmpty()) {
-						data = "_";
-					}
+					if (data.isEmpty())	data = "_";
 					
 
-					if ((code & WumpusWorld.VISITED_FLAG) != 0) {
+					if ((code & GameBoard.VISITED_FLAG) != 0) {
 						start = "[";
 						end = "]";
 					}
 
-					if ((code & WumpusWorld.CRUMB_FLAG) != 0) {
+					if ((code & GameBoard.CRUMB_FLAG) != 0) {
 						start = "(";
 						end = ")";
 					}
