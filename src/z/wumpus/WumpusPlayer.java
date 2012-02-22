@@ -37,11 +37,11 @@ public abstract class WumpusPlayer {
 
 	private Statistics results;
 	
-	private WumpusWorld world;
+	private GameBoard board;
 	private LogLevel logLevel;
 	
-	public WumpusPlayer(WumpusWorld world) {
-		this.world = world;
+	public WumpusPlayer(GameBoard board) {
+		this.board = board;
 		x = WumpusWorld.START_X;
 		y = WumpusWorld.START_Y;
 		direction = Direction.NORTH;
@@ -127,7 +127,7 @@ public abstract class WumpusPlayer {
 		int ax = x + direction.dx;
 		int ay = y + direction.dy;
 		while (WumpusWorld.inBounds(ax, ay)) {
-			if (world.killWumpus(ax, ay)) {
+			if (board.killWumpus(ax, ay)) {
 				wumpusHit = true;
 				break;
 			} else {
@@ -169,7 +169,7 @@ public abstract class WumpusPlayer {
 		onMove();
 		
 		// If the world has a Wumpus at that point, we die.
-		if (world.hasWumpus(mx, my)) {
+		if (board.hasWumpus(mx, my)) {
 			results.addDeath();
 			logMessage("You have been eaten by a Grue... er, I mean, a Wumpus. Suddenly, you wake up... at the main entrance. Finding the gold at this point wouldn't be worth it.");
 			onDeath();
@@ -179,7 +179,7 @@ public abstract class WumpusPlayer {
 			y = WumpusWorld.START_Y;
 			logMessage("You find yourself in the starting room, with some nasty bite marks.");
 			onMove();
-		} else if (world.hasPit(mx, my)) {
+		} else if (board.hasPit(mx, my)) {
 
 			// If the world has a pitfall at that point, we die.
 			results.addDeath();
@@ -201,7 +201,7 @@ public abstract class WumpusPlayer {
 	}
 	
 	public boolean grabGold() {
-		if (world.grabGold(x, y)) {
+		if (board.grabGold(x, y)) {
 			results.acquireGold();
 			logMessage("You heft the solid lump of gold, and stash it in your pack. Victory!");
 			onGrab();
@@ -215,7 +215,7 @@ public abstract class WumpusPlayer {
 		if (!results.hasGold()) {
 			return false;
 		}
-		if (world.placeGold(x, y)) {
+		if (board.placeGold(x, y)) {
 			results.releaseGold();
 			logMessage("For some unknown reason, you decide to drop the golden prize and run for your life. From what? Who knows.");
 			onDrop();
@@ -224,11 +224,11 @@ public abstract class WumpusPlayer {
 		return false;
 	}
 	
-	public void dropCrumb() {
-		world.dropCrumb(x, y);
+	public void dropMileMarker() {
+		board.dropMileMarker(x, y);
 	}
 	
-	// To be called when the agent is completed.
+	
 	public void stop(boolean giveUp) {
 		logMessage("Knowing that this is as good as you can do, you shout the magic words, and are carried out of the maze through a swirling vortex of magic.");
 		logMessage("Final Score: " + results.getScore());
@@ -258,7 +258,7 @@ public abstract class WumpusPlayer {
 	
 	
 	public boolean isSmelly() {
-		if (world.hasStench(x, y)) {
+		if (board.hasStench(x, y)) {
 			logMessage("Something rancid taunts your nostrils, and sends chills down your spine. The Wumpus is near.");
 			return true;
 		}
@@ -266,7 +266,7 @@ public abstract class WumpusPlayer {
 	}
 	
 	public boolean isGlittering() {
-		if (world.hasGold(x, y)) {
+		if (board.hasGold(x, y)) {
 			logMessage("You detect a faint glimmer in the corner of the room. Upon closer inspection, you determine it is a large lump of gold.");
 			return true;
 		}
@@ -274,15 +274,15 @@ public abstract class WumpusPlayer {
 	}
 	
 	public boolean isBreezy() {
-		if (world.hasBreeze(x, y)) {
+		if (board.hasBreeze(x, y)) {
 			logMessage("There seems to be a stirring in the air, but you can't make out the source of the breeze.");
 			return true;
 		}
 		return false;
 	}
 	
-	public boolean isCrumby() {
-		if (world.hasCrumb(x, y)) {
+	public boolean isMileMarker() {
+		if (board.hasMileMarker(x, y)) {
 			logMessage("You see some breadcrumbs on the ground. This is getting annoying.");
 			return true;
 		}
@@ -290,7 +290,7 @@ public abstract class WumpusPlayer {
 	}
 	
 	public boolean isVisited() {
-		return world.isVisited(x, y);
+		return board.isVisited(x, y);
 	}
 	
 	public void logMessage(String msg) {

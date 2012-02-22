@@ -11,6 +11,7 @@ import z.agent.ChickenLittle;
 import z.agent.GoldSeeking;
 import z.agent.Heuristic;
 import z.agent.Rambo;
+import z.wumpus.GameBoard;
 import z.wumpus.KBWumpusAgent;
 import z.wumpus.LogLevel;
 import z.wumpus.WumpusWorld;
@@ -31,12 +32,11 @@ public class Driver {
 	public static void main(String[] args) {
 		Random r = new Random();
 		
-		WumpusWorld w;
+		GameBoard w;
 		boolean reset = false;
 		do {
 			reset = false;
-			w = new WumpusWorld();
-			w.randomize(r);
+			w = new GameBoard();
 			if (w.hasGold(0, 1) || w.hasGold(1, 0)) {
 				reset = reset || r.nextBoolean();
 			} 
@@ -59,7 +59,7 @@ public class Driver {
 
 		
 		for (Agent resolver : resolvers) {
-			KBWumpusAgent agent = new KBWumpusAgent((WumpusWorld)w.clone(), resolver);
+			KBWumpusAgent agent = new KBWumpusAgent((GameBoard)w.clone(), resolver);
 			if (MOVE_LOGGING) {
 				System.out.println("--------------------------------------------");
 				System.out.println(resolver.identify());

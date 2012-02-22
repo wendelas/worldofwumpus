@@ -17,14 +17,14 @@ public class KBWumpusAgent extends WumpusPlayer {
 
 	public static PLFCEntails plfce = new PLFCEntails();
 	
-	private static final int MAXIMUM_CRUMB_STEPS = 30;
+	private static final int MAXIMUM_MILE_MARKERS = 30;
 	
 	private StateSpace stateSpace;
 	private KnowledgeBase kb;
 	private Agent explorer;
 	private PathNavigator navigator;
 	private boolean firstTurn;
-	private int numberCrumbsEncountered;
+	private int numberOfMileMarkersEncountered;
 	
 	private List<Point> currentPath;
 	
@@ -35,13 +35,13 @@ public class KBWumpusAgent extends WumpusPlayer {
 	 * @param world
 	 * @param explorer
 	 */
-	public KBWumpusAgent(WumpusWorld world, Agent explorer) {
-		super(world);
+	public KBWumpusAgent(GameBoard board, Agent explorer) {
+		super(board);
 		this.explorer = explorer;
 		kb = generateInitialKB();
 		stateSpace = new StateSpace(kb);
 		navigator = new PathNavigator(stateSpace);
-		numberCrumbsEncountered = 0;
+		numberOfMileMarkersEncountered = 0;
 		firstTurn = true;
 		onMove();
 	}
@@ -111,7 +111,7 @@ public class KBWumpusAgent extends WumpusPlayer {
 		}
 		
 		
-		dropCrumb();
+		dropMileMarker();
 		Point current = new Point(getX(), getY());
 		Point nextNode = explorer.search(current, stateSpace);
 		
@@ -208,12 +208,12 @@ public class KBWumpusAgent extends WumpusPlayer {
 			kb.tell("(NS" + p + ")");
 		}
 		
-		boolean maxCrumbs = false;
-		if (isCrumby()) {
+		boolean maxMileMarkers = false;
+		if (isMileMarker()) {
 			kb.tell("(C" + p + ")");
-			numberCrumbsEncountered++;
-			if (numberCrumbsEncountered > KBWumpusAgent.MAXIMUM_CRUMB_STEPS) {
-				maxCrumbs = true;
+			numberOfMileMarkersEncountered++;
+			if (numberOfMileMarkersEncountered > KBWumpusAgent.MAXIMUM_MILE_MARKERS) {
+				maxMileMarkers = true;
 			}
 		}
 		
@@ -233,8 +233,8 @@ public class KBWumpusAgent extends WumpusPlayer {
 		}
 		
 		// If we've reached our limit, stop.
-		if (maxCrumbs) {
-			logMessage("After seeing your own footprints for the " + MAXIMUM_CRUMB_STEPS + "th time, you decide enough is enough.");
+		if (maxMileMarkers) {
+			logMessage("After seeing your own footprints for the " + MAXIMUM_MILE_MARKERS + "th time, you decide enough is enough.");
 			stop(true);
 			return;
 		}
