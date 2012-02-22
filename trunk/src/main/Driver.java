@@ -11,12 +11,10 @@ import java.util.TreeMap;
 
 import Gameboard.GameBoard;
 import Gameboard.LogLevel;
-import agent.ChickenLittleExplorer;
+import agent.ChickenLittle;
 import agent.ExplorerStrategy;
-import agent.GoldSeekingExplorer;
-import agent.HeuristicExplorer;
 import agent.KBWumpusAgent;
-import agent.RamboExplorer;
+import agent.Rambo;
 
 /**
  * @author iannonen
@@ -50,28 +48,16 @@ public class Driver {
 				reset = reset || r.nextBoolean();
 			}
 		} while (w.hasGold(0, 1) || w.hasGold(1, 0) || r.nextBoolean());
-		/*
-		do {
-			w = new WumpusWorld();
-			w.randomize(r);
-		} while (!w.hasGold(3, 3) || !w.hasPit(3, 2) || !w.hasPit(2, 3));
-		*/
-		/*
-		do {
-			w = new WumpusWorld();
-			w.randomize(r);
-		} while (!w.hasGold(2, 2) || !(w.hasPit(2, 3) || w.hasWumpus(2, 3)) || !(w.hasPit(2,1) || w.hasWumpus(2,1)) || !(w.hasPit(1,2) || w.hasWumpus(1,2)) || !(w.hasPit(3,2) || w.hasWumpus(3,2)));
-		*/
+		
 		System.out.println(w);
 		
 		Map<String, Statistics> results = new TreeMap<String, Statistics>();
 		
 		// Generate the list of agents.
 		List<ExplorerStrategy> resolvers = new LinkedList<ExplorerStrategy>();
-		resolvers.add(new ChickenLittleExplorer());
-		resolvers.add(new RamboExplorer());
-		resolvers.add(new HeuristicExplorer());
-		resolvers.add(new GoldSeekingExplorer());
+		resolvers.add(new ChickenLittle());
+		resolvers.add(new Rambo());
+
 		
 		for (ExplorerStrategy resolver : resolvers) {
 			KBWumpusAgent agent = new KBWumpusAgent((GameBoard)w.clone(), resolver);

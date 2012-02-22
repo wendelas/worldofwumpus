@@ -13,7 +13,7 @@ import aima.util.Pair;
  * @author iannonen
  *
  */
-public class RamboExplorer extends ExplorerStrategy {
+public class Rambo extends ExplorerStrategy {
 
 	public static Random r = new Random();
 	

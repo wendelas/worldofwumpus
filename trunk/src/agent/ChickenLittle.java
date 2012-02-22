@@ -1,9 +1,10 @@
 /**
  * 
  */
-package z.wumpus;
+package agent;
 
 import java.util.List;
+
 
 import aima.util.Pair;
 
@@ -11,7 +12,7 @@ import aima.util.Pair;
  * @author iannonen
  *
  */
-public class ChickenLittleExplorer extends ExplorerStrategy {
+public class ChickenLittle extends ExplorerStrategy {
 
 	@Override
 	public Pair<Integer, Integer> resolveFringe(Pair<Integer, Integer> current, StateSpace stateSpace) {
