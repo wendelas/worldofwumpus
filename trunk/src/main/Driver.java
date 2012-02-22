@@ -1,150 +1,56 @@
+/*****************************************************************************
+ * FILE: Driver.java
+ * DATE: 02/08/12
+ * AUTHOR: 	Karl Schmidbauer <schmidbauerk@msoe.edu>
+ * 			Ben Ebert <ebertb@msoe.edu>
+ * 
+ * PURPOSE: Provides a main method for running and testing the AI.
+ * 
+ ****************************************************************************/
 package main;
 
-import java.text.NumberFormat;
+import agent.Agent;
+import agent.ChickenLittle;
+import agent.Rambo;
+import board.GameBoard;
 
-import Agents.ChickenLittle;
-import Agents.Rambo;
-import Agents.pass_fail_test;
-import environment.GameBoard;
-
-
+/**
+ * Main method to control and run tests on the AI
+ * 
+ * @author schmidbauerk
+ *
+ */
 public class Driver {
 
+	
 	/**
+	 * Storage variable for the Game board
+	 */
+	private static GameBoard board;
+	/**
+	 * Width of the Game board
+	 */
+	private final static int sizeX = 4;
+	/**
+	 * Height of the game board
+	 */
+	private final static int sizeY = 4;
+	
+	
+	/**
+	 * Main method
+	 * 
 	 * @param args
 	 */
-	public static void main(String[] args) 
-	{
-		double pass = 0;
-		double fail = 0;
-		double give = 0;
-		double moves_P = 0;
-		double moves_F = 0;
-		double moves_G = 0;
-		pass_fail_test A = new pass_fail_test();
-		NumberFormat nf1 = NumberFormat.getInstance();
-		int runs = 0;
-		double score_P = 0;
-		double score_F = 0;
-		double score_G = 0;
-		int pit_rate = 0;
+	public static void main(String args[]){
 		
-		pit_rate = 20;
-		int size = 4; 
-		runs = 0;
-		pass = 0;
-		fail = 0;
-		give = 0;
-		score_P = 0;
-		score_F = 0;
-		score_G = 0;
-		moves_P = 0;
-		moves_F = 0;
-		moves_G = 0;
-		System.out.println("----------Chicken Little----------");
-		for(pit_rate = 20; pit_rate < 45; pit_rate += 10)
-		{
-			for(size = 4; size < 13; size+=4)
-			{
-				runs = 0;
-				pass = 0;
-				fail = 0;
-				give = 0;
-				score_P = 0;
-				score_F = 0;
-				score_G = 0;
-				moves_P = 0;
-				moves_F = 0;
-				moves_G = 0;
-				for(int i = 0; i < 666; i++)
-				{
-					
-					GameBoard the_Land = new GameBoard(size, pit_rate); 
-					
-					ChickenLittle agent = new ChickenLittle(the_Land);
-					A = agent.move(the_Land);
-					
-					if (A.give_up == true)
-					{
-						give++;
-						score_G += A.score;
-						moves_G += A.moves;
-					}
-					
-					else if(A.pass == true)
-					{pass++;
-						moves_P += A.moves;
-						score_P += A.score;} 
-					else {
-						fail++;
-						moves_F += A.moves;
-						score_F += A.score;
-					}
-					runs++;
-				}
-				System.out.println("World Size: " + size + "\t" + "% of tiles with pits: " + pit_rate);
-				System.out.println("Agents:");
-				System.out.println("__________________________________________________________________________");
-				System.out.println("P/F" + "\t" + "|  " + "Runs:" + "  | " + "# Complete" + "\t" + "|   " + "Avg # steps " + "|" + "\t" + "Avg score"  );
-				System.out.println("P Fear: " + "|  " + runs + "\t" + "  |  "+ pass + "\t" + "|   " + nf1.format(moves_P/pass) + "\t" + "|   "  + nf1.format(score_P/pass));
-				System.out.println("F Fear: " + "|  " + runs + "\t" + "  |  "+ fail + "\t" + "|   " + nf1.format(moves_F/fail) + "\t" + "|   "  + nf1.format(score_F/fail));
-				System.out.println("G Fear: " + "|  " + runs + "\t" + "  |  "+ give + "\t" + "|   " + nf1.format(moves_G/give) + "\t" + "|   "  + nf1.format(score_G/give));
-				System.out.println("Fear:   " + "|  " + runs + "\t" + "  |  "+ runs + "\t" + "|   " + nf1.format((moves_F+moves_P+moves_G)/runs) + "\t" + "|   "  + nf1.format((score_P+score_F+score_G)/runs));
-				System.out.println("Fear Pass/Fail Ratio: " + nf1.format(pass/(fail+give)));
-				System.out.println();
-			}
-			System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-			System.out.println();
-		}
-		System.out.println();
-		System.out.println("=====================================================================================");
-		System.out.println("----------Rambo----------");
-		for(pit_rate = 20; pit_rate < 45; pit_rate += 10)
-		{
-			for(size = 4; size < 13; size+=4)
-			{
-				runs = 0;
-				pass = 0;
-				fail = 0;
-				give = 0;
-				score_P = 0;
-				score_F = 0;
-				score_G = 0;
-				moves_P = 0;
-				moves_F = 0;
-				moves_G = 0;
-				for(int i = 0; i < 666; i++)
-				{
-					
-					GameBoard board = new GameBoard(size, pit_rate); 
-					
-					Rambo agent = new Rambo(board);
-					A = agent.move(board);
-					
-					if(A.pass == true)
-						{pass++;
-						moves_P += A.moves;
-						score_P += A.score;}
-					else {
-						fail++;
-						moves_F += A.moves;
-						score_F += A.score;
-					}
-					runs++;
-				}
-				System.out.println("World Size: " + size + "\t" + "% of tiles with pits: " + pit_rate);
-				System.out.println("Agents:");
-				System.out.println("__________________________________________________________________________");
-				System.out.println("P/F" + "\t" + "|  " + "Runs:" + "  | " + "# Complete" + "\t" + "|   " + "Avg # steps " + "|" + "\t" + "Avg score"  );
-				System.out.println("P Fr-1: " + "|  " + runs + "\t" + "  |  "+ pass + "\t" + "|   " + nf1.format(moves_P/pass) + "\t" + "|   "   + nf1.format(score_P/pass));
-				System.out.println("F Fr-1: " + "|  " + runs + "\t" + "  |  "+ fail + "\t" + "|   " + nf1.format(moves_F/fail) + "\t" + "|   "  + nf1.format(score_F/fail));
-				System.out.println("Fr-1:   " + "|  " + runs + "\t" + "  |  "+ runs + "\t" + "|   " + nf1.format((moves_F+moves_P)/runs) + "\t" + "|   "  + nf1.format((score_P+score_F)/runs));
-				System.out.println("Fr-1 Pass/Fail Ratio: " + nf1.format(pass/(fail)));
-				System.out.println();
-			}
-			System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-			System.out.println();
-		}
+		
+		board = new GameBoard(sizeX,sizeY);
+		
+		//GUI gi = new GUI();
+		
+		Agent smith = new Rambo(board);
+		smith.search();
+		
 	}
 }
-
