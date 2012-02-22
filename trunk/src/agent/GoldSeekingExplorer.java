@@ -1,10 +1,12 @@
 /**
  * 
  */
-package wumpus;
+package agent;
 
 import java.util.List;
 
+
+import Gameboard.GameBoard;
 import aima.util.Pair;
 
 /**
@@ -14,7 +16,7 @@ import aima.util.Pair;
 public class GoldSeekingExplorer extends ExplorerStrategy {
 
 	/**
-	 * @see wumpus.ExplorerStrategy#identify()
+	 * @see agent.ExplorerStrategy#identify()
 	 */
 	@Override
 	public String identify() {
@@ -22,7 +24,7 @@ public class GoldSeekingExplorer extends ExplorerStrategy {
 	}
 
 	/**
-	 * @see wumpus.ExplorerStrategy#resolveFringe(aima.util.Pair, wumpus.StateSpace)
+	 * @see agent.ExplorerStrategy#resolveFringe(aima.util.Pair, agent.StateSpace)
 	 */
 	@Override
 	public Pair<Integer, Integer> resolveFringe(Pair<Integer, Integer> current, StateSpace stateSpace) {
@@ -69,7 +71,7 @@ public class GoldSeekingExplorer extends ExplorerStrategy {
 		int n = 0;
 		for (int x = (int)Math.floor(estimate.getFirst()); x <= Math.ceil(estimate.getFirst()); x++) {
 			for (int y = (int)Math.floor(estimate.getSecond()); y <= Math.ceil(estimate.getSecond()); y++) {
-				if (!WumpusWorld.inBounds(x, y)) {
+				if (!GameBoard.inBounds(x, y)) {
 					continue;
 				}
 				n++;

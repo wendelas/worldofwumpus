@@ -1,7 +1,7 @@
 /**
  * 
  */
-package wumpus;
+package agent;
 
 /**
  * @author iannonen
@@ -13,8 +13,8 @@ public enum Direction {
 	EAST(1,0),
 	WEST(-1,0);
 	
-	int dx;
-	int dy;
+	public int dx;
+	public int dy;
 	
 	Direction(int dx, int dy) {
 		this.dx = dx;

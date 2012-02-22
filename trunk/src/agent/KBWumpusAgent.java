@@ -1,11 +1,14 @@
 /**
  * 
  */
-package wumpus;
+package agent;
 
 import java.util.List;
 import java.util.Random;
 
+
+import Gameboard.PathNavigator;
+import Gameboard.GameBoard;
 import aima.logic.propositional.algorithms.KnowledgeBase;
 import aima.logic.propositional.algorithms.PLFCEntails;
 import aima.util.Pair;
@@ -36,7 +39,7 @@ public class KBWumpusAgent extends WumpusPlayer {
 	 * @param world
 	 * @param explorer
 	 */
-	public KBWumpusAgent(WumpusWorld world, ExplorerStrategy explorer) {
+	public KBWumpusAgent(GameBoard world, ExplorerStrategy explorer) {
 		super(world);
 		this.explorer = explorer;
 		kb = generateInitialKB();
@@ -49,14 +52,14 @@ public class KBWumpusAgent extends WumpusPlayer {
 	}
 	
 	/**
-	 * @see wumpus.ExplorerStrategy#identify()
+	 * @see agent.ExplorerStrategy#identify()
 	 */
 	public String identify() {
 		return explorer.identify();
 	}
 
 	/**
-	 * @see wumpus.WumpusPlayer#update()
+	 * @see agent.WumpusPlayer#update()
 	 */
 	@Override
 	public void update() {
@@ -147,7 +150,7 @@ public class KBWumpusAgent extends WumpusPlayer {
 	}
 
 	/**
-	 * @see wumpus.WumpusPlayer#onScream()
+	 * @see agent.WumpusPlayer#onScream()
 	 */
 	@Override
 	public void onScream() {
@@ -160,7 +163,7 @@ public class KBWumpusAgent extends WumpusPlayer {
 	}
 
 	/**
-	 * @see wumpus.WumpusPlayer#onBump()
+	 * @see agent.WumpusPlayer#onBump()
 	 */
 	@Override
 	public void onBump() {
@@ -168,7 +171,7 @@ public class KBWumpusAgent extends WumpusPlayer {
 	}
 
 	/**
-	 * @see wumpus.WumpusPlayer#onPitfall()
+	 * @see agent.WumpusPlayer#onPitfall()
 	 */
 	@Override
 	public void onPitfall() {
@@ -181,7 +184,7 @@ public class KBWumpusAgent extends WumpusPlayer {
 	}
 
 	/**
-	 * @see wumpus.WumpusPlayer#onDeath()
+	 * @see agent.WumpusPlayer#onDeath()
 	 */
 	@Override
 	public void onDeath() {
@@ -194,7 +197,7 @@ public class KBWumpusAgent extends WumpusPlayer {
 	}
 
 	/**
-	 * @see wumpus.WumpusPlayer#onMove()
+	 * @see agent.WumpusPlayer#onMove()
 	 */
 	@Override
 	public void onMove() {
@@ -257,19 +260,19 @@ public class KBWumpusAgent extends WumpusPlayer {
 	}
 	
 	/**
-	 * @see wumpus.WumpusPlayer#onGrab()
+	 * @see agent.WumpusPlayer#onGrab()
 	 */
 	@Override
 	public void onGrab() {}
 
 	/**
-	 * @see wumpus.WumpusPlayer#onDrop()
+	 * @see agent.WumpusPlayer#onDrop()
 	 */
 	@Override
 	public void onDrop() {}
 	
 	/**
-	 * @see wumpus.WumpusPlayer#stop(boolean)
+	 * @see agent.WumpusPlayer#stop(boolean)
 	 */
 	@Override
 	public void stop(boolean giveUp) {
@@ -333,7 +336,7 @@ public class KBWumpusAgent extends WumpusPlayer {
 	}
 	
 	/**
-	 * @see wumpus.StateSpace#toKBCoords(int, int)
+	 * @see agent.StateSpace#toKBCoords(int, int)
 	 */
 	public static String toKBCoords(int x, int y) {
 		return StateSpace.toKBCoords(x, y);
@@ -359,8 +362,8 @@ public class KBWumpusAgent extends WumpusPlayer {
 		 */
 		
 		// Out-of-Bounds/In-Bounds impositions:
-		for (int x = -1; x <= WumpusWorld.WORLD_WIDTH; x++) {
-			for (int y = -1; y <= WumpusWorld.WORLD_HEIGHT; y++) {
+		for (int x = -1; x <= GameBoard.WORLD_WIDTH; x++) {
+			for (int y = -1; y <= GameBoard.WORLD_HEIGHT; y++) {
 				// Basic positions.
 				String p = toKBCoords(x,y);
 				String north = toKBCoords(x,y+1);
@@ -371,7 +374,7 @@ public class KBWumpusAgent extends WumpusPlayer {
 				String northwest = toKBCoords(x-1,y+1);
 				
 				// Bounds checking.
-				if (!WumpusWorld.inBounds(x, y)) {
+				if (!GameBoard.inBounds(x, y)) {
 					// Bounds in position.
 					// 1. All cells outside of [0,Width),[0,Height) are out-of-bounds.
 					kb.tell("(O" + p + ")");

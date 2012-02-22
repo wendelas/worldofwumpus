@@ -1,15 +1,17 @@
 /**
  * 
  */
-package wumpus;
+package Gameboard;
 
 import java.util.Random;
+
+import agent.Direction;
 
 /**
  * @author iannonen
  *
  */
-public class WumpusWorld implements Cloneable {
+public class GameBoard implements Cloneable {
 
 	public static final int STENCH_FLAG = (1<<0);
 	public static final int BREEZE_FLAG = (1<<1);
@@ -42,7 +44,7 @@ public class WumpusWorld implements Cloneable {
 	 * Default constructor.
 	 * Initializes the Wumpus World as empty.
 	 */
-	public WumpusWorld() {
+	public GameBoard() {
 		flags = new int[WORLD_WIDTH][];
 		for (int i = 0; i < WORLD_WIDTH; i++) {
 			flags[i] = new int[WORLD_HEIGHT];
@@ -56,7 +58,7 @@ public class WumpusWorld implements Cloneable {
 	}
 	
 	public Object clone() {
-		WumpusWorld newWorld = new WumpusWorld();
+		GameBoard newWorld = new GameBoard();
 		for (int x = 0; x < WORLD_WIDTH; x++) {
 			for (int y = 0; y < WORLD_HEIGHT; y++) {
 				newWorld.flags[x][y] = flags[x][y];

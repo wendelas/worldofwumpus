@@ -1,9 +1,10 @@
 /**
  * 
  */
-package wumpus;
+package agent;
 
 import java.util.List;
+
 
 import aima.util.Pair;
 
@@ -14,7 +15,7 @@ import aima.util.Pair;
 public class HeuristicExplorer extends ExplorerStrategy {
 
 	/**
-	 * @see wumpus.ExplorerStrategy#resolveFringe(aima.util.Pair, java.util.List, aima.logic.propositional.algorithms.KnowledgeBase, boolean)
+	 * @see agent.ExplorerStrategy#resolveFringe(aima.util.Pair, java.util.List, aima.logic.propositional.algorithms.KnowledgeBase, boolean)
 	 */
 	@Override
 	public Pair<Integer, Integer> resolveFringe(Pair<Integer, Integer> current, StateSpace stateSpace) {

@@ -1,86 +1,128 @@
+/**
+ * 
+ */
 package main;
 
+import Gameboard.GameBoard;
 
+/**
+ * @author iannonen
+ *
+ */
 public class Statistics {
 
+	private int score;
+	private int numDeaths;
+	private int numSteps;
 	
-	private static int numDeaths;
+	private boolean hasArrow;
+	private boolean hasGold;
+	private boolean killedWumpus;
+	private boolean unwinnable;
 	
-	private static int numWins;
+	private long time;
 	
-	private static int wumpuskills;
-
-	private static int tries;
-	
-	private static Statistics Instance;
-	
-	private static int gold;
-	
-	private Statistics(){
+	public Statistics() {
+		score = 0;
 		numDeaths = 0;
-		numWins = 0;
-		wumpuskills = 0;
-		tries = 0;
-		gold = 0;
+		numSteps = 0;
+		hasArrow = true;
+		hasGold = false;
+		killedWumpus = false;
+		unwinnable = false;
+		time = 0L;
 	}
 	
-	public static synchronized Statistics getInstance(){
-		if(Instance == null){
-			Instance = new Statistics();
-		}
-		return Instance;
+	public void addStep() {
+		numSteps++;
+		score -= GameBoard.STEP_COST;
 	}
 	
+	public boolean hasGold() {
+		return (hasGold);
+	}
 	
-	public static int getNumDeaths(){
+	public boolean hasKilledWumpus() {
+		return (killedWumpus);
+	}
+	
+	public int getNumDeaths() {
 		return numDeaths;
 	}
 	
-	public static int getNumWins(){
-		return numWins;
+	public int getNumSteps() {
+		return numSteps;
 	}
 	
-	public static int getWumpusKills(){
-		return wumpuskills;
+	public int getScore() {
+		return score;
 	}
 	
-	public static int getTries(){
-		return tries;
+	public boolean hasArrow() {
+		return hasArrow;
+	}
+
+	public void useArrow() {
+		if (hasArrow) {
+			hasArrow = false;
+			score -= GameBoard.ARROW_COST;
+		}
 	}
 	
-	public static void incrementDeaths(){
-		numDeaths += 1;
+	public void confirmKill() {
+		killedWumpus = true;
 	}
 	
-	public static void incrementWins(){
-		numWins += 1;
+	public void addDeath() {
+		numDeaths++;
+		score -= GameBoard.DEATH_COST;
+	}
+
+	public void acquireGold() {
+		if (!hasGold) {
+			hasGold = true;
+			score += GameBoard.GOLD_VALUE;
+		}
+	}
+
+	public void releaseGold() {
+		if (hasGold) {
+			hasGold = false;
+			score -= GameBoard.GOLD_VALUE;
+		}
 	}
 	
-	public static void incrementKills(){
-		wumpuskills += 1;
+	public void markUnwinnable() {
+		unwinnable = true;
 	}
 	
-	public static void incrementTries(){
-		tries += 1;
+	public boolean isUnwinnable() {
+		return unwinnable;
 	}
 	
-	public static void incrementGold(int amount){
-		gold +=amount;
+	public static String getHeader() {
+		return "Score:,Deaths:,Steps:,Has Arrow?:,Has Gold?:,Wumpus Dead?:,Unwinnable?,Time (ms):,";
 	}
 	
-	public static int getGold(){
-		return gold;
+	@Override
+	public String toString() {
+		return String.format("%d,%d,%d,%b,%b,%b,%b,%f,",
+				score,
+				numDeaths,
+				numSteps,
+				hasArrow,
+				hasGold,
+				killedWumpus,
+				unwinnable,
+				((double)time) / 1000000f
+			);
+	}
+
+	public void markTime(long t) {
+		time = t;
 	}
 	
-	public static void decrementGold(int amount){
-		gold -= amount;
-	}
-	
-	public static void resetStats(){
-		numDeaths = 0;
-		numWins = 0;
-		wumpuskills = 0;
-		tries = 0;
-		gold = 0;
+	public long getTime() {
+		return time;
 	}
 }

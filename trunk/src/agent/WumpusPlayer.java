@@ -1,7 +1,11 @@
 /**
  * 
  */
-package wumpus;
+package agent;
+
+import main.Statistics;
+import Gameboard.LogLevel;
+import Gameboard.GameBoard;
 
 /**
  * @author iannonen
@@ -12,20 +16,20 @@ public abstract class WumpusPlayer {
 	private static final LogLevel DEFAULT_LOG_LEVEL = LogLevel.OFF;
 
 	public double calcInitialWumpusProb() {
-		double numWumpus = (double)WumpusWorld.NUM_WUMPUS;
-		double numCells = (double)((WumpusWorld.WORLD_WIDTH * WumpusWorld.WORLD_HEIGHT) - 1);
+		double numWumpus = (double)GameBoard.NUM_WUMPUS;
+		double numCells = (double)((GameBoard.WORLD_WIDTH * GameBoard.WORLD_HEIGHT) - 1);
 		return (numWumpus / numCells);
 	}
 	
 	public double calcInitialGoldProbs() {
-		double numGold = (double)WumpusWorld.NUM_GOLD;
-		double numCells = (double)((WumpusWorld.WORLD_WIDTH * WumpusWorld.WORLD_HEIGHT) - 1);
+		double numGold = (double)GameBoard.NUM_GOLD;
+		double numCells = (double)((GameBoard.WORLD_WIDTH * GameBoard.WORLD_HEIGHT) - 1);
 		return (numGold / numCells);
 	}
 	
 	public double calcInitialPitProbs() {
-		double numPits = (double)WumpusWorld.NUM_PITS;
-		double numCells = (double)((WumpusWorld.WORLD_WIDTH * WumpusWorld.WORLD_HEIGHT) - 1);
+		double numPits = (double)GameBoard.NUM_PITS;
+		double numCells = (double)((GameBoard.WORLD_WIDTH * GameBoard.WORLD_HEIGHT) - 1);
 		return (numPits / numCells);
 	}
 	
@@ -35,18 +39,18 @@ public abstract class WumpusPlayer {
 	
 	private boolean stopped;
 
-	private ResultsData results;
+	private Statistics results;
 	
-	private WumpusWorld world;
+	private GameBoard world;
 	private LogLevel logLevel;
 	
-	public WumpusPlayer(WumpusWorld world) {
+	public WumpusPlayer(GameBoard world) {
 		this.world = world;
-		x = WumpusWorld.START_X;
-		y = WumpusWorld.START_Y;
+		x = GameBoard.START_X;
+		y = GameBoard.START_Y;
 		direction = Direction.NORTH;
 		stopped = false;
-		results = new ResultsData();
+		results = new Statistics();
 		logLevel = DEFAULT_LOG_LEVEL;
 		this.logMessage("You are in a maze of blocky passageways, all alike. Behind you is the door you entered through, now locked. Two doors lead further into the maze.");
 	}
@@ -126,7 +130,7 @@ public abstract class WumpusPlayer {
 		
 		int ax = x + direction.dx;
 		int ay = y + direction.dy;
-		while (WumpusWorld.inBounds(ax, ay)) {
+		while (GameBoard.inBounds(ax, ay)) {
 			if (world.killWumpus(ax, ay)) {
 				wumpusHit = true;
 				break;
@@ -154,7 +158,7 @@ public abstract class WumpusPlayer {
 		int mx = x + direction.dx;
 		int my = y + direction.dy;
 		
-		if (!WumpusWorld.inBounds(mx, my)) {
+		if (!GameBoard.inBounds(mx, my)) {
 			// We've bumped into the edge of the world.
 			logMessage("Your blindness sends you careening into a solid wall. That, or your stupidity.");
 			onBump();
@@ -175,8 +179,8 @@ public abstract class WumpusPlayer {
 			onDeath();
 			
 			// On death, move back to the starting position.
-			x = WumpusWorld.START_X;
-			y = WumpusWorld.START_Y;
+			x = GameBoard.START_X;
+			y = GameBoard.START_Y;
 			logMessage("You find yourself in the starting room, with some nasty bite marks.");
 			onMove();
 		} else if (world.hasPit(mx, my)) {
@@ -187,8 +191,8 @@ public abstract class WumpusPlayer {
 			onPitfall();
 			
 			// On pitfall, move back to the starting position.
-			x = WumpusWorld.START_X;
-			y = WumpusWorld.START_Y;
+			x = GameBoard.START_X;
+			y = GameBoard.START_Y;
 			logMessage("You find yourself in the starting room, with a large bruise where you landed.");
 			onMove();
 		}
@@ -323,7 +327,7 @@ public abstract class WumpusPlayer {
 		return logLevel;
 	}
 	
-	public ResultsData getResults() {
+	public Statistics getResults() {
 		return results;
 	}
 }

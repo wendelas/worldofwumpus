@@ -1,7 +1,7 @@
 /**
  * 
  */
-package wumpus;
+package Gameboard;
 
 /**
  * @author iannonen

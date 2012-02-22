@@ -1,56 +1,115 @@
-/*****************************************************************************
- * FILE: Driver.java
- * DATE: 02/08/12
- * AUTHOR: 	Karl Schmidbauer <schmidbauerk@msoe.edu>
- * 			Ben Ebert <ebertb@msoe.edu>
+/**
  * 
- * PURPOSE: Provides a main method for running and testing the AI.
- * 
- ****************************************************************************/
+ */
 package main;
 
-import agent.Agent;
-import agent.ChickenLittle;
-import agent.Rambo;
-import board.GameBoard;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.TreeMap;
+
+import Gameboard.GameBoard;
+import Gameboard.LogLevel;
+import agent.ChickenLittleExplorer;
+import agent.ExplorerStrategy;
+import agent.GoldSeekingExplorer;
+import agent.HeuristicExplorer;
+import agent.KBWumpusAgent;
+import agent.RamboExplorer;
 
 /**
- * Main method to control and run tests on the AI
- * 
- * @author schmidbauerk
+ * @author iannonen
  *
  */
 public class Driver {
 
-	
+	public static final LogLevel STOPPING_LOG_LEVEL = LogLevel.OFF;
+	public static final boolean MOVE_LOGGING = false;
+
 	/**
-	 * Storage variable for the Game board
-	 */
-	private static GameBoard board;
-	/**
-	 * Width of the Game board
-	 */
-	private final static int sizeX = 4;
-	/**
-	 * Height of the game board
-	 */
-	private final static int sizeY = 4;
-	
-	
-	/**
-	 * Main method
-	 * 
 	 * @param args
 	 */
-	public static void main(String args[]){
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Random r = new Random();
 		
+		GameBoard w;
+		boolean reset = false;
+		do {
+			reset = false;
+			w = new GameBoard();
+			w.randomize(r);
+			if (w.hasGold(0, 1) || w.hasGold(1, 0)) {
+				reset = reset || r.nextBoolean();
+			} 
+			if (w.hasWumpus(0, 1) || w.hasWumpus(1, 0)) {
+				reset = reset || r.nextBoolean();
+			}
+			if (w.hasPit(0, 1) || w.hasPit(1, 0)) {
+				reset = reset || r.nextBoolean();
+			}
+		} while (w.hasGold(0, 1) || w.hasGold(1, 0) || r.nextBoolean());
+		/*
+		do {
+			w = new WumpusWorld();
+			w.randomize(r);
+		} while (!w.hasGold(3, 3) || !w.hasPit(3, 2) || !w.hasPit(2, 3));
+		*/
+		/*
+		do {
+			w = new WumpusWorld();
+			w.randomize(r);
+		} while (!w.hasGold(2, 2) || !(w.hasPit(2, 3) || w.hasWumpus(2, 3)) || !(w.hasPit(2,1) || w.hasWumpus(2,1)) || !(w.hasPit(1,2) || w.hasWumpus(1,2)) || !(w.hasPit(3,2) || w.hasWumpus(3,2)));
+		*/
+		System.out.println(w);
 		
-		board = new GameBoard(sizeX,sizeY);
+		Map<String, Statistics> results = new TreeMap<String, Statistics>();
 		
-		//GUI gi = new GUI();
+		// Generate the list of agents.
+		List<ExplorerStrategy> resolvers = new LinkedList<ExplorerStrategy>();
+		resolvers.add(new ChickenLittleExplorer());
+		resolvers.add(new RamboExplorer());
+		resolvers.add(new HeuristicExplorer());
+		resolvers.add(new GoldSeekingExplorer());
 		
-		Agent smith = new Rambo(board);
-		smith.search();
-		
+		for (ExplorerStrategy resolver : resolvers) {
+			KBWumpusAgent agent = new KBWumpusAgent((GameBoard)w.clone(), resolver);
+			if (MOVE_LOGGING) {
+				System.out.println("--------------------------------------------");
+				System.out.println(resolver.identify());
+				System.out.println("--------------------------------------------");
+			} else {
+				System.out.println("Solving for " + resolver.identify() + "...");
+			}
+			long time = 0;
+			while (!agent.isStopped()) {
+				long startTime = System.nanoTime();
+				agent.update();
+				time += System.nanoTime() - startTime;
+				if (MOVE_LOGGING) {
+					agent.printStateSpace();
+				}
+			}
+			Statistics result = agent.getResults();
+			result.markTime(time);
+			results.put(agent.identify(), result);
+		}
+		System.out.println("--------------------------------------------");
+		System.out.println("Wumpus World execution complete.");
+		System.out.println("--------------------------------------------");
+		System.out.println("Final results:,");
+		System.out.println("--------------------------------------------");
+		System.out.println("Name:," + Statistics.getHeader());
+		for (String agentName : results.keySet()) {
+			Statistics data = results.get(agentName);
+			System.out.println(agentName + "," + data.toString());
+		}
+		System.out.println("--------------------------------------------");
+		System.out.println("Original Puzzle:,");
+		System.out.println(w.toString().replace("\t", ",").replace("\n", ",\n") + ",");
+		System.out.println("--------------------------------------------");
 	}
+	
+	
 }

@@ -1,10 +1,11 @@
 /**
  * 
  */
-package wumpus;
+package agent;
 
 import java.util.LinkedList;
 import java.util.List;
+
 
 import aima.util.Pair;
 

@@ -1,10 +1,10 @@
 /**
  * 
  */
-package wumpus;
+package agent;
 
 import java.util.List;
-import java.util.Random;
+
 
 import aima.util.Pair;
 
@@ -12,37 +12,28 @@ import aima.util.Pair;
  * @author iannonen
  *
  */
-public class RamboExplorer extends ExplorerStrategy {
+public class ChickenLittleExplorer extends ExplorerStrategy {
 
-	public static Random r = new Random();
-	
-	/**
-	 * @see wumpus.ExplorerStrategy#resolveFringe(aima.util.Pair, java.util.List, wumpus.StateSpace)
-	 */
 	@Override
 	public Pair<Integer, Integer> resolveFringe(Pair<Integer, Integer> current, StateSpace stateSpace) {
-		
+		// TODO Auto-generated method stub
 		Pair<Integer, Integer> resolved = null;
 		
 		List<Pair<Integer, Integer>> safeMoves = ExplorerStrategy.getSafeMoves(stateSpace);
 		
-		if (safeMoves.size() < 1) {
-			System.out.println("I'm trapped. Crap.");
-			return null;
-		} else if (safeMoves.size() == 1) {
+		if (safeMoves.size() > 0) {
 			resolved = safeMoves.get(0);
 		} else {
-			resolved = safeMoves.get(r.nextInt(safeMoves.size()));
+			return null;
 		}
 		
 		return resolved;
 	}
 	
-	
 	@Override
 	public String identify() {
 		// TODO Auto-generated method stub
-		return "Rambo the Random-Resolving Wumpus Hunter";
+		return "Chicken Little the Wumpus Novice";
 	}
 
 }
