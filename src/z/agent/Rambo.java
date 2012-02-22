@@ -20,14 +20,26 @@ public class Rambo extends Agent {
 	 */
 	@Override
 	public Point search(Point current, StateSpace stateSpace) {
+		
+		Point resolved = null;
+		
 		List<Point> safeMoves = Agent.getSafeMoves(stateSpace);
-		if (safeMoves.size() < 1) return null;
-		else if (safeMoves.size() == 1) return safeMoves.get(0);
-		else return safeMoves.get(r.nextInt(safeMoves.size()));
+		
+		if (safeMoves.size() < 1) {
+			return null;
+		} else if (safeMoves.size() == 1) {
+			resolved = safeMoves.get(0);
+		} else {
+			resolved = safeMoves.get(r.nextInt(safeMoves.size()));
+		}
+		
+		return resolved;
 	}
+	
 	
 	@Override
 	public String toString() {
 		return "Rambo";
 	}
+
 }

@@ -13,7 +13,7 @@ import aima.logic.propositional.algorithms.PLFCEntails;
  * @date 2/17/12
  * This class runs the interface between the WumpusPlayer and the Knowledge Database
  */
-public class KBWumpusAgent extends WumpusPlayer {
+public class Solver extends WumpusPlayer {
 
 	public static PLFCEntails plfce = new PLFCEntails();
 	
@@ -35,11 +35,11 @@ public class KBWumpusAgent extends WumpusPlayer {
 	 * @param world
 	 * @param explorer
 	 */
-	public KBWumpusAgent(GameBoard board, Agent explorer) {
+	public Solver(GameBoard board, Agent explorer) {
 		super(board);
 		this.explorer = explorer;
 		kb = generateInitialKB();
-		stateSpace = new StateSpace(kb);
+		stateSpace = new StateSpace(kb, board);
 		navigator = new PathNavigator(stateSpace);
 		numberOfMileMarkersEncountered = 0;
 		firstTurn = true;
@@ -47,9 +47,9 @@ public class KBWumpusAgent extends WumpusPlayer {
 	}
 	
 	/**
-	 * @see z.agent.Agent#identify()
+	 * @see z.agent.Agent#toString()
 	 */
-	public String identify() {
+	public String toString() {
 		return explorer.toString();
 	}
 
@@ -58,23 +58,16 @@ public class KBWumpusAgent extends WumpusPlayer {
 	 */
 	@Override
 	public void update() {
-		
-
 		if (firstTurn) {
 			Random r = new Random();
-			if (r.nextBoolean()) {
-				turnToFace(Direction.EAST);
-			} else {
-				turnToFace(Direction.NORTH);
-			}
-
+			if (r.nextBoolean()) turnToFace(Direction.EAST);
+			else turnToFace(Direction.NORTH);
 			moveForward();
 			firstTurn = false;
 			return;
 		}
-		
-
-		if (hasGold()) {
+		boolean gold = hasGold();
+		if (gold) {
 			stop(false);
 			return;
 		}
@@ -135,7 +128,7 @@ public class KBWumpusAgent extends WumpusPlayer {
 	 */
 	@Override
 	public void onScream() {
-		stateSpace.markWumpusDead();
+		stateSpace.noteWumpusDead();
 		stateSpace.update();
 		if (printMoves) {
 			System.out.println(stateSpace.makeString(getX(), getY()));
@@ -212,20 +205,25 @@ public class KBWumpusAgent extends WumpusPlayer {
 		if (isMileMarker()) {
 			kb.tell("(C" + p + ")");
 			numberOfMileMarkersEncountered++;
-			if (numberOfMileMarkersEncountered > KBWumpusAgent.MAXIMUM_MILE_MARKERS) {
+			if (numberOfMileMarkersEncountered > Solver.MAXIMUM_MILE_MARKERS) {
 				maxMileMarkers = true;
 			}
 		}
+		
 		// Merge into the state space.
 		stateSpace.update();
 		if (printMoves) {
 			System.out.println(stateSpace.makeString(getX(), getY()));
 		}
+		
 		// If we've found the gold, grab it and stop.
-		if (goldFound && grabGold()) {
-			stop(false);
-			return;
+		if (goldFound) {
+			if (grabGold()) {
+				stop(false);
+				return;
+			}
 		}
+		
 		// If we've reached our limit, stop.
 		if (maxMileMarkers) {
 			stop(true);
@@ -318,7 +316,7 @@ public class KBWumpusAgent extends WumpusPlayer {
 	 * Factory method for generating an initialized knowledge base.
 	 * @return An initialized knowledge base.
 	 */
-	public static KnowledgeBase generateInitialKB() {
+	public KnowledgeBase generateInitialKB() {
 		KnowledgeBase kb = new KnowledgeBase();
 		
 		// Symbols:
@@ -334,8 +332,8 @@ public class KBWumpusAgent extends WumpusPlayer {
 		 */
 		
 		// Out-of-Bounds/In-Bounds impositions:
-		for (int x = -1; x <= GameBoard.WIDTH; x++) {
-			for (int y = -1; y <= GameBoard.HEIGHT; y++) {
+		for (int x = -1; x <= board.boardSize.width; x++) {
+			for (int y = -1; y <= board.boardSize.height; y++) {
 				// Basic positions.
 				String p = toKBCoords(x,y);
 				String north = toKBCoords(x,y+1);
@@ -346,7 +344,7 @@ public class KBWumpusAgent extends WumpusPlayer {
 				String northwest = toKBCoords(x-1,y+1);
 				
 				// Bounds checking.
-				if (!GameBoard.inBounds(x, y)) {
+				if (!board.inBounds(x, y)) {
 					// Bounds in position.
 					// 1. All cells outside of [0,Width),[0,Height) are out-of-bounds.
 					kb.tell("(O" + p + ")");
@@ -407,8 +405,8 @@ public class KBWumpusAgent extends WumpusPlayer {
 					// 1. If a Wumpus is found in one cell, no other cell may contain a Wumpus.
 					// 2. If Gold is found in one cell, no other cell may contain Gold.
 					/*
-					for (int x2 = 0; x2 < GameBoard.WORLD_WIDTH; x2++) {
-						for (int y2 = 0; y2 < GameBoard.WORLD_HEIGHT; y2++) {
+					for (int x2 = 0; x2 < WumpusWorld.WORLD_WIDTH; x2++) {
+						for (int y2 = 0; y2 < WumpusWorld.WORLD_HEIGHT; y2++) {
 							String p2 = toKBCoords(x2, y2);
 							if (!p2.equals(p)) {
 								kb.tell("(W" + p + " => NW" + p2 + ")");
