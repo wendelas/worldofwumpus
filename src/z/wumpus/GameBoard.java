@@ -28,7 +28,7 @@ public class GameBoard implements Cloneable {
 	/**
 	 * The game board stored as a two dimensional array of tiles
 	 */
-	private static Tile[][] board;
+	public static Tile[][] board;
 
 	
 	/**

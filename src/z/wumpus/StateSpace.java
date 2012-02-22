@@ -383,7 +383,7 @@ public class StateSpace {
 	 * @param y The y-coordinate.
 	 */
 	public void markVisited(int x, int y) {
-		markFlag(x,y,GameBoard.VISITED_FLAG);
+		GameBoard.board[x][y].visited = true; ////////////////////////
 	}
 	
 	/**
@@ -392,7 +392,7 @@ public class StateSpace {
 	 * @param y The y-coordinate.
 	 */
 	public void markSmelly(int x, int y) {
-		markFlag(x,y,GameBoard.STENCH_FLAG);
+		GameBoard.board[x][y].stench = true; //////////////////////////
 	}
 	
 	/**
