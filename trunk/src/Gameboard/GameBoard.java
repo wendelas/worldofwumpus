@@ -1,6 +1,3 @@
-/**
- * 
- */
 package Gameboard;
 
 import java.util.Random;
@@ -8,8 +5,8 @@ import java.util.Random;
 import agent.Direction;
 
 /**
- * @author iannonen
- *
+ * @author ebertb schmidbauerk
+ * Our main wumpus board class
  */
 public class GameBoard implements Cloneable {
 
@@ -40,10 +37,7 @@ public class GameBoard implements Cloneable {
 	
 	private int flags[][];
 	
-	/**
-	 * Default constructor.
-	 * Initializes the Wumpus World as empty.
-	 */
+	
 	public GameBoard() {
 		flags = new int[WORLD_WIDTH][];
 		for (int i = 0; i < WORLD_WIDTH; i++) {
@@ -53,7 +47,7 @@ public class GameBoard implements Cloneable {
 			}
 		}
 		
-		// Designate the lower-left corner as the start location.
+		
 		flags[START_X][START_Y] = START_FLAG;
 	}
 	
@@ -174,14 +168,13 @@ public class GameBoard implements Cloneable {
 		for (int numPits = 0; numPits < NUM_PITS; numPits++) {
 			int px = r.nextInt(WORLD_WIDTH);
 			int py = r.nextInt(WORLD_HEIGHT);
-			// Check repeatedly, reselecting as necessary.
 			while (hasPit(px,py) || isStart(px,py)) {
 				px = r.nextInt(WORLD_WIDTH);
 				py = r.nextInt(WORLD_HEIGHT);
 			}
-			// Mark the cell at that point as a pit.
+			
 			flags[px][py] |= PIT_FLAG;
-			// Add a breeze to the surrounding cells.
+			
 			for (Direction d : Direction.values()) {
 				int bx = px + d.dx;
 				int by = py + d.dy;
@@ -191,26 +184,26 @@ public class GameBoard implements Cloneable {
 			}
 		}
 		
-		// Generate the gold.
+		
 		int gx = r.nextInt(WORLD_WIDTH);
 		int gy = r.nextInt(WORLD_HEIGHT);
 		while (hasPit(gx,gy) || isStart(gx,gy)) {
 			gx = r.nextInt(WORLD_WIDTH);
 			gy = r.nextInt(WORLD_HEIGHT);
 		}
-		// Mark the cell at that point as having gold.
+		
 		flags[gx][gy] |= GOLD_FLAG;
 		
-		// Generate the wumpus.
+		
 		int wx = r.nextInt(WORLD_WIDTH);
 		int wy = r.nextInt(WORLD_HEIGHT);
 		while (hasPit(wx,wy) || isStart(wx,wy) || hasGold(wx,wy)) {
 			wx = r.nextInt(WORLD_WIDTH);
 			wy = r.nextInt(WORLD_HEIGHT);
 		}
-		// Mark the cell at that point as having the wumpus.
+		
 		flags[wx][wy] |= WUMPUS_FLAG;
-		// Add a stench to the surrounding cells.
+		
 		for (Direction d : Direction.values()) {
 			int sx = wx + d.dx;
 			int sy = wy + d.dy;

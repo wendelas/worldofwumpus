@@ -1,6 +1,3 @@
-/**
- * 
- */
 package agent;
 
 import java.util.HashMap;
@@ -14,9 +11,8 @@ import aima.logic.propositional.algorithms.KnowledgeBase;
 import aima.util.Pair;
 
 /**
- * This class keeps track of traversed spaces in the 
- * @author iannonen
- *
+ * @author ebertb schmidbauerk
+ * Keeps track of the spaces the AIs went to
  */
 public class StateSpace {
 
@@ -30,10 +26,7 @@ public class StateSpace {
 	private Pair<Integer, Integer> goldSpace;
 	private Pair<Integer, Integer> wumpusSpace;
 	
-	/**
-	 * Constructor. Initializes a blank state space, and accepts the knowledge base reference.
-	 * @param kb The knowledge base.
-	 */
+	
 	public StateSpace(KnowledgeBase kb) {
 		this.kb = kb;
 		killedWumpus = false;
@@ -43,29 +36,17 @@ public class StateSpace {
 		safetyMap.clear();
 	}
 
-	/**
-	 * Gets the associated knowledge base.
-	 * @return The knowledge base.
-	 */
+	
 	public KnowledgeBase getKnowledgeBase() {
 		return kb;
 	}
 	
-	/**
-	 * Calculates a heuristic-based move cost for moving between an occupied space, a, and a separate space, b.
-	 * @param a The current space.
-	 * @param b The destination space.
-	 * @return A value representing the cost of moving to the given space.
-	 */
+	
 	public double getMoveCost(Pair<Integer, Integer> a, Pair<Integer, Integer> b) {
 		return distBetween(a, b) + getSafetyCost(b);
 	}
 	
-	/**
-	 * 
-	 * @param space
-	 * @return
-	 */
+	
 	public double getSafetyCost(Pair<Integer, Integer> space) {
 		if (!safetyMap.containsKey(space)) {
 			updateSafetyCost(space);
@@ -73,11 +54,7 @@ public class StateSpace {
 		return safetyMap.get(space);
 	}
 	
-	/**
-	 * Updates the cached safety cost for a given space.
-	 * This method is very computationally expensive for states that haven't yet been visited!
-	 * @param space The space to update.
-	 */
+	
 	private void updateSafetyCost(Pair<Integer, Integer> space) {
 		
 		if (space == null) {
@@ -89,35 +66,35 @@ public class StateSpace {
 		int x = space.getFirst();
 		int y = space.getSecond();
 		
-		// If the pit contains a breadcrumb, increase the cost by 0.5.
+		
 		if (isCrumb(x,y)) {
 			cost += GameBoard.CRUMB_COST;
 		}
 		
-		// Regardless of whether we've visited it or not, if we know it's a pit or a wumpus, then we know it's deadly.
+		
 		if (isPit(x,y) || (!isWumpusDead() && isWumpus(x,y))) {
 			
-			cost += (double)GameBoard.DEATH_COST;	// Score hit taken when falling into a pit or being eaten.
+			cost += (double)GameBoard.DEATH_COST;	
 			
 		} else if (!isVisited(x,y)) {
-			// If we haven't visited it, try it out.
+			
 			int numUnvisitedSpaces = getUnvisitedSpaces().size();
 			if (numUnvisitedSpaces > 0 && !isVisited(x, y)) {
 				
-				// Get the number of pits/wumpi still not found.
+				
 				int numMissingPits = GameBoard.NUM_PITS - getKnownPitSpaces().size();
 				int numMissingWumpi = GameBoard.NUM_WUMPUS - getKnownWumpusSpaces().size();
 				
-				// Compute the base likelihood that a space is a pit.
+				
 				double baseChanceOfPit = ((double)numMissingPits) / ((double)numUnvisitedSpaces);
 				
-				// Compute the base likelihood that a space is a wumpus.
+				
 				double baseChanceOfWumpus = 0.0;
 				if (!isWumpusDead()) {
 					baseChanceOfWumpus = ((double)numMissingWumpi) / ((double)numUnvisitedSpaces);
 				}
 			
-				// Offset the likelihoods by doing a search of the neighboring spaces.
+				
 				List<Pair<Integer, Integer>> neighbors = getNeighbors(space);
 				int numBreezes = 0;
 				int numStenches = 0;
@@ -125,7 +102,7 @@ public class StateSpace {
 					int nx = neighbor.getFirst();
 					int ny = neighbor.getSecond();
 					
-					// If we've visited a surrounding space and found it to not have a breeze or stench, drop to 0%.
+					
 					if (isVisited(nx, ny)) {
 						if (!isBreezy(nx, ny)) {
 							baseChanceOfPit = 0.0;
@@ -135,57 +112,45 @@ public class StateSpace {
 						}
 					}
 					
-					// If the space is breezy, add one to the number of surrounding breezes.
+					
 					if (isBreezy(nx, ny)) {
 						numBreezes++;
 					}
-					// If the space is smelly, add one to the number of surrounding stenches.
+					
 					if (isSmelly(nx, ny)) {
 						numStenches++;
 					}
 				}
 				
-				// Recompute the estimated cost for pit guessing.
-				// Take the number of confirmed breezes/stenches over the max amount, times the cost of death, times the base chance of there being a pit.
+				
 				cost += (((double)numBreezes / 4.0) * ((double)GameBoard.DEATH_COST) * (baseChanceOfPit))
 						+ (((double)numStenches / 4.0) * ((double)GameBoard.DEATH_COST) * (baseChanceOfWumpus));
 			}
 		}
 		
-		// Store the computed cost.
+		
 		safetyMap.put(space, cost);
 	}
 
-	/**
-	 * Calculates the ideal heuristic distance between two spaces.
-	 * @param a The first space.
-	 * @param b The second space.
-	 * @return The heuristic distance estimate between the two points.
-	 */
+	
 	public static double distBetween(Pair<Integer, Integer> a, Pair<Integer, Integer> b) {
 		double dx = (double)(a.getFirst() - b.getFirst());
 		double dy = (double)(a.getSecond() - b.getSecond());
 		return ((double)GameBoard.STEP_COST * Math.sqrt((dx * dx) + (dy * dy)));
 	}
 	
-	/**
-	 * Tells whether or not the wumpus has been killed.
-	 * @return <b>true</b> if the wumpus is dead, <b>false</b> otherwise.
-	 */
+	
 	public boolean isWumpusDead() {
 		return killedWumpus;
 	}
 	
-	/**
-	 * Calculates a most-likely gold location estimation, by averaging the coordinates of all unexplored spaces.
-	 * @return A pair of double-precision floating point values representing the approximate location.
-	 */
+	
 	public Pair<Double, Double> estimateGoldSpace() {
 		if (goldSpace != null) {
-			// If we know where the gold is, give that space.
+			
 			return new Pair<Double, Double>((double)goldSpace.getFirst(), (double)goldSpace.getSecond());
 		} else {
-			// If we don't, take all unexplored spaces, and retrieve a path for them.
+			
 			double dx = 0.0;
 			double dy = 0.0;
 			List<Pair<Integer, Integer>> unvisited = getUnvisitedSpaces();
@@ -200,16 +165,13 @@ public class StateSpace {
 		}
 	}
 	
-	/**
-	 * Calculates a most-likely wumpus location estimation, by averaging the coordinates of all unexplored spaces.
-	 * @return An approximation of the wumpus space.
-	 */
+	
 	public Pair<Double, Double> estimateWumpusSpace() {
 		if (wumpusSpace != null) {
-			// If we know where the wumpus is, give that space.
+			
 			return new Pair<Double, Double>((double)wumpusSpace.getFirst(), (double)wumpusSpace.getSecond());
 		} else {
-			// If we don't, take all unexplored spaces, wumpus spaces, and smelly spaces, and average them, repeating two more times for smelly/wumpus spaces.
+			
 			double dx = 0.0;
 			double dy = 0.0;
 			List<Pair<Integer, Integer>> territory = getWumpusTerritory();
@@ -231,41 +193,25 @@ public class StateSpace {
 		}
 	}
 	
-	/**
-	 * Retrieves the space determined to contain the wumpus.
-	 * @return The wumpus space.
-	 */
+	
 	public Pair<Integer, Integer> getWumpusSpace() {
 		return wumpusSpace;
 	}
 	
-	/**
-	 * Retrieves the space determined to contain the gold.
-	 * @return The gold space.
-	 */
+	
 	public Pair<Integer, Integer> getGoldSpace() {
 		return goldSpace;
 	}
 	
-	/**
-	 * Represents a conditional function object, which serves as a search criteria for the state space.
-	 * @author iannonen
-	 */
+	
 	public interface Conditional {
 		
-		/**
-		 * Evaluates the condition.
-		 * @return <b>true</b> if the space is to be selected, <b>false</b> otherwise.
-		 */
+		
 		public boolean evaluate(int x, int y);
 		
 	};
 	
-	/**
-	 * Fetches a list of all matching spaces which satisfy a given condition.
-	 * @param c A condition to evaluate.
-	 * @return A list of matching states.
-	 */
+	
 	public List<Pair<Integer, Integer>> selectMatchingSpaces(Conditional c) {
 		List<Pair<Integer, Integer>> list = new LinkedList<Pair<Integer, Integer>>();
 		if (c != null) {
@@ -280,10 +226,7 @@ public class StateSpace {
 		return list;
 	}
 	
-	/**
-	 * Gets a set of all previously-traversed, safe spaces. To be used by the PathResolver.
-	 * @return A list of spaces.
-	 */
+	
 	public List<Pair<Integer, Integer>> getTraversableSpaces() {
 		return selectMatchingSpaces(new Conditional() {
 			@Override
@@ -293,10 +236,7 @@ public class StateSpace {
 		});
 	}
 	
-	/**
-	 * Gets a set of all spaces which could indicate the presence of a Wumpus. To be used by the PathResolver.
-	 * @return A list of spaces.
-	 */
+	
 	public List<Pair<Integer, Integer>> getWumpusTerritory() {
 		return selectMatchingSpaces(new Conditional() {
 			@Override
@@ -306,10 +246,7 @@ public class StateSpace {
 		});
 	}
 	
-	/**
-	 * Gets a set of all untraversed spaces.
-	 * @return A list of spaces.
-	 */
+	
 	public List<Pair<Integer, Integer>> getUnvisitedSpaces() {
 		return selectMatchingSpaces(new Conditional() {
 			@Override
@@ -319,10 +256,7 @@ public class StateSpace {
 		});
 	}
 	
-	/**
-	 * Gets a set of all spaces known to contain wumpi.
-	 * @return A list of spaces with wumpi.
-	 */
+	
 	public List<Pair<Integer, Integer>> getKnownWumpusSpaces() {
 		return selectMatchingSpaces(new Conditional() {
 			@Override
@@ -332,10 +266,7 @@ public class StateSpace {
 		});
 	}
 	
-	/**
-	 * Gets a set of all spaces known to contain pits.
-	 * @return A list of spaces with pits.
-	 */
+	
 	public List<Pair<Integer, Integer>> getKnownPitSpaces() {
 		return selectMatchingSpaces(new Conditional() {
 			@Override
@@ -345,10 +276,7 @@ public class StateSpace {
 		});
 	}
 	
-	/**
-	 * Gets a set of all spaces known to contain breezes.
-	 * @return A list of spaces with breezes.
-	 */
+	
 	public List<Pair<Integer, Integer>> getKnownBreezySpaces() {
 		return selectMatchingSpaces(new Conditional() {
 			@Override
@@ -358,10 +286,7 @@ public class StateSpace {
 		});
 	}
 	
-	/**
-	 * Gets a set of all spaces known to contain stench.
-	 * @return A list of spaces with stench.
-	 */
+	
 	public List<Pair<Integer, Integer>> getKnownStinkySpaces() {
 		return selectMatchingSpaces(new Conditional() {
 			@Override
@@ -371,27 +296,18 @@ public class StateSpace {
 		});
 	}
 	
-	/**
-	 * Marks the wumpus as having been killed.
-	 */
+	
 	public void noteWumpusDead() {
 		killedWumpus = true;
 		wumpusSpace = null;
 	}
 	
-	/**
-	 * Utility function; converts the given coordinates to a string representation, for feeding into the knowledge base. Shifts from 0-based to 1-based indexing.
-	 * @param x The x-coordinate.
-	 * @param y The y-coordinate.
-	 * @return The knowledge base coordinate string.
-	 */
+	
 	public static String toKBCoords(int x, int y) {
 		return "" + (x+1) + (y+1);
 	}
 	
-	/**
-	 * Updates the state space via the knowledge base. Should be called whenever new percepts are entered into the knowledge base.
-	 */
+	
 	public void update() {
 		for (int x = 0; x < GameBoard.WORLD_WIDTH; x++) {
 			for (int y = 0; y < GameBoard.WORLD_HEIGHT; y++) {
@@ -420,22 +336,17 @@ public class StateSpace {
 			}
 		}
 		
-		// Invalidate the cache of safety costs.
+		
 		safetyMap.clear();
 		
-		// Forward-compute the safety costs of the fringe; it's the most intensive.
+		
 		List<Pair<Integer, Integer>> fringe = getFringe();
 		for (Pair<Integer, Integer> space : fringe) {
 			updateSafetyCost(space);
 		}
 	}
 
-	/**
-	 * Marks the given space with the specified flags.
-	 * @param x The x-coordinate.
-	 * @param y The y-coordinate.
-	 * @param flags The set of bit flags to mark.
-	 */
+	
 	private void markFlag(int x, int y, int flags) {
 		Pair<Integer, Integer> p = new Pair<Integer,Integer>(x,y);
 		if (!spaceMap.containsKey(p)) {
@@ -445,38 +356,22 @@ public class StateSpace {
 		}
 	}
 	
-	/**
-	 * Marks the given space as having been visited by the agent.
-	 * @param x The x-coordinate.
-	 * @param y The y-coordinate.
-	 */
+	
 	public void markVisited(int x, int y) {
 		markFlag(x,y,GameBoard.VISITED_FLAG);
 	}
 	
-	/**
-	 * Marks the given space as being smelly.
-	 * @param x The x-coordinate.
-	 * @param y The y-coordinate.
-	 */
+	
 	public void markSmelly(int x, int y) {
 		markFlag(x,y,GameBoard.STENCH_FLAG);
 	}
 	
-	/**
-	 * Marks the given space as having a pit.
-	 * @param x The x-coordinate.
-	 * @param y The y-coordinate.
-	 */
+	
 	public void markPit(int x, int y) {
 		markFlag(x,y,GameBoard.PIT_FLAG);
 	}
 	
-	/**
-	 * Marks the given space as having a Wumpus.
-	 * @param x The x-coordinate.
-	 * @param y The y-coordinate.
-	 */
+	
 	public void markWumpus(int x, int y) {
 		markFlag(x,y,GameBoard.WUMPUS_FLAG);
 		Pair<Integer, Integer> space = new Pair<Integer, Integer>(x,y);
@@ -485,20 +380,12 @@ public class StateSpace {
 		}
 	}
 	
-	/**
-	 * Marks the given space as being breezy.
-	 * @param x The x-coordinate.
-	 * @param y The y-coordinate.
-	 */
+	
 	public void markBreezy(int x, int y) {
 		markFlag(x,y,GameBoard.BREEZE_FLAG);
 	}
 	
-	/**
-	 * Marks the given space as having gold.
-	 * @param x The x-coordinate.
-	 * @param y The y-coordinate.
-	 */
+	
 	public void markGold(int x, int y) {
 		markFlag(x,y,GameBoard.GOLD_FLAG);
 		Pair<Integer, Integer> space = new Pair<Integer, Integer>(x,y);
@@ -507,39 +394,32 @@ public class StateSpace {
 		}
 	}
 	
-	/**
-	 * Marks the given space as having a crumb.
-	 * @param x The x-coordinate.
-	 * @param y The y-coordinate.
-	 */
+	
 	public void markCrumb(int x, int y) {
 		markFlag(x,y,GameBoard.CRUMB_FLAG);
 	}
 	
-	/**
-	 * Fetches a list of spaces on the fringe of the explored region.
-	 * @return A list of fringe spaces.
-	 */
+	
 	public List<Pair<Integer, Integer>> getFringe() {
 		
 		List<Pair<Integer,Integer>> fringe = new LinkedList<Pair<Integer,Integer>>();
 		
-		// Go through each of the neighbors of all nodes of the state space.
+		
 		for (Pair<Integer, Integer> space : spaceMap.keySet()) {
-			if (isVisited(space.getFirst(), space.getSecond())) {	// TODO Test this if-statement!
+			if (isVisited(space.getFirst(), space.getSecond())) {	
 				List<Pair<Integer, Integer>> neighbors = getNeighbors(space);
 				for (Pair<Integer, Integer> neighbor : neighbors) {
 					int nx = neighbor.getFirst();
 					int ny = neighbor.getSecond();
-					// If the neighbor has been visited, or isn't safe, skip it.
+					
 					if (isVisited(nx, ny) || !isSafe(nx, ny)) {
 						continue;
 					}
-					// If the fringe already has the neighbor, skip it.
+					
 					if (fringe.contains(neighbor)) {
 						continue;
 					}
-					// Otherwise, add it.
+					
 					fringe.add(neighbor);
 				}
 			}
@@ -548,13 +428,7 @@ public class StateSpace {
 		return fringe;
 	}
 	
-	/**
-	 * Tells whether or not the given flags are set for the given space.
-	 * @param x The x-coordinate.
-	 * @param y The y-coordinate.
-	 * @param flags The set of flags to check.
-	 * @return <b>true</b> if all of the flag's bits are set; <b>false</b> otherwise.
-	 */
+	
 	private boolean isFlagSet(int x, int y, int flags) {
 		Pair<Integer, Integer> space = new Pair<Integer, Integer>(x,y);
 		if (!spaceMap.containsKey(space)) {
@@ -564,99 +438,52 @@ public class StateSpace {
 		}
 	}
 	
-	/**
-	 * Tells whether the given space has been visited.
-	 * @param x The x-coordinate.
-	 * @param y The y-coordinate.
-	 * @return <b>true</b> if the space has been visited; <b>false</b> otherwise.
-	 */
+	
 	public boolean isVisited(int x, int y) {
 		return isFlagSet(x,y,GameBoard.VISITED_FLAG);
 	}
 	
-	/**
-	 * Tells whether the given space is safe; ie. not a known pit or a wumpus. Also considers whether the wumpus has been killed.
-	 * @param x The x-coordinate.
-	 * @param y The y-coordinate.
-	 * @return <b>true</b> if the space is safe; <b>false</b> otherwise.
-	 */
+	
 	public boolean isSafe(int x, int y) {
 		return (!isPit(x,y) && (killedWumpus || !isWumpus(x,y)));
 	}
 	
-	/**
-	 * Tells whether the given space is known to contain a pit.
-	 * @param x The x-coordinate.
-	 * @param y The y-coordinate.
-	 * @return <b>true</b> if the space has a pit; <b>false</b> otherwise.
-	 */
+	
 	public boolean isPit(int x, int y) {
 		return isFlagSet(x,y,GameBoard.PIT_FLAG);
 	}
 	
-	/**
-	 * Tells whether the given space is known to contain a wumpus.
-	 * @param x The x-coordinate.
-	 * @param y The y-coordinate.
-	 * @return <b>true</b> if the space has a wumpus; <b>false</b> otherwise.
-	 */
+	
 	public boolean isWumpus(int x, int y) {
 		return isFlagSet(x,y,GameBoard.WUMPUS_FLAG);
 	}
 	
-	/**
-	 * Tells whether the given space is known to contain a breeze.
-	 * @param x The x-coordinate.
-	 * @param y The y-coordinate.
-	 * @return <b>true</b> if the space has a breeze; <b>false</b> otherwise.
-	 */
+	
 	public boolean isBreezy(int x, int y) {
 		return isFlagSet(x,y,GameBoard.BREEZE_FLAG);
 	}
 	
-	/**
-	 * Tells whether the given space is known to contain a stench.
-	 * @param x The x-coordinate.
-	 * @param y The y-coordinate.
-	 * @return <b>true</b> if the space has a stench; <b>false</b> otherwise.
-	 */
+	
 	public boolean isSmelly(int x, int y) {
 		return isFlagSet(x,y,GameBoard.STENCH_FLAG);
 	}
 	
-	/**
-	 * Tells whether the given space is known to contain a crumb.
-	 * @param x The x-coordinate.
-	 * @param y The y-coordinate.
-	 * @return <b>true</b> if the space has a crumb; <b>false</b> otherwise.
-	 */
+	
 	public boolean isCrumb(int x, int y) {
 		return isFlagSet(x,y,GameBoard.CRUMB_FLAG);
 	}
 	
-	/**
-	 * Tells whether the given space is known to contain gold.
-	 * @param x The x-coordinate.
-	 * @param y The y-coordinate.
-	 * @return <b>true</b> if the space has gold; <b>false</b> otherwise.
-	 */
+	
 	public boolean isGold(int x, int y) {
 		return isFlagSet(x,y,GameBoard.GOLD_FLAG);
 	}
 	
-	/**
-	 * Tells whether or not the state space has deduced the location of the wumpus.
-	 * @return <b>true</b> if the wumpus space is known, <b>false</b> otherwise.
-	 */
+	
 	public boolean knowsWumpusSpace() {
 		return (wumpusSpace != null);
 	}
 	
-	/**
-	 * Returns a list of all existing neighbors of the given space.
-	 * @param space The central space.
-	 * @return A list of neighboring spaces.
-	 */
+	
 	public List<Pair<Integer, Integer>> getNeighbors(Pair<Integer, Integer> space) {
 		List<Pair<Integer, Integer>> list = new LinkedList<Pair<Integer, Integer>>();
 		if (space == null) {
@@ -671,20 +498,13 @@ public class StateSpace {
 		return list;
 	}
 	
-	/**
-	 * @see java.lang.Object#toString()
-	 */
+	
 	@Override
 	public String toString() {
 		return makeString(-1,-1);
 	}
 	
-	/**
-	 * Converts the state space into a printable string format.
-	 * @param currX The player's x-coordinate.
-	 * @param currY The player's y-coordinate.
-	 * @return The state space as a string.
-	 */
+	
 	public String makeString(int currX, int currY) {
 		List<Pair<Integer, Integer>> fringe = getFringe();
 		String s = "-----------------------------------\n";
@@ -709,17 +529,17 @@ public class StateSpace {
 						data = "_";
 					}
 					
-					// If the space has been visited, mark it with square brackets.
+					
 					if ((code & GameBoard.VISITED_FLAG) != 0) {
 						start = "[";
 						end = "]";
 					}
-					// If the space has been marked with a crumb, surround it with parentheses.
+					
 					if ((code & GameBoard.CRUMB_FLAG) != 0) {
 						start = "(";
 						end = ")";
 					}
-					// If the space contains the player, surround it with angle braces.
+					
 					if (x == currX && y == currY) {
 						start = "<";
 						end = ">";
@@ -728,7 +548,7 @@ public class StateSpace {
 					data = "?";
 				}
 				
-				// If the space is in the fringe, mark it with curly braces.
+				
 				if (fringe.contains(space)) {
 					start = "{";
 					end = "}";

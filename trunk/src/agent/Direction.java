@@ -1,11 +1,8 @@
-/**
- * 
- */
 package agent;
 
 /**
- * @author iannonen
- *
+ * @author ebertb schmidbauerk
+ * Contains directions for the wumpusboard
  */
 public enum Direction {
 	NORTH(0,1),

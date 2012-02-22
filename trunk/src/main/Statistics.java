@@ -1,13 +1,10 @@
-/**
- * 
- */
 package main;
 
 import Gameboard.GameBoard;
 
 /**
- * @author iannonen
- *
+ * @author ebertb schmidbauerk
+ * Holds the statistics for the game
  */
 public class Statistics {
 

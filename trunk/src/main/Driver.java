@@ -1,6 +1,3 @@
-/**
- * 
- */
 package main;
 
 import java.util.LinkedList;
@@ -17,19 +14,17 @@ import agent.KBWumpusAgent;
 import agent.Rambo;
 
 /**
- * @author iannonen
- *
+ * @author ebertb schmidbauerk
+ * The main driver for the program
  */
 public class Driver {
 
 	public static final LogLevel STOPPING_LOG_LEVEL = LogLevel.OFF;
 	public static final boolean MOVE_LOGGING = false;
 
-	/**
-	 * @param args
-	 */
+
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		
 		Random r = new Random();
 		
 		GameBoard w;
@@ -53,7 +48,7 @@ public class Driver {
 		
 		Map<String, Statistics> results = new TreeMap<String, Statistics>();
 		
-		// Generate the list of agents.
+		
 		List<ExplorerStrategy> resolvers = new LinkedList<ExplorerStrategy>();
 		resolvers.add(new ChickenLittle());
 		resolvers.add(new Rambo());

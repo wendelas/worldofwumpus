@@ -1,10 +1,7 @@
-/**
- * 
- */
 package Gameboard;
 
 /**
- * @author iannonen
+ * @author ebertb schmidbauerk
  */
 public enum LogLevel {
 	OFF,

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package agent;
 
 import java.util.List;
@@ -9,14 +6,14 @@ import java.util.List;
 import aima.util.Pair;
 
 /**
- * @author iannonen
- *
+ * @author ebertb schmidbauerk
+ * The Chicken Little agent
  */
 public class ChickenLittle extends ExplorerStrategy {
 
 	@Override
 	public Pair<Integer, Integer> resolveFringe(Pair<Integer, Integer> current, StateSpace stateSpace) {
-		// TODO Auto-generated method stub
+		
 		Pair<Integer, Integer> resolved = null;
 		
 		List<Pair<Integer, Integer>> safeMoves = ExplorerStrategy.getSafeMoves(stateSpace);
@@ -32,8 +29,8 @@ public class ChickenLittle extends ExplorerStrategy {
 	
 	@Override
 	public String identify() {
-		// TODO Auto-generated method stub
-		return "Chicken Little the Wumpus Novice";
+		
+		return "Chicken Little";
 	}
 
 }

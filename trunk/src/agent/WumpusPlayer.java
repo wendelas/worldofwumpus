@@ -1,6 +1,3 @@
-/**
- * 
- */
 package agent;
 
 import main.Statistics;
@@ -8,8 +5,8 @@ import Gameboard.LogLevel;
 import Gameboard.GameBoard;
 
 /**
- * @author iannonen
- *
+ * @author ebertb schmidbauerk
+ * This class plays the wumpus game
  */
 public abstract class WumpusPlayer {
 	
@@ -55,7 +52,7 @@ public abstract class WumpusPlayer {
 		this.logMessage("You are in a maze of blocky passageways, all alike. Behind you is the door you entered through, now locked. Two doors lead further into the maze.");
 	}
 	
-	// The entry point for evaluating the next move.
+	
 	public abstract void update();
 	
 	public boolean isStopped() {
@@ -151,7 +148,7 @@ public abstract class WumpusPlayer {
 		return true;
 	}
 	
-	// Called when the arrow kills the wumpus.
+	
 	public abstract void onScream();
 	
 	public boolean moveForward() {
@@ -159,38 +156,38 @@ public abstract class WumpusPlayer {
 		int my = y + direction.dy;
 		
 		if (!GameBoard.inBounds(mx, my)) {
-			// We've bumped into the edge of the world.
+			
 			logMessage("Your blindness sends you careening into a solid wall. That, or your stupidity.");
 			onBump();
 			return false;
 		}
 		
-		// Take that step forward.
+		
 		x = mx;
 		y = my;
 		results.addStep();
 		logMessage("You enter the next room.");
 		onMove();
 		
-		// If the world has a Wumpus at that point, we die.
+		
 		if (world.hasWumpus(mx, my)) {
 			results.addDeath();
 			logMessage("You have been eaten by a Grue... er, I mean, a Wumpus. Suddenly, you wake up... at the main entrance. Finding the gold at this point wouldn't be worth it.");
 			onDeath();
 			
-			// On death, move back to the starting position.
+			
 			x = GameBoard.START_X;
 			y = GameBoard.START_Y;
 			logMessage("You find yourself in the starting room, with some nasty bite marks.");
 			onMove();
 		} else if (world.hasPit(mx, my)) {
 
-			// If the world has a pitfall at that point, we die.
+			
 			results.addDeath();
 			logMessage("Walking carelessly into a large pit, you fall, screaming... and land at the main entrance. ");
 			onPitfall();
 			
-			// On pitfall, move back to the starting position.
+			
 			x = GameBoard.START_X;
 			y = GameBoard.START_Y;
 			logMessage("You find yourself in the starting room, with a large bruise where you landed.");
@@ -232,7 +229,7 @@ public abstract class WumpusPlayer {
 		world.dropCrumb(x, y);
 	}
 	
-	// To be called when the agent is completed.
+	
 	public void stop(boolean giveUp) {
 		logMessage("Knowing that this is as good as you can do, you shout the magic words, and are carried out of the maze through a swirling vortex of magic.");
 		logMessage("Final Score: " + results.getScore());
@@ -242,25 +239,25 @@ public abstract class WumpusPlayer {
 		}
 	}
 	
-	// Called when the player bumps into the edge of the Wumpus World.
+	
 	public abstract void onBump();
 	
-	// Called when the player falls into a pit.
+	
 	public abstract void onPitfall();
 	
-	// Called when the player is killed by bumping into the Wumpus.
+	
 	public abstract void onDeath();
 	
-	// Called when the player safely enters a space.
+	
 	public abstract void onMove();
 	
-	// Called when the player safely retrieves the gold.
+	
 	public abstract void onGrab();
 	
-	// Called when the player drops the gold.
+	
 	public abstract void onDrop();
 	
-	// On-demand sensors:
+	
 	public boolean isSmelly() {
 		if (world.hasStench(x, y)) {
 			logMessage("Something rancid taunts your nostrils, and sends chills down your spine. The Wumpus is near.");

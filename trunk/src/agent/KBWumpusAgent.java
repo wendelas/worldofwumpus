@@ -1,6 +1,3 @@
-/**
- * 
- */
 package agent;
 
 import java.util.List;
@@ -14,8 +11,8 @@ import aima.logic.propositional.algorithms.PLFCEntails;
 import aima.util.Pair;
 
 /**
- * @author iannonen
- *
+ * @author ebertb schmidbauerk
+ * Handle the knowledge connector for the board
  */
 public class KBWumpusAgent extends WumpusPlayer {
 
@@ -34,72 +31,53 @@ public class KBWumpusAgent extends WumpusPlayer {
 	
 	private boolean printMoves = false;
 	
-	/**
-	 * Constructor. Takes in the Wumpus World object and the agent resolver.
-	 * @param world
-	 * @param explorer
-	 */
+	
 	public KBWumpusAgent(GameBoard world, ExplorerStrategy explorer) {
 		super(world);
 		this.explorer = explorer;
 		kb = generateInitialKB();
 		stateSpace = new StateSpace(kb);
 		navigator = new PathNavigator(stateSpace);
-		//goldCollected = false;
 		numberCrumbsEncountered = 0;
 		firstTurn = true;
 		onMove();
 	}
 	
-	/**
-	 * @see agent.ExplorerStrategy#identify()
-	 */
+	
 	public String identify() {
 		return explorer.identify();
 	}
 
-	/**
-	 * @see agent.WumpusPlayer#update()
-	 */
+	
 	@Override
 	public void update() {
 		
-		// First, we check for the first turn.
+		
 		if (firstTurn) {
-			// Pick a random direction, north or east.
+			
 			Random r = new Random();
 			if (r.nextBoolean()) {
 				turnToFace(Direction.EAST);
 			} else {
 				turnToFace(Direction.NORTH);
 			}
-			// Walk ahead one square.
+			
 			moveForward();
 			firstTurn = false;
 			return;
 		}
 		
-		// Now, we check to see if we have the gold already.
+		
 		if (hasGold()) {
 			stop(false);
 			return;
 		}
 		
-		// Now, we check to see if we can pick up the gold and stop.
-		/*
-		if (stateSpace.isGold(getX(), getY())) {
-			// Check to see if we're in the same space.
-			if (grabGold()) {
-				onGrab();
-				//goldCollected = true;
-				return;
-			}
-		}
-		*/
+	
 		
-		// Check for the wumpus.
+		
 		if (!stateSpace.isWumpusDead() && stateSpace.knowsWumpusSpace() && hasArrow()) {
-			// If we're in the same row or column as the wumpus, try and kill it.
+			
 			Pair<Integer, Integer> wumpusSpace = stateSpace.getWumpusSpace();
 			int wx = wumpusSpace.getFirst();
 			int wy = wumpusSpace.getSecond();
@@ -115,20 +93,20 @@ public class KBWumpusAgent extends WumpusPlayer {
 					d = Direction.NORTH;
 				}
 				if (d != null) {
-					// If necessary, turn towards the beast and fire.
+					
 					turnToFace(d);
 					fireArrow();
 				}
 			}
 		}
 		
-		// Now, we check to see if we're on a path.
+		
 		if (isOnPath()) {
 			proceedAlongPath();
 			return;
 		}
 		
-		// If not, drop a crumb, and use our explorer to select a fringe node.
+		
 		dropCrumb();
 		Pair<Integer, Integer> current = new Pair<Integer, Integer>(getX(), getY());
 		Pair<Integer, Integer> nextNode = explorer.resolveFringe(current, stateSpace);
@@ -140,18 +118,16 @@ public class KBWumpusAgent extends WumpusPlayer {
 			try {
 				followPath(navigator.resolvePath(current, nextNode));
 			} catch (IllegalStateException e) {
-				// Unable to find a path to the next fringe state.
+				
 				stop(true);
 			} catch (IllegalArgumentException e) {
 				stop(true);
 			}
-			//followPath(navigator.resolvePath(current, nextNode));
+			
 		}
 	}
 
-	/**
-	 * @see agent.WumpusPlayer#onScream()
-	 */
+	
 	@Override
 	public void onScream() {
 		stateSpace.noteWumpusDead();
@@ -162,17 +138,13 @@ public class KBWumpusAgent extends WumpusPlayer {
 		dropCurrentPath();
 	}
 
-	/**
-	 * @see agent.WumpusPlayer#onBump()
-	 */
+	
 	@Override
 	public void onBump() {
 		dropCurrentPath();
 	}
 
-	/**
-	 * @see agent.WumpusPlayer#onPitfall()
-	 */
+	
 	@Override
 	public void onPitfall() {
 		kb.tell("(P" + toKBCoords(getX(), getY()) + ")");
@@ -183,9 +155,7 @@ public class KBWumpusAgent extends WumpusPlayer {
 		dropCurrentPath();
 	}
 
-	/**
-	 * @see agent.WumpusPlayer#onDeath()
-	 */
+	
 	@Override
 	public void onDeath() {
 		kb.tell("(W" + toKBCoords(getX(), getY()) + ")");
@@ -196,15 +166,13 @@ public class KBWumpusAgent extends WumpusPlayer {
 		dropCurrentPath();
 	}
 
-	/**
-	 * @see agent.WumpusPlayer#onMove()
-	 */
+	
 	@Override
 	public void onMove() {
-		// Update the state space, if the space we're in hadn't already been visited..
+		
 		String p = toKBCoords(getX(), getY());
 		
-		// Tell us we've visited this space.
+		
 		kb.tell("(V" + p + ")");
 		
 		if (isBreezy()) {
@@ -236,13 +204,13 @@ public class KBWumpusAgent extends WumpusPlayer {
 			}
 		}
 		
-		// Merge into the state space.
+		
 		stateSpace.update();
 		if (printMoves) {
 			System.out.println(stateSpace.makeString(getX(), getY()));
 		}
 		
-		// If we've found the gold, grab it and stop.
+		
 		if (goldFound) {
 			if (grabGold()) {
 				logMessage("After finding the gold, you figure you should just leave.");
@@ -251,7 +219,7 @@ public class KBWumpusAgent extends WumpusPlayer {
 			}
 		}
 		
-		// If we've reached our limit, stop.
+		
 		if (maxCrumbs) {
 			logMessage("After seeing your own footprints for the " + MAXIMUM_CRUMB_STEPS + "th time, you decide enough is enough.");
 			stop(true);
@@ -259,21 +227,15 @@ public class KBWumpusAgent extends WumpusPlayer {
 		}
 	}
 	
-	/**
-	 * @see agent.WumpusPlayer#onGrab()
-	 */
+	
 	@Override
 	public void onGrab() {}
 
-	/**
-	 * @see agent.WumpusPlayer#onDrop()
-	 */
+	
 	@Override
 	public void onDrop() {}
 	
-	/**
-	 * @see agent.WumpusPlayer#stop(boolean)
-	 */
+	
 	@Override
 	public void stop(boolean giveUp) {
 		logMessage("Final state space:\n" + stateSpace.makeString(getX(),getY()));
@@ -281,10 +243,7 @@ public class KBWumpusAgent extends WumpusPlayer {
 		super.stop(giveUp);
 	}
 
-	/**
-	 * Sets the path for the agent to follow.
-	 * @param path The path.
-	 */
+	
 	public void followPath(List<Pair<Integer, Integer>> path) {
 		if (path == null || path.size() == 0) {
 			return;
@@ -292,10 +251,7 @@ public class KBWumpusAgent extends WumpusPlayer {
 		currentPath = path;
 	}
 	
-	/**
-	 * Proceeds along the stored path until it reaches the last element.
-	 * If the next portion of the path is not adjacent to the current space, drop the path entirely.
-	 */
+	
 	private void proceedAlongPath() {
 		if (currentPath != null) {
 			if (!currentPath.isEmpty()) {
@@ -309,7 +265,7 @@ public class KBWumpusAgent extends WumpusPlayer {
 						break;
 					}
 				}
-				// If we've empied the list, drop it.
+				
 				if (currentPath == null || currentPath.isEmpty()) {
 					dropCurrentPath();
 				}
@@ -317,9 +273,7 @@ public class KBWumpusAgent extends WumpusPlayer {
 		}
 	}
 	
-	/**
-	 * Drops the current path, and resumes control of the program from its current location.
-	 */
+	
 	private void dropCurrentPath() {
 		if (currentPath != null) {
 			currentPath.clear();
@@ -327,44 +281,24 @@ public class KBWumpusAgent extends WumpusPlayer {
 		}
 	}
 	
-	/**
-	 * 
-	 * @return <b>true</b> if the agent is following a path, <b>false</b> otherwise.
-	 */
+	
 	private boolean isOnPath() {
 		return (currentPath != null);
 	}
 	
-	/**
-	 * @see agent.StateSpace#toKBCoords(int, int)
-	 */
+	
 	public static String toKBCoords(int x, int y) {
 		return StateSpace.toKBCoords(x, y);
 	}
 
-	/**
-	 * Factory method for generating an initialized knowledge base.
-	 * @return An initialized knowledge base.
-	 */
+	
 	public static KnowledgeBase generateInitialKB() {
 		KnowledgeBase kb = new KnowledgeBase();
 		
-		// Symbols:
-		/**
-		 * B: Breeze
-		 * P: Pit
-		 * W: Wumpus
-		 * G: Gold/Glitter
-		 * S: Stench
-		 * O: Out-of-Bounds position
-		 * 
-		 * N: Not-prefix
-		 */
 		
-		// Out-of-Bounds/In-Bounds impositions:
 		for (int x = -1; x <= GameBoard.WORLD_WIDTH; x++) {
 			for (int y = -1; y <= GameBoard.WORLD_HEIGHT; y++) {
-				// Basic positions.
+				
 				String p = toKBCoords(x,y);
 				String north = toKBCoords(x,y+1);
 				String south = toKBCoords(x,y-1);
@@ -373,97 +307,74 @@ public class KBWumpusAgent extends WumpusPlayer {
 				String northeast = toKBCoords(x+1,y+1);
 				String northwest = toKBCoords(x-1,y+1);
 				
-				// Bounds checking.
+				
 				if (!GameBoard.inBounds(x, y)) {
-					// Bounds in position.
-					// 1. All cells outside of [0,Width),[0,Height) are out-of-bounds.
+					
 					kb.tell("(O" + p + ")");
-					// Out-of-bound generation rules.
-					// 1-3. There are no pits, wumpi, or gold in any out-of-bound cells.
+					
 					kb.tell("(NP" + p + ")");
 					kb.tell("(NW" + p + ")");
 					kb.tell("(NG" + p + ")");
 				} else {
-					// Bounds imposition.
-					// 1. All cells within [0,Width),[0,Height) are in-bounds.
+					
 					kb.tell("(NO" + toKBCoords(x,y) + ")");
 					
-					// Last-left rules.
-					// 1. If a breeze has no pits in three of its surrounding cells, the remaining cell must be a pit.
+					
 					kb.tell("((B" + p + " AND (NP" + north + " AND (NP" + east + " AND (NP" + west + ")))) => P" + south + ")");
 					kb.tell("((B" + p + " AND (NP" + north + " AND (NP" + south + " AND (NP" + west + ")))) => P" + east + ")");
 					kb.tell("((B" + p + " AND (NP" + north + " AND (NP" + east + " AND (NP" + south + ")))) => P" + west + ")");
 					kb.tell("((B" + p + " AND (NP" + south + " AND (NP" + east + " AND (NP" + west + ")))) => P" + north + ")");
-					// 2. If a stench has no wumpi in three of its surrounding cells, the remaining cell must be a wumpus.
+					
 					kb.tell("((S" + p + " AND (NW" + north + " AND (NW" + east + " AND (NW" + west + ")))) => W" + south + ")");
 					kb.tell("((S" + p + " AND (NW" + north + " AND (NW" + south + " AND (NW" + west + ")))) => W" + east + ")");
 					kb.tell("((S" + p + " AND (NW" + north + " AND (NW" + east + " AND (NW" + south + ")))) => W" + west + ")");
 					kb.tell("((S" + p + " AND (NW" + south + " AND (NW" + east + " AND (NW" + west + ")))) => W" + north + ")");
 					
-					// Two-fourths rules, for wumpi.
-					// 1. If this space, and one northeast, have stenches, and north is clear, then east is a wumpus, and vice versa.
+					
 					kb.tell("((S" + p + " AND (S" + northeast + " AND NW" + north + ")) => W" + east + ")");
 					kb.tell("((S" + p + " AND (S" + northeast + " AND NW" + east + ")) => W" + north + ")");
-					// 2. If this space, and one northwest, have stenches, and north is clear, then west is a wumpus, and vice versa.
+
 					kb.tell("((S" + p + " AND (S" + northwest + " AND NW" + north + ")) => W" + west + ")");
 					kb.tell("((S" + p + " AND (S" + northwest + " AND NW" + west + ")) => W" + north + ")");
 					
-					// Adjacency rules.
-					// 1. Pits are surrounded by breezes.
+					
 					kb.tell("(P" + p + " => B" + north + ")");
 					kb.tell("(P" + p + " => B" + south + ")");
 					kb.tell("(P" + p + " => B" + east + ")");
 					kb.tell("(P" + p + " => B" + west + ")");
-					// 2. Wumpi are surrounded by stench.
+					
 					kb.tell("(W" + p + " => S" + north + ")");
 					kb.tell("(W" + p + " => S" + south + ")");
 					kb.tell("(W" + p + " => S" + east + ")");
 					kb.tell("(W" + p + " => S" + west + ")");
 					
-					// Same-space rules (custom; imposed by wumpus world generation rules)
-					// 1. Gold and Pits cannot be in the same space.
+					
 					kb.tell("(G" + p + " => NP" + p + ")");
 					kb.tell("(P" + p + " => NG" + p + ")");
-					// 2. Gold and Wumpi cannot be in the same space.
+					
 					kb.tell("(G" + p + " => NW" + p + ")");
 					kb.tell("(W" + p + " => NG" + p + ")");
-					// 3. Pits and Wumpi cannot be in the same space.
+					
 					kb.tell("(P" + p + " => NW" + p + ")");
 					kb.tell("(W" + p + " => NP" + p + ")");
 					
-					// Elimination rules.
-					// 1. If a Wumpus is found in one cell, no other cell may contain a Wumpus.
-					// 2. If Gold is found in one cell, no other cell may contain Gold.
-					/*
-					for (int x2 = 0; x2 < WumpusWorld.WORLD_WIDTH; x2++) {
-						for (int y2 = 0; y2 < WumpusWorld.WORLD_HEIGHT; y2++) {
-							String p2 = toKBCoords(x2, y2);
-							if (!p2.equals(p)) {
-								kb.tell("(W" + p + " => NW" + p2 + ")");
-								kb.tell("(G" + p + " => NG" + p2 + ")");
-							}
-						}
-					}
-					*/
+					
 				}
 			}
 		}
 		
-		// Initial space rules:
-		// 1-3. There are no pits, wumpi, or gold in the starting space.
+		
 		kb.tell("(NP11)");
 		kb.tell("(NW11)");
 		kb.tell("(NG11)");
 		
-		// Some basic initial knowledge about pits and wumpi.
-		// 1. A lack of a breeze or stench in the first cell indicates the two adjacent cells are both clear.
+		
 		kb.tell("(NB11 => NP12)");
 		kb.tell("(NB11 => NP21)");
 		kb.tell("(NS11 => NW12)");
 		kb.tell("(NS11 => NW21)");
 		
-		// Corner resolution information:
-		// 1-8. A breeze/stench in a corner means a pit/wumpus in at least one adjacent space.
+		
 		kb.tell("((B11 AND NP12) => P21)");
 		kb.tell("((B11 AND NP21) => P12)");
 		kb.tell("((S11 AND NW12) => W21)");

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package agent;
 
 import java.util.List;
@@ -10,16 +7,14 @@ import java.util.Random;
 import aima.util.Pair;
 
 /**
- * @author iannonen
- *
+ * @author ebertb schmidbauerk
+ * Rambo agent
  */
 public class Rambo extends ExplorerStrategy {
 
 	public static Random r = new Random();
 	
-	/**
-	 * @see agent.ExplorerStrategy#resolveFringe(aima.util.Pair, java.util.List, agent.StateSpace)
-	 */
+
 	@Override
 	public Pair<Integer, Integer> resolveFringe(Pair<Integer, Integer> current, StateSpace stateSpace) {
 		
@@ -42,8 +37,8 @@ public class Rambo extends ExplorerStrategy {
 	
 	@Override
 	public String identify() {
-		// TODO Auto-generated method stub
-		return "Rambo the Random-Resolving Wumpus Hunter";
+		
+		return "Rambo";
 	}
 
 }
