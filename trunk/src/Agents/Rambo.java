@@ -46,7 +46,7 @@ public class Rambo extends Actions {
 		//Arrow code
 		arrow = true;
 		//List of places to see and go
-		agenda = new places_to_go();
+		agenda = new Directions();
 		//Where I currently am
 		current_location = new Tile();
 		

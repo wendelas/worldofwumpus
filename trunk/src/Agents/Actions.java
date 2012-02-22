@@ -16,7 +16,7 @@ public class Actions
 	
 	boolean arrow;
 	
-	places_to_go agenda;
+	Directions agenda;
 	
 	int moves;
 	int score;

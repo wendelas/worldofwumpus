@@ -8,7 +8,7 @@ import Agents.pass_fail_test;
 import environment.GameBoard;
 
 
-public class main {
+public class Driver {
 
 	/**
 	 * @param args
