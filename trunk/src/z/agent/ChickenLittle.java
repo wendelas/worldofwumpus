@@ -24,7 +24,7 @@ public class ChickenLittle extends Agent {
 	
 	@Override
 	public String toString() {
-		return "Chicken Little";
+		return "Chicken";
 	}
 
 }

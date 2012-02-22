@@ -37,5 +37,14 @@ public abstract class Agent {
 	 * @param stateSpace The state.
 	 * @return A fringe space to move to, or null if the agent cannot proceed.
 	 */
+	public abstract String toString();
+	
+	/**
+	 * Chooses a next state from the fringe of unexplored states using a user-defined selection algorithm.
+	 * May return <b>null</b> to indicate that the explorer cannot proceed further.
+	 * @param current The current space.
+	 * @param stateSpace The state space.
+	 * @return A fringe space to move to, or <b>null</b> if no space is selected.
+	 */
 	public abstract Point search(Point current, StateSpace stateSpace);
 }

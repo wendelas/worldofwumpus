@@ -45,7 +45,9 @@ public class Tile {
 	/**
 	 * Stores if tile has Mile Marker
 	 */
-	public boolean mileMarker;
+	public int mileMarker = 0;
+	
+	public boolean wumpusDead;
 
 	/* (non-Javadoc)
 	 * Outputs the tile to a string to be viewed on a console.
@@ -55,13 +57,25 @@ public class Tile {
 	public String toString(){
 		String output = "";
 		if(gold)	output+="A";
-		if(wumpus)	output+="W";
+		if(wumpus && !wumpusDead)	output+="W";
+		if(wumpus && wumpusDead)	output+="X";
 		if(pit)		output+="P";
 		if(breeze)	output+="B";
 		if(stench)	output+="S";
 		if(visited) output+="V";
-		if(mileMarker) output+="M";
 		return output;
+	}
+	
+	public Object clone(){
+		Tile temp = new Tile();
+		temp.gold = this.gold;
+		temp.wumpus = this.wumpus;
+		temp.pit = this.pit;
+		temp.breeze = this.breeze;
+		temp.stench = this.stench;
+		temp.visited = this.visited;
+		temp.mileMarker = this.mileMarker;
+		return temp;
 	}
 }
 
