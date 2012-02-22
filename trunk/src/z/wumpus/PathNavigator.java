@@ -34,28 +34,23 @@ public class PathNavigator {
 	public List<Point> resolvePath(Point start, Point goal) throws IllegalArgumentException, IllegalStateException {
 		
 		
-		if (start == null) {
+		if (start == null)
 			throw new IllegalArgumentException("Error: Start space must not be null!");
-		}
-		if (goal == null) {
+		if (goal == null)
 			throw new IllegalArgumentException("Error: Goal space must not be null!");
-		}
 		
 		
-		if (start.equals(goal)) {
+		if (start.equals(goal))
 			return new LinkedList<Point>();
-		}
 		
 		
-		if (!stateSpace.isVisited(start.x, start.y)) {
+		if (!stateSpace.isVisited(start.x, start.y))
 			throw new IllegalArgumentException("Error: Start space has not been visited!");
-		}
 		
 		
 		List<Point> fringe = stateSpace.getFringe();
-		if (!stateSpace.isVisited(goal.x, goal.y) && !fringe.contains(goal)) {
+		if (!stateSpace.isVisited(goal.x, goal.y) && !fringe.contains(goal))
 			throw new IllegalArgumentException("Error: Goal space must be within visited set or fringe set!");
-		}
 		
 		
 		Map<Point, Point> cameFrom = new HashMap<Point, Point>();
@@ -68,18 +63,14 @@ public class PathNavigator {
 		
 		while (!openSet.isEmpty()) {
 			Point x = lowestFScore(openSet, gScore, goal);
-			if (x.equals(goal)) {
-				return reconstructPath(cameFrom, goal);
-			}
+			if (x.equals(goal)) return reconstructPath(cameFrom, goal);
 			
 			openSet.remove(x);
 			closedSet.add(x);
 			
 			List<Point> neighbors = neighborNodes(x, fringe);
 			for (Point y : neighbors) {
-				if (closedSet.contains(y)) {
-					continue;
-				}
+				if (closedSet.contains(y)) continue;
 				
 				
 				double tentativeGScore = g(x, gScore) + stateSpace.getMoveCost(x, y);
@@ -100,7 +91,6 @@ public class PathNavigator {
 				}
 			}
 		}
-		
 		throw new IllegalStateException("Error: No safe path found between start and goal spaces!");
 	}
 	
@@ -111,9 +101,7 @@ public class PathNavigator {
 	 * @return The weighted depth score for the given space.
 	 */
 	private double g(Point space, Map<Point, Double> gScore) {
-		if (gScore.containsKey(space)) {
-			return gScore.get(space);
-		}
+		if (gScore.containsKey(space)) return gScore.get(space);
 		return 0.0;
 	}
 
@@ -130,9 +118,8 @@ public class PathNavigator {
 			int x = neighbor.x;
 			int y = neighbor.y;
 			
-			if (fringe.contains(neighbor) || (stateSpace.isVisited(x, y) && stateSpace.isSafe(x, y))) {
+			if (fringe.contains(neighbor) || (stateSpace.isVisited(x, y) && stateSpace.isSafe(x, y))) 
 				finalList.add(neighbor);
-			}
 		}
 		return finalList;
 	}
@@ -192,9 +179,7 @@ public class PathNavigator {
 	public static double getSafetyCost(Point space, StateSpace stateSpace) {
 		double cost = 0.0;
 		
-		if (space == null) {
-			return cost;
-		}
+		if (space == null) return cost;
 		
 		int x = space.x;
 		int y = space.y;
@@ -214,8 +199,6 @@ public class PathNavigator {
 				cost += 0.2;
 			}
 		}
-		
-		
 		return cost;
 	}
 }

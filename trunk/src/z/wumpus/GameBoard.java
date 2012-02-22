@@ -208,12 +208,7 @@ public class GameBoard implements Cloneable {
 			}
 		}
 	}
-	/////////////////////////////////////////////////////////////////////////////////
-	
-	
-	/////////////////////////////////////////////////////////////////////////////////
-	//Checkers
-	public boolean inBounds(int x, int y) {
+	public static boolean inBounds(int x, int y) {
 		if (x < 0 || x >= boardSize.width) {
 			return false;
 		}

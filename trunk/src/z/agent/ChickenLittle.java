@@ -8,27 +8,22 @@ import z.wumpus.StateSpace;
 /**
  * @author ebertb, Schmidbauerk
  * @date 2/17/12
- * This class is the Chicken Little AI
+ * This class is the Chicken Little AI.
+ * Cautious searching of the game board.
+ * Will climb out if no safe moves exist.
  */
 public class ChickenLittle extends Agent {
 
 	@Override
 	public Point search(Point current, StateSpace stateSpace) {
-		Point resolved = null;
+		List<Point> safe = Agent.getSafeMoves(stateSpace);
 		
-		List<Point> safeMoves = Agent.getSafeMoves(stateSpace);
-		
-		if (safeMoves.size() > 0) {
-			resolved = safeMoves.get(0);
-		} else {
-			return null;
-		}
-		
-		return resolved;
+		if (safe.size() > 0) return safe.get(0);
+		else return null;
 	}
 	
 	@Override
-	public String identify() {
+	public String toString() {
 		return "Chicken Little";
 	}
 

@@ -2,23 +2,19 @@ package z.wumpus;
 
 /**
  * @author ebertb, Schmidbauerk
- * @date 2/17/12
- * This class keeps track Directions we can go
+ * @date 2/17/12 This class keeps track Directions we can go
  */
 public enum Direction {
-	NORTH(0,1),
-	SOUTH(0,-1),
-	EAST(1,0),
-	WEST(-1,0);
-	
+	NORTH(0, 1), SOUTH(0, -1), EAST(1, 0), WEST(-1, 0);
+
 	int dx;
 	int dy;
-	
+
 	Direction(int dx, int dy) {
 		this.dx = dx;
 		this.dy = dy;
 	}
-	
+
 	public String toString() {
 		switch (this) {
 		case NORTH:
@@ -33,9 +29,9 @@ public enum Direction {
 			return "an unknown direction";
 		}
 	}
-	
-	public static Direction leftOf(Direction current) {
-		switch(current) {
+
+	public static Direction nextChoice(Direction current) {
+		switch (current) {
 		case NORTH:
 			return WEST;
 		case WEST:
@@ -48,9 +44,9 @@ public enum Direction {
 			return null;
 		}
 	}
-	
-	public static Direction rightOf(Direction current) {
-		switch(current) {
+
+	public static Direction prevChoice(Direction current) {
+		switch (current) {
 		case NORTH:
 			return EAST;
 		case EAST:
@@ -63,4 +59,4 @@ public enum Direction {
 			return null;
 		}
 	}
-};
+}

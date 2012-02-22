@@ -50,7 +50,7 @@ public class KBWumpusAgent extends WumpusPlayer {
 	 * @see z.agent.Agent#identify()
 	 */
 	public String identify() {
-		return explorer.identify();
+		return explorer.toString();
 	}
 
 	/**
@@ -135,7 +135,7 @@ public class KBWumpusAgent extends WumpusPlayer {
 	 */
 	@Override
 	public void onScream() {
-		stateSpace.noteWumpusDead();
+		stateSpace.markWumpusDead();
 		stateSpace.update();
 		if (printMoves) {
 			System.out.println(stateSpace.makeString(getX(), getY()));
@@ -216,25 +216,18 @@ public class KBWumpusAgent extends WumpusPlayer {
 				maxMileMarkers = true;
 			}
 		}
-		
 		// Merge into the state space.
 		stateSpace.update();
 		if (printMoves) {
 			System.out.println(stateSpace.makeString(getX(), getY()));
 		}
-		
 		// If we've found the gold, grab it and stop.
-		if (goldFound) {
-			if (grabGold()) {
-				logMessage("After finding the gold, you figure you should just leave.");
-				stop(false);
-				return;
-			}
+		if (goldFound && grabGold()) {
+			stop(false);
+			return;
 		}
-		
 		// If we've reached our limit, stop.
 		if (maxMileMarkers) {
-			logMessage("After seeing your own footprints for the " + MAXIMUM_MILE_MARKERS + "th time, you decide enough is enough.");
 			stop(true);
 			return;
 		}
@@ -257,8 +250,6 @@ public class KBWumpusAgent extends WumpusPlayer {
 	 */
 	@Override
 	public void stop(boolean giveUp) {
-		logMessage("Final state space:\n" + stateSpace.makeString(getX(),getY()));
-		logMessage("Final score: " + getScore());
 		super.stop(giveUp);
 	}
 
@@ -343,8 +334,8 @@ public class KBWumpusAgent extends WumpusPlayer {
 		 */
 		
 		// Out-of-Bounds/In-Bounds impositions:
-		for (int x = -1; x <= WumpusWorld.WORLD_WIDTH; x++) {
-			for (int y = -1; y <= WumpusWorld.WORLD_HEIGHT; y++) {
+		for (int x = -1; x <= GameBoard.WIDTH; x++) {
+			for (int y = -1; y <= GameBoard.HEIGHT; y++) {
 				// Basic positions.
 				String p = toKBCoords(x,y);
 				String north = toKBCoords(x,y+1);
@@ -355,7 +346,7 @@ public class KBWumpusAgent extends WumpusPlayer {
 				String northwest = toKBCoords(x-1,y+1);
 				
 				// Bounds checking.
-				if (!WumpusWorld.inBounds(x, y)) {
+				if (!GameBoard.inBounds(x, y)) {
 					// Bounds in position.
 					// 1. All cells outside of [0,Width),[0,Height) are out-of-bounds.
 					kb.tell("(O" + p + ")");
@@ -416,8 +407,8 @@ public class KBWumpusAgent extends WumpusPlayer {
 					// 1. If a Wumpus is found in one cell, no other cell may contain a Wumpus.
 					// 2. If Gold is found in one cell, no other cell may contain Gold.
 					/*
-					for (int x2 = 0; x2 < WumpusWorld.WORLD_WIDTH; x2++) {
-						for (int y2 = 0; y2 < WumpusWorld.WORLD_HEIGHT; y2++) {
+					for (int x2 = 0; x2 < GameBoard.WORLD_WIDTH; x2++) {
+						for (int y2 = 0; y2 < GameBoard.WORLD_HEIGHT; y2++) {
 							String p2 = toKBCoords(x2, y2);
 							if (!p2.equals(p)) {
 								kb.tell("(W" + p + " => NW" + p2 + ")");
