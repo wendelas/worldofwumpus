@@ -1,13 +1,13 @@
 package main;
 
+import gameboard.GameBoard;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
 
-import Gameboard.GameBoard;
-import Gameboard.LogLevel;
 import agent.ChickenLittle;
 import agent.ExplorerStrategy;
 import agent.KBWumpusAgent;
@@ -19,7 +19,6 @@ import agent.Rambo;
  */
 public class Driver {
 
-	public static final LogLevel STOPPING_LOG_LEVEL = LogLevel.OFF;
 	public static final boolean MOVE_LOGGING = false;
 
 
@@ -31,6 +30,7 @@ public class Driver {
 		boolean reset = false;
 		do {
 			reset = false;
+			
 			w = new GameBoard();
 			w.randomize(r);
 			if (w.hasGold(0, 1) || w.hasGold(1, 0)) {

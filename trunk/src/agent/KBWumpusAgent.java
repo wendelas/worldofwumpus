@@ -1,11 +1,12 @@
 package agent;
 
+import gameboard.GameBoard;
+import gameboard.PathNavigator;
+
 import java.util.List;
 import java.util.Random;
 
 
-import Gameboard.PathNavigator;
-import Gameboard.GameBoard;
 import aima.logic.propositional.algorithms.KnowledgeBase;
 import aima.logic.propositional.algorithms.PLFCEntails;
 import aima.util.Pair;
@@ -213,7 +214,6 @@ public class KBWumpusAgent extends WumpusPlayer {
 		
 		if (goldFound) {
 			if (grabGold()) {
-				logMessage("After finding the gold, you figure you should just leave.");
 				stop(false);
 				return;
 			}
@@ -221,7 +221,6 @@ public class KBWumpusAgent extends WumpusPlayer {
 		
 		
 		if (maxCrumbs) {
-			logMessage("After seeing your own footprints for the " + MAXIMUM_CRUMB_STEPS + "th time, you decide enough is enough.");
 			stop(true);
 			return;
 		}
@@ -238,8 +237,6 @@ public class KBWumpusAgent extends WumpusPlayer {
 	
 	@Override
 	public void stop(boolean giveUp) {
-		logMessage("Final state space:\n" + stateSpace.makeString(getX(),getY()));
-		logMessage("Final score: " + getScore());
 		super.stop(giveUp);
 	}
 

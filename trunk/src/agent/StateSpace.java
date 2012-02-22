@@ -1,12 +1,13 @@
 package agent;
 
+import gameboard.GameBoard;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 
-import Gameboard.GameBoard;
 import aima.logic.propositional.algorithms.KnowledgeBase;
 import aima.util.Pair;
 

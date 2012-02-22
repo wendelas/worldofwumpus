@@ -1,6 +1,6 @@
 package main;
 
-import Gameboard.GameBoard;
+import gameboard.GameBoard;
 
 /**
  * @author ebertb schmidbauerk
