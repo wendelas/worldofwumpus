@@ -13,8 +13,6 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.util.Random;
 
-import zz.main.Statistics;
-
 
 /**
  * Generates the game board for a wumpus world implementation
