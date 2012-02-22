@@ -41,8 +41,7 @@ public class Driver {
 		moves_P = 0;
 		moves_F = 0;
 		moves_G = 0;
-		//Fear agent
-		System.out.println("----------The Agents from F.E.A.R.----------");
+		System.out.println("----------Chicken Little----------");
 		for(pit_rate = 20; pit_rate < 45; pit_rate += 10)
 		{
 			for(size = 4; size < 13; size+=4)
@@ -61,10 +60,8 @@ public class Driver {
 				{
 					
 					GameBoard the_Land = new GameBoard(size, pit_rate); 
-					//the_Land.revealed();
 					
 					ChickenLittle agent = new ChickenLittle(the_Land);
-					//agent.what_are_you_thinking();
 					A = agent.move(the_Land);
 					
 					if (A.give_up == true)
@@ -100,9 +97,8 @@ public class Driver {
 			System.out.println();
 		}
 		System.out.println();
-		System.out.println("--------------------------------------------------------------------------");
-		System.out.println("----------Fearless----------");
-		//Shadowrunner
+		System.out.println("=====================================================================================");
+		System.out.println("----------Rambo----------");
 		for(pit_rate = 20; pit_rate < 45; pit_rate += 10)
 		{
 			for(size = 4; size < 13; size+=4)
@@ -120,12 +116,10 @@ public class Driver {
 				for(int i = 0; i < 666; i++)
 				{
 					
-					GameBoard the_Land = new GameBoard(size, pit_rate); 
-					//the_Land.revealed();
+					GameBoard board = new GameBoard(size, pit_rate); 
 					
-					Rambo agent = new Rambo(the_Land);
-					//agent.what_are_you_thinking();
-					A = agent.move(the_Land);
+					Rambo agent = new Rambo(board);
+					A = agent.move(board);
 					
 					if(A.pass == true)
 						{pass++;
