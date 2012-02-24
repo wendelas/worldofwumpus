@@ -39,7 +39,7 @@ public class KBWumpusAgent extends WumpusPlayer {
 		super(board);
 		this.explorer = explorer;
 		kb = generateInitialKB();
-		stateSpace = new StateSpace(kb);
+		stateSpace = new StateSpace(kb, board);
 		navigator = new PathNavigator(stateSpace);
 		numberOfMileMarkersEncountered = 0;
 		firstTurn = true;
@@ -135,7 +135,7 @@ public class KBWumpusAgent extends WumpusPlayer {
 	 */
 	@Override
 	public void onScream() {
-		stateSpace.markWumpusDead();
+		stateSpace.noteWumpusDead();
 		stateSpace.update();
 		if (printMoves) {
 			System.out.println(stateSpace.makeString(getX(), getY()));
@@ -334,8 +334,8 @@ public class KBWumpusAgent extends WumpusPlayer {
 		 */
 		
 		// Out-of-Bounds/In-Bounds impositions:
-		for (int x = -1; x <= GameBoard.WIDTH; x++) {
-			for (int y = -1; y <= GameBoard.HEIGHT; y++) {
+		for (int x = -1; x <= GameBoard.getDimensions().width; x++) {
+			for (int y = -1; y <= GameBoard.getDimensions().height; y++) {
 				// Basic positions.
 				String p = toKBCoords(x,y);
 				String north = toKBCoords(x,y+1);

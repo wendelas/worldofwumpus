@@ -11,7 +11,7 @@ import java.util.Random;
  */
 public class GameBoard implements Cloneable {
 
-	public Dimension boardSize;
+	public static Dimension boardSize;
 	
 	public int NUMBER_OF_WUMPUS = 1;
 	public int NUMBER_OF_GOLD = 1;
@@ -120,7 +120,7 @@ public class GameBoard implements Cloneable {
 		return newWorld;
 	}
 	
-	public boolean inBounds(int x, int y) {
+	public static boolean inBounds(int x, int y) {
 		if (x < 0 || x >= boardSize.width) return false;
 		if (y < 0 || y >= boardSize.height) return false;
 		return true;
@@ -208,5 +208,9 @@ public class GameBoard implements Cloneable {
 	public Tile getTile(int x, int y){
 		if(board[x][y].visited) return board[x][y];
 		return null;
+	}
+	
+	public static Dimension getDimensions(){
+		return boardSize;
 	}
 }

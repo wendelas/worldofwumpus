@@ -86,11 +86,11 @@ public abstract class WumpusPlayer {
 	}
 	
 	public void turnLeft() {
-		direction = Direction.leftOf(direction);
+		direction = Direction.nextChoice(direction);
 	}
 	
 	public void turnRight() {
-		direction = Direction.rightOf(direction);
+		direction = Direction.nextChoice(direction);
 	}
 	
 	public void turnToFace(Direction d) {

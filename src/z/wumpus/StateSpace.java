@@ -131,19 +131,19 @@ public class StateSpace {
 					int ny = neighbor.y;
 
 					if (isVisited(nx, ny)) {
-						if (!isBreezy(nx, ny)) {
+						if (!isBreeze(nx, ny)) {
 							baseChanceOfPit = 0.0;
 						}
-						if (!isSmelly(nx, ny)) {
+						if (!isStench(nx, ny)) {
 							baseChanceOfWumpus = 0.0;
 						}
 					}
 
-					if (isBreezy(nx, ny)) {
+					if (isBreeze(nx, ny)) {
 						numBreezes++;
 					}
 
-					if (isSmelly(nx, ny)) {
+					if (isStench(nx, ny)) {
 						numStenches++;
 					}
 				}
@@ -225,7 +225,7 @@ public class StateSpace {
 			for (Point space : territory) {
 				int px = space.x;
 				int py = space.y;
-				if (isSmelly(px, py) || isWumpus(px, py)) {
+				if (isStench(px, py) || isWumpus(px, py)) {
 					px *= 3;
 					py *= 3;
 					n += 2;
@@ -321,7 +321,7 @@ public class StateSpace {
 		return selectMatchingSpaces(new Conditional() {
 			@Override
 			public boolean evaluate(int x, int y) {
-				return (isWumpus(x, y) || isSmelly(x, y) || !isVisited(x, y));
+				return (isWumpus(x, y) || isStench(x, y) || !isVisited(x, y));
 			}
 		});
 	}
@@ -377,7 +377,7 @@ public class StateSpace {
 		return selectMatchingSpaces(new Conditional() {
 			@Override
 			public boolean evaluate(int x, int y) {
-				return (isBreezy(x, y));
+				return (isBreeze(x, y));
 			}
 		});
 	}
@@ -391,7 +391,7 @@ public class StateSpace {
 		return selectMatchingSpaces(new Conditional() {
 			@Override
 			public boolean evaluate(int x, int y) {
-				return (isSmelly(x, y));
+				return (isStench(x, y));
 			}
 		});
 	}
@@ -438,7 +438,7 @@ public class StateSpace {
 					markWumpus(x, y);
 				}
 				if (Solver.plfce.plfcEntails(kb, "B" + p)) {
-					markBreezy(x, y);
+					markBreeze(x, y);
 				}
 				if (Solver.plfce.plfcEntails(kb, "C" + p)) {
 					markCrumb(x, y);
@@ -536,7 +536,7 @@ public class StateSpace {
 	 * @param y
 	 *            The y-coordinate.
 	 */
-	public void markBreezy(int x, int y) {
+	public void markBreeze(int x, int y) {
 		getMark(x, y).breeze = true;
 	}
 
@@ -661,7 +661,7 @@ public class StateSpace {
 	 *            The y-coordinate.
 	 * @return <b>true</b> if the space has a breeze; <b>false</b> otherwise.
 	 */
-	public boolean isBreezy(int x, int y) {
+	public boolean isBreeze(int x, int y) {
 		return getMark(x, y).breeze;
 	}
 
@@ -674,7 +674,7 @@ public class StateSpace {
 	 *            The y-coordinate.
 	 * @return <b>true</b> if the space has a stench; <b>false</b> otherwise.
 	 */
-	public boolean isSmelly(int x, int y) {
+	public boolean isStench(int x, int y) {
 		return getMark(x, y).stench;
 	}
 
