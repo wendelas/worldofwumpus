@@ -128,7 +128,7 @@ public class Solver extends WumpusPlayer {
 	 */
 	@Override
 	public void onScream() {
-		stateSpace.markWumpusDead();
+		stateSpace.noteWumpusDead();
 		stateSpace.update();
 		if (printMoves) {
 			System.out.println(stateSpace.makeString(getX(), getY()));
